@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
-	public partial class Grid
+	public partial class Puzzle
 	{
 		public bool IsSolved
 		{
@@ -98,7 +98,7 @@ namespace SudokuSharp
 
 							foreach (int test in Candidates)
 							{
-								Grid working = new Grid(this);
+								Puzzle working = new Puzzle(this);
 								working.PutCell((Location)i, test);
 								try
 								{
@@ -109,7 +109,7 @@ namespace SudokuSharp
 									else
 										foundSolution = true;
 								}
-								catch (Grid.CouldNotFillException e)
+								catch (Puzzle.CouldNotFillException e)
 								{ }
 							}
 						}

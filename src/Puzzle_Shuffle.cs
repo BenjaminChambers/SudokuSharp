@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
-	public partial class Grid
+	public partial class Puzzle
 	{
 		public void Shuffle(Random Stream, int Iterations)
 		{
