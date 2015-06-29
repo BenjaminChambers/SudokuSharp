@@ -8,19 +8,20 @@ namespace SudokuSharp
 {
 	public partial class Puzzle
 	{
-		public class CouldNotFillException : Exception
+		public class CouldNotSolveException : Exception
 		{
-			public CouldNotFillException() : base() { }
-			public CouldNotFillException(string Message = "") : base(Message) { }
+			public CouldNotSolveException() : base() { }
+			public CouldNotSolveException(string Message = "") : base(Message) { }
 		}
 
-		public void BruteForceFill()
+        #region Brute Force
+        public void SolveBruteForce()
 		{
 			if (DuplicateValuesPresent)
-				throw new CouldNotFillException("Puzzle has duplicates, could not fill.");
+				throw new CouldNotSolveException("Puzzle has duplicates, could not fill.");
 
 			if (!BruteForceRecursion(0))
-				throw new CouldNotFillException("No solution found.");
+				throw new CouldNotSolveException("No solution found.");
 		}
 
 		private bool BruteForceRecursion(int Index)
@@ -32,7 +33,7 @@ namespace SudokuSharp
 				return BruteForceRecursion(Index + 1);
 			else
 			{
-				List<int> Candidates = GetCandidates((Location)Index);
+				List<int> Candidates = GetCandidates(Index);
 
 				foreach (int test in Candidates)
 				{
@@ -45,16 +46,18 @@ namespace SudokuSharp
 				return false;
 			}
 		}
+        #endregion
 
-		public void RandomFill(int Seed)
+        #region Randomized
+        public void SolveRandomizedOrder(int Seed)
 		{
 			Random rnd = new Random(Seed);
 
 			if (DuplicateValuesPresent)
-				throw new CouldNotFillException("Puzzle has duplicates, could not fill.");
+				throw new CouldNotSolveException("Puzzle has duplicates, could not fill.");
 
 			if (!RandomRecursion(rnd, 0))
-				throw new CouldNotFillException("No solution found.");
+				throw new CouldNotSolveException("No solution found.");
 		}
 
 		private bool RandomRecursion(Random stream, int Index)
@@ -66,7 +69,7 @@ namespace SudokuSharp
 				return BruteForceRecursion(Index + 1);
 			else
 			{
-				List<int> UnsortedCandidates = GetCandidates((Location)Index);
+				List<int> UnsortedCandidates = GetCandidates(Index);
 				List<int> Candidates = new List<int>();
 
 				foreach (int digit in UnsortedCandidates)
@@ -83,6 +86,7 @@ namespace SudokuSharp
 				return false;
 			}
 		}
-	}
+        #endregion
+    }
 }
 

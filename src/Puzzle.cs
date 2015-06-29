@@ -8,14 +8,23 @@ namespace SudokuSharp
 {
     public partial class Puzzle
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Puzzle"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
+        /// </summary>
         public Puzzle() { }
+        /// <summary>
+        /// Copies an instance of the <see cref="Puzzle"/> class.
+        /// </summary>
+        /// <param name="src">The source.</param>
         public Puzzle(Puzzle src)
         {
             Array.Copy(src.data, this.data, 81);
         }
+        #endregion
 
-        public int GetCell(Location where) { return data[where.Index]; }
-        public void PutCell(Location where, int value) { data[where.Index] = value; }
+        public int GetCell(int Where) { return data[Where]; }
+        public void PutCell(int Where, int value) { data[Where] = value; }
 
         public int[] GetRow(int Row)
         {
@@ -45,14 +54,14 @@ namespace SudokuSharp
 
             return result;
         }
-        public List<int> GetCandidates(Location where)
+        public List<int> GetCandidates(Location Where)
         {
             List<int> result = new List<int>();
-            if (data[where.Index] > 0)
+            if (data[Where] > 0)
                 return result;
 
             bool[] blocking = new bool[10];
-            int[] blockingIndices = where.GetConflictingIndices();
+            int[] blockingIndices = Where.GetConflictingIndices();
 
             foreach (int idx in blockingIndices)
             {
@@ -73,25 +82,6 @@ namespace SudokuSharp
             return false;
         }
 
-        public override string ToString()
-        {
-            string result = data[0].ToString();
-            for (int i = 1; i < 81; i++)
-            {
-                if (i % 27 == 0)
-                    result += "\n\n";
-                else
-                    if (i % 9 == 0)
-                    result += "\n";
-                else
-                        if (i % 3 == 0)
-                    result += " ";
-
-                result += data[i];
-            }
-
-            return result;
-        }
 
         private int[] data = new int[81];
 

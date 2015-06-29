@@ -40,9 +40,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Puzzle.cs" />
-    <Compile Include="src\Puzzle_Cut.cs" />
-    <Compile Include="src\Puzzle_Fill.cs" />
-    <Compile Include="src\Puzzle_Shuffle.cs" />
+    <Compile Include="src\Puzzle_Factories.cs" />
+    <Compile Include="src\Puzzle_Solving.cs" />
     <Compile Include="src\Puzzle_Properties.cs" />
     <Compile Include="src\Location.cs" />
   </ItemGroup>

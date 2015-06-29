@@ -8,7 +8,13 @@ namespace SudokuSharp
 {
     public partial class Puzzle
     {
-        
+        #region Is Solved
+        /// <summary>
+        /// Returns whether or not the particular puzzle is solved.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is solved; otherwise, <c>false</c>.
+        /// </value>
         public bool IsSolved
         {
             get
@@ -33,7 +39,17 @@ namespace SudokuSharp
                 return true;
             }
         }
+        #endregion
 
+        #region Is Valid
+        /// <summary>
+        /// Returns whether this particular puzzle MAY be solved.
+        /// 
+        /// Certain conditions are known to invalidate a puzzle, preventing the existence of a unique solution. This checks for those conditions.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+        /// </value>
         public bool IsValid
         {
             get
@@ -46,7 +62,7 @@ namespace SudokuSharp
             }
         }
 
-        public bool DuplicateValuesPresent
+        private bool DuplicateValuesPresent
         {
             get
             {
@@ -56,8 +72,8 @@ namespace SudokuSharp
 
                 for (int i = 0; i < 81; i++)
                 {
-                    Location loc = (Location)i;
-                    int value = GetCell(loc);
+                    Location loc = i;
+                    int value = GetCell(i);
 
                     CountByRow[loc.Row, value]++;
                     CountByColumn[loc.Column, value]++;
@@ -74,50 +90,6 @@ namespace SudokuSharp
                 }
 
                 return false;
-            }
-        }
-
-        public bool ExistsUniqueSolution
-        {
-            get
-            {
-                if (IsSolved)
-                    return true;
-
-                if (!IsValid)
-                    return false;
-
-                for (int i = 0; i < 81; i++)
-                {
-                    if (GetCell((Location)i) == 0)
-                    { // Only test against empty cells
-                        List<int> Candidates = GetCandidates((Location)i);
-
-                        if (Candidates.Count > 1)
-                        { // Only test where there's more than one option
-                            bool foundSolution = false;
-
-                            foreach (int test in Candidates)
-                            {
-                                Puzzle working = new Puzzle(this);
-                                working.PutCell((Location)i, test);
-                                try
-                                {
-                                    working.BruteForceFill(); // Will trigger an exception if this doesn't work
-
-                                    if (foundSolution) // solution already found
-                                        return false;
-                                    else
-                                        foundSolution = true;
-                                }
-                                catch (Puzzle.CouldNotFillException e)
-                                { }
-                            }
-                        }
-                    }
-                }
-
-                return true;
             }
         }
 
@@ -160,8 +132,9 @@ namespace SudokuSharp
                 {
                     if (data[i] > 0)
                     {
-                        isColPopulated[((Location)i).Column] = true;
-                        isRowPopulated[((Location)i).Row] = true;
+                        Location loc = i;
+                        isColPopulated[loc.Column] = true;
+                        isRowPopulated[loc.Row] = true;
                     }
                 }
 
@@ -181,6 +154,55 @@ namespace SudokuSharp
                 return false;
             }
         }
+        #endregion
+
+        #region Unique Solution
+        /// <summary>
+        /// Verifies the existance of a unique solution
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [a unique solution exists]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ExistsUniqueSolution
+        {
+            get
+            {
+                if (IsSolved) return true;
+                if (!IsValid) return false;
+
+                Puzzle work = new Puzzle(this);
+
+                for (int i = 0; i < 81; i++)
+                {
+                    if (GetCell(i) == 0)
+                    { // Only test against empty cells
+                        List<int> Candidates = GetCandidates(i);
+
+                        if (Candidates.Count > 1)
+                        { // Only test where there's more than one option
+                            bool foundSolution = false;
+
+                            foreach (int test in Candidates)
+                            {
+                                Puzzle working = new Puzzle(this);
+                                working.PutCell(i, test);
+
+                                if (working.BruteForceRecursion(0))
+                                {
+                                    // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
+                                    if (foundSolution)
+                                        return false;
+                                    else
+                                        foundSolution = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+        #endregion
     }
 }
 

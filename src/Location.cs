@@ -18,13 +18,13 @@ namespace SudokuSharp
             Index = idx;
         }
         /// <summary>
-        /// Performs an explicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
+        /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
         /// </summary>
         /// <param name="index">The cell <see cref="Index"/>.</param>
         /// <returns>
         /// A new <see cref="Location"/>.
         /// </returns>
-        public static explicit operator Location(int index)
+        public static implicit operator Location(int index)
         {
             return new Location(index);
         }
@@ -72,6 +72,11 @@ namespace SudokuSharp
         /// The lower right-hand corner is numbered 80.
         /// </value>
         public int Index { get; private set; }
+
+        public static implicit operator int(Location Where)
+        {
+            return Where.Index;
+        }
         #endregion
 
         #region Lists of indices
