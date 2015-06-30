@@ -8,23 +8,28 @@ namespace SudokuSharp
 {
 	public partial class Puzzle
 	{
-		public class CouldNotSolveException : Exception
-		{
-			public CouldNotSolveException() : base() { }
-			public CouldNotSolveException(string Message = "") : base(Message) { }
-		}
+        /// <summary>
+        /// Attempts to fill in all cells in a puzzle using brute force.
+        /// The original puzzle remains unchanged.
+        /// </summary>
+        /// <returns>
+        /// If successful, a new instance of <see cref="Puzzle"/> will be returned with all cells filled in.
+        /// If unsuccesful, a value of null will be returned.
+        /// </returns>
+        public Puzzle Solve()
+        {
+            if (DuplicateValuesPresent)
+                return null;
 
-        #region Brute Force
-        public void SolveBruteForce()
-		{
-			if (DuplicateValuesPresent)
-				throw new CouldNotSolveException("Puzzle has duplicates, could not fill.");
+            Puzzle work = new Puzzle(this);
 
-			if (!BruteForceRecursion(0))
-				throw new CouldNotSolveException("No solution found.");
-		}
+            if (work.BruteForceRecursion(0))
+                return work;
+            else
+                return null;
+        }
 
-		private bool BruteForceRecursion(int Index)
+        private bool BruteForceRecursion(int Index)
 		{
 			if (Index == 81)
 				return true;
@@ -45,19 +50,6 @@ namespace SudokuSharp
 
 				return false;
 			}
-		}
-        #endregion
-
-        #region Randomized
-        public void SolveRandomizedOrder(int Seed)
-		{
-			Random rnd = new Random(Seed);
-
-			if (DuplicateValuesPresent)
-				throw new CouldNotSolveException("Puzzle has duplicates, could not fill.");
-
-			if (!RandomRecursion(rnd, 0))
-				throw new CouldNotSolveException("No solution found.");
 		}
 
 		private bool RandomRecursion(Random stream, int Index)
@@ -86,7 +78,6 @@ namespace SudokuSharp
 				return false;
 			}
 		}
-        #endregion
     }
 }
 

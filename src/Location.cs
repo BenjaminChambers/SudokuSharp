@@ -73,6 +73,13 @@ namespace SudokuSharp
         /// </value>
         public int Index { get; private set; }
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> to be cast.</param>
+        /// <returns>
+        /// The location Index, as an integer
+        /// </returns>
         public static implicit operator int(Location Where)
         {
             return Where.Index;
@@ -80,8 +87,11 @@ namespace SudokuSharp
         #endregion
 
         #region Lists of indices
+        // I'm currently marking these as Private, since they aren't ever used.
+        // If I ever find a use for them, then I will mark them public
+
         // If these ever get utilized more I will consider precalculating them as well; as it is, the only one I actually call is GetConflicting, and it's not the bottleneck, so I'm not worried.
-        public int[] GetRowIndices()
+        private int[] GetRowIndices()
         {
             int[] result = new int[9];
             int start = Index - (Index % 9);
@@ -91,7 +101,7 @@ namespace SudokuSharp
 
             return result;
         }
-        public int[] GetColumnIndices()
+        private int[] GetColumnIndices()
         {
             int[] result = new int[9];
             int start = Column;
@@ -101,7 +111,7 @@ namespace SudokuSharp
 
             return result;
         }
-        public int[] GetZoneIndices()
+        private int[] GetZoneIndices()
         {
             int[] result = new int[9];
 
@@ -114,6 +124,10 @@ namespace SudokuSharp
 
             return result;
         }
+        /// <summary>
+        /// Gets the cells which may cause conflicts with this one.
+        /// </summary>
+        /// <returns>An <see cref="int"/>[] array of all the indices in the current row, column, or zone. These are the only cells which may conflict with this cell.</returns>
         public int[] GetConflictingIndices()
         {
             int[] result = new int[20];

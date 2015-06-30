@@ -49,18 +49,21 @@ namespace SudokuSharp
 
             #region Cutting quads
             // Removing cells four at a time, mirrored around both axes
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Array.Copy(Work.data, Restore, 81);
 
-                Location loc = Order[i];
+                for (int j=0; j<2; j++)
+                {
+                    Location loc = Order[i*3+j];
 
-                int x = loc.Column;
-                int y = loc.Row;
-                Work.PutCell(loc, 0);
-                Work.PutCell(new Location(8 - x, y), 0);
-                Work.PutCell(new Location(x, 8 - y), 0);
-                Work.PutCell(new Location(8 - x, 8 - y), 0);
+                    int x = loc.Column;
+                    int y = loc.Row;
+                    Work.PutCell(loc, 0);
+                    Work.PutCell(new Location(8 - x, y), 0);
+                    Work.PutCell(new Location(x, 8 - y), 0);
+                    Work.PutCell(new Location(8 - x, 8 - y), 0);
+                }
 
                 // If it resulted in an unsolvable puzzle, then roll it back
                 if (!Work.ExistsUniqueSolution)
@@ -70,19 +73,22 @@ namespace SudokuSharp
 
             #region Cutting pairs
             // Same thing, just removing pairs mirrored around a single axis
-            for (int i = 11; i < 30; i++)
+            for (int i = 5; i < 10; i++)
             {
                 Array.Copy(Work.data, Restore, 81);
 
-                Location loc = Order[i];
+                for (int j=0; j<2; j++)
+                {
+                    Location loc = Order[i*3+j];
 
-                int x = loc.Column;
-                int y = loc.Row;
-                Work.PutCell(loc, 0);
-                if (Stream.Next(2) == 0)
-                    Work.PutCell(new Location(8 - x, y), 0);
-                else
-                    Work.PutCell(new Location(x, 8 - y), 0);
+                    int x = loc.Column;
+                    int y = loc.Row;
+                    Work.PutCell(loc, 0);
+                    if (Stream.Next(2) == 0)
+                        Work.PutCell(new Location(8 - x, y), 0);
+                    else
+                        Work.PutCell(new Location(x, 8 - y), 0);
+                }
 
                 if (!Work.ExistsUniqueSolution)
                     Array.Copy(Restore, Work.data, 81);
@@ -103,13 +109,19 @@ namespace SudokuSharp
                     Order.Insert(Stream.Next(Order.Count), Work.data[i]);
             }
             int backup;
+            int givens = 81 - Order.Count;
             foreach (int i in Order)
             {
-                backup = Work.data[Order[i]];
-                Work.data[Order[i]] = 0;
+                if (givens > 18)
+                {
+                    backup = Work.data[Order[i]];
+                    Work.data[Order[i]] = 0;
 
-                if (!Work.ExistsUniqueSolution)
-                    Work.data[Order[i]] = backup;
+                    if (!Work.ExistsUniqueSolution)
+                        Work.data[Order[i]] = backup;
+                    else
+                        givens--;
+                }
             }
             #endregion
 

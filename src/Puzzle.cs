@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
+    /// <summary>
+    /// The basic Sudoku class.
+    /// It contains a grid of cells with values of 0-9; 0 corresponds to an empty cell, and the other digits the possible values.
+    /// </summary>
     public partial class Puzzle
     {
         #region Constructors
@@ -23,10 +27,20 @@ namespace SudokuSharp
         }
         #endregion
 
-        public int GetCell(int Where) { return data[Where]; }
-        public void PutCell(int Where, int value) { data[Where] = value; }
+        /// <summary>
+        /// Gets the value of a given cell.
+        /// </summary>
+        /// <param name="Where">The cell to check; may be provided as either an instance of <see cref="Location"/> or the integer index of the cell.</param>
+        /// <returns></returns>
+        public int GetCell(Location Where) { return data[Where]; }
+        /// <summary>
+        /// Fills a cell in.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> of the cell to fill.</param>
+        /// <param name="value">The value to place; 0 for clear, or 1-9.</param>
+        public void PutCell(Location Where, int value) { data[Where] = value; }
 
-        public int[] GetRow(int Row)
+        private int[] GetRow(int Row)
         {
             int[] result = new int[9];
 
@@ -34,7 +48,7 @@ namespace SudokuSharp
 
             return result;
         }
-        public int[] GetColumn(int Column)
+        private int[] GetColumn(int Column)
         {
             int[] result = new int[9];
             int idx = Column;
@@ -45,7 +59,7 @@ namespace SudokuSharp
             }
             return result;
         }
-        public int[] GetZone(int Zone)
+        private int[] GetZone(int Zone)
         {
             int[] result = new int[9];
             Array.Copy(data, ZoneIndices[Zone], result, 0, 3);
@@ -54,6 +68,12 @@ namespace SudokuSharp
 
             return result;
         }
+
+        /// <summary>
+        /// Gets a list of the values which may go here.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> of the cell to check.</param>
+        /// <returns>A <see cref="List{T}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
         public List<int> GetCandidates(Location Where)
         {
             List<int> result = new List<int>();
@@ -74,17 +94,8 @@ namespace SudokuSharp
 
             return result;
         }
-        public static bool AreDistinct(Puzzle first, Puzzle second)
-        {
-            for (int i = 0; i < 81; i++)
-                if (!(first.data[i] == second.data[i]))
-                    return true;
-            return false;
-        }
-
 
         private int[] data = new int[81];
-
         private static int[] ZoneIndices = { 0, 3, 6, 27, 30, 33, 54, 57, 60 };
     }
 }
