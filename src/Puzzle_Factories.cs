@@ -15,7 +15,30 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Seed">The seed to use for the random number generator.</param>
         /// <returns>A <see cref="Puzzle"/> with all cells filled in.</returns>
-        public static Puzzle Create_Solution(int Seed)
+        public static async Task<Puzzle> CreateSolutionAsync(int Seed)
+        {
+            return await Task.Factory.StartNew(() => Puzzle.CreateSolution(Seed));
+        }
+
+        /// <summary>
+        /// Creates a puzzle with guaranteed to have your provided solution as the unique solution available.
+        /// </summary>
+        /// <param name="Solution">Your provided solution.</param>
+        /// <param name="Seed">The seed for the random generator.</param>
+        /// <returns>A <see cref="Puzzle"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
+        public static async Task<Puzzle> CreatePuzzleAsync(Puzzle Solution, int Seed)
+        {
+            return await Task.Factory.StartNew(() => Puzzle.CreatePuzzle(Solution, Seed));
+        }
+
+        /// <summary>
+        /// Creates a random Sudoku board, using the provided Seed for the randomizer.
+        /// 
+        /// If a board could not be created, it will return a Null value.
+        /// </summary>
+        /// <param name="Seed">The seed to use for the random number generator.</param>
+        /// <returns>A <see cref="Puzzle"/> with all cells filled in.</returns>
+        public static Puzzle CreateSolution(int Seed)
         {
             Puzzle work = new Puzzle();
 
@@ -31,7 +54,7 @@ namespace SudokuSharp
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
         /// <returns>A <see cref="Puzzle"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static Puzzle Create_Puzzle(Puzzle Solution, int Seed)
+        public static Puzzle CreatePuzzle(Puzzle Solution, int Seed)
         {
             // Keeping a local array in case we make a mistake has empirically turned out to be faster than manually unrolling the changes
             int[] Restore = new int[81];
