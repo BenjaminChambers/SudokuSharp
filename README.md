@@ -2,15 +2,29 @@
 A C# library for working with Sudoku puzzles
 
 # Main classes
-There are two classes introduced by this library: Location and Puzzle.
-Location is essentially an integer (and includes implicit casting, both to and from, standard int).
-Essentially, it is an index (0-81) of every possible position on the board.
-It also includes the following properties: Row, Column, Zone, and Index.
-Each of these returns an int of the appropriate value.
+There are two classes introduced by this library: **Location** and **Puzzle**.
 
-It may be cast to or from an int, or you may use the constructor with syntax
-new Location(int Column, int Row)
-for convenience.
+## Location
+**Location** is stored internally as an integer tracking the index of the location on the board (0-81).
+
+It contains the following helpful properties:
+```c#
+int Row
+int Column
+int Zone
+int Index
+```
+Both the **Index** and **Zone** are ordered from the upper left corner, moving horizontally to the right, and wrapping to the next line after the end. Thus, the first line of **Zones** are number `0,1,2`, the next line `3,4,5`, and the final line `6,7,8`.
+
+The indices are numbered `0-8` on the first line, `9-17` on the second line, etc.
+
+**Location**s include implicit casts both to and from **int**s. This allows swapping them with **int**s, for instance in `for` loops:
+
+```c#
+for (Location loc=0; loc<81; loc++)
+ { }
+```
+This will cycle through every location on the board.
 
 The SudokuSharp.Puzzle class is essentially a gameboard, with every location (cell) filled in by 0-9 (0 corresponds to an empty cell).
 You may call the default construction Puzzle() to create a completely empty board; if you wish to create a filled in puzzle, you may call one of two factory methods:
