@@ -26,21 +26,45 @@ for (Location loc=0; loc<81; loc++)
 ```
 This will cycle through every location on the board.
 
-The SudokuSharp.Puzzle class is essentially a gameboard, with every location (cell) filled in by 0-9 (0 corresponds to an empty cell).
-You may call the default construction Puzzle() to create a completely empty board; if you wish to create a filled in puzzle, you may call one of two factory methods:
-Puzzle myPuzzle = Puzzle.CreateSolution(int Seed);
-Puzzle myPuzzle = Puzzle.CreatePuzzle(Puzzle Solution, int Seed);
+## Puzzle
+A **Puzzle* is actually a grid of 81 **Location**s.
+
+There are two standard constructors:
+```c#
+Puzzle();
+Puzzle(Puzzle src);
+```
+The first creates a completely blank **Puzzle**, the second is to copy an existing **Puzzle**.
+
+When creating games, though, you generally don't want a blank board. Fortunately, there are factories for that:
+```c#
+Puzzle Puzzle.CreateSolution(int Seed);
+Task<Puzzle> Puzzle.CreateSolutionAsync(int Seed);
+
+Puzzle Puzzle.CreatePuzzle(Puzzle Solution, int Seed);
+Task<Puzzle> Puzzle.CreatePuzzleAsync(Puzzle Solution, int Seed);
+```
+
+The **CreateSolution** methods start with a new blank Puzzle and fill in the board completely (no empty spaces).
+
+The **CreatePuzzle** methods begin with another puzzle (either partially or completely filled in), and removes clues to create a **Puzzle** with a unique solution.
+
+In either case, a new **Random** stream is seeded with the **Seed** value.
+
 In either case, the Seed value is used to create a new random number stream for determinance.
-The first begins with an empty board and randomly places all digits; the second begins with a filled (either partially or completely) board and removes pieces to create a game to play. I make no guarantees about the resulting difficulty level (grading will come in a future version), only in determinance (hence the seed value).
 
-There are also async factories available; they are:
-Puzzle.CreateSolutionAsync(int Seed);
-Puzle.CreatePuzzleAsync(Puzzle Solution, int Seed);
+### Puzzle Properties
+```c#
+bool IsSolved
+bool IsValid
+bool ExistsUniqueSolution
+```
+**IsSolved** makes sure that every **Location** is filled, and that the solution is valid.
+**IsValid** checks for some common problems which prohibit a puzzle from having a unique solution: if two rows within any triplet are completely empty, for instance, they may be swapped resulting in two possible solutions. Likewise, it checks for two empty columns within triplets, and it checks that every number is on the board at least once (one number may be missing, but if two are then all cells containing those two digits may be swapped resulting in two possible solutions).
+**ExistsUniqueSolution** will attempt to solve the **Puzzle** via bruteforce. When a solution is found, a flag is set. If a second solution is found (or none is found), then **false** will be returned; if only a single solution is found, then **true**.
 
-The Puzzle class also contains many helpful properties:
-bool IsSolved: returns whether the puzzle is completely solved AND valid.
-bool IsValid: returns whether the puzzle MAY be solved, even though it is only partially filled in. There are certain conditions which are known to preclude this, and this method checks for those.
-bool ExistsUniqueSolution: Attempts to randomly solve the puzzle every possible way; when the first solution is found, a flag is set. If a second solution is found, it returns false. If no other solution is found, it returns true.
-
-The Puzzle class also contains a solving method:
-Puzzle Puzzle.Solve: returns a solved form of the calling instance. The original instance is unchanged.
+### Puzzle Methods
+```c#
+Puzzle Puzzle.Solve();
+```
+**Solve** returns a solved form of the calling instance. The original instance of **Puzzle** is unchanged.
