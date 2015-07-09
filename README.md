@@ -35,19 +35,19 @@ This will cycle through every location on the board.
 ## Puzzle
 A **Puzzle* is actually a grid of 81 **Location**s.
 
-There are two standard constructors:
+### Puzzle Constructors
 ```c#
 Puzzle();
 Puzzle(Puzzle src);
 ```
 The first creates a completely blank **Puzzle**, the second is to copy an existing **Puzzle**.
 
-When creating games, though, you generally don't want a blank board. Fortunately, there are factories for that:
+### Puzzle Factories
 ```c#
 Puzzle Puzzle.CreateSolution(int Seed);
-Task<Puzzle> Puzzle.CreateSolutionAsync(int Seed);
-
 Puzzle Puzzle.CreatePuzzle(Puzzle Solution, int Seed);
+
+Task<Puzzle> Puzzle.CreateSolutionAsync(int Seed);
 Task<Puzzle> Puzzle.CreatePuzzleAsync(Puzzle Solution, int Seed);
 ```
 
