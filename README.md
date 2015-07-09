@@ -7,7 +7,13 @@ There are two classes introduced by this library: **Location** and **Puzzle**.
 ## Location
 **Location** is stored internally as an integer tracking the index of the location on the board (0-81).
 
-It contains the following helpful properties:
+### Location Constructors
+```c#
+Location(int Column, int Row)
+Location(int Index)
+```
+
+### Location Properties
 ```c#
 int Row
 int Column
@@ -68,3 +74,9 @@ bool ExistsUniqueSolution
 Puzzle Puzzle.Solve();
 ```
 **Solve** returns a solved form of the calling instance. The original instance of **Puzzle** is unchanged.
+
+```c#
+void Puzzle.PutCell(Location where, int value);
+int Puzzle.GetCell(Location where);
+```
+Because of the implicit casting of the **Location** class, you may either use an actual **Location** instance or an **int** representing the Index.
