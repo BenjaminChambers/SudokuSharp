@@ -2,7 +2,7 @@
 A C# library for working with Sudoku puzzles
 
 # Main classes
-There are two classes introduced by this library: **Location** and **Puzzle**.
+There are three classes introduced by this library: **Location**, **Grid** and **PencilGrid**.
 
 ## Location
 **Location** is stored internally as an integer tracking the index of the location on the board (0-81).
@@ -32,34 +32,34 @@ for (Location loc=0; loc<81; loc++)
 ```
 This will cycle through every location on the board.
 
-## Puzzle
-A **Puzzle* is actually a grid of 81 **Location**s.
+## Grid
+A **Grid* is actually a grid of 81 **Location**s.
 
-### Puzzle Constructors
+### Grid Constructors
 ```c#
-Puzzle();
-Puzzle(Puzzle src);
+Grid();
+Grid(Puzzle src);
 ```
-The first creates a completely blank **Puzzle**, the second is to copy an existing **Puzzle**.
+The first creates a completely blank **Grid**, the second is to copy an existing **Grid**.
 
-### Puzzle Factories
+### Grid Factories
 ```c#
-Puzzle Puzzle.CreateSolution(int Seed);
-Puzzle Puzzle.CreatePuzzle(Puzzle Solution, int Seed);
+Grid Grid.CreateSolution(int Seed);
+Grid Grid.CreatePuzzle(Grid Solution, int Seed);
 
-Task<Puzzle> Puzzle.CreateSolutionAsync(int Seed);
-Task<Puzzle> Puzzle.CreatePuzzleAsync(Puzzle Solution, int Seed);
+Task<Grid> Grid.CreateSolutionAsync(int Seed);
+Task<Grid> Grid.CreatePuzzleAsync(Grid Solution, int Seed);
 ```
 
-The **CreateSolution** methods start with a new blank Puzzle and fill in the board completely (no empty spaces).
+The **CreateSolution** methods start with a new blank Grid and fill in the board completely (no empty spaces).
 
-The **CreatePuzzle** methods begin with another puzzle (either partially or completely filled in), and removes clues to create a **Puzzle** with a unique solution.
+The **CreatePuzzle** methods begin with another Grid (either partially or completely filled in), and removes clues to create a **Grid** with a unique solution.
 
 In either case, a new **Random** stream is seeded with the **Seed** value.
 
 In either case, the Seed value is used to create a new random number stream for determinance.
 
-### Puzzle Properties
+### Grid Properties
 ```c#
 bool IsSolved
 bool IsValid
@@ -69,14 +69,23 @@ bool ExistsUniqueSolution
 **IsValid** checks for some common problems which prohibit a puzzle from having a unique solution: if two rows within any triplet are completely empty, for instance, they may be swapped resulting in two possible solutions. Likewise, it checks for two empty columns within triplets, and it checks that every number is on the board at least once (one number may be missing, but if two are then all cells containing those two digits may be swapped resulting in two possible solutions).
 **ExistsUniqueSolution** will attempt to solve the **Puzzle** via bruteforce. When a solution is found, a flag is set. If a second solution is found (or none is found), then **false** will be returned; if only a single solution is found, then **true**.
 
-### Puzzle Methods
+### Grid Methods
 ```c#
-Puzzle Puzzle.Solve();
+Grid Grid.Solve();
 ```
-**Solve** returns a solved form of the calling instance. The original instance of **Puzzle** is unchanged.
+**Solve** returns a solved form of the calling instance. The original instance of **Grid** is unchanged.
 
+### Accessing Grid data
 ```c#
-void Puzzle.PutCell(Location where, int value);
-int Puzzle.GetCell(Location where);
+void Grid.PutCell(Location where, int value);
+int Grid.GetCell(Location where);
 ```
 Because of the implicit casting of the **Location** class, you may either use an actual **Location** instance or an **int** representing the Index.
+
+You may also access via [] indexing with a Location value, such as:
+```c#
+Location where = new Location(x,y);
+Grid[where]=value;
+int result = Grid[where];
+```
+The above contain inlined versions of the PutCell and GetCell methods.
