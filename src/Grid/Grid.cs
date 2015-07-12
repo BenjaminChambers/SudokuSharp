@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
@@ -10,18 +7,18 @@ namespace SudokuSharp
     /// The basic Sudoku class.
     /// It contains a grid of cells with values of 0-9; 0 corresponds to an empty cell, and the other digits the possible values.
     /// </summary>
-    public partial class Puzzle
+    public partial class Grid
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Puzzle"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
+        /// Initializes a new instance of the <see cref="Grid"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
         /// </summary>
-        public Puzzle() { }
+        public Grid() { }
         /// <summary>
-        /// Copies an instance of the <see cref="Puzzle"/> class.
+        /// Copies an instance of the <see cref="Grid"/> class.
         /// </summary>
         /// <param name="src">The source.</param>
-        public Puzzle(Puzzle src)
+        public Grid(Grid src)
         {
             Array.Copy(src.data, this.data, 81);
         }
@@ -39,6 +36,26 @@ namespace SudokuSharp
         /// <param name="Where">The <see cref="Location"/> of the cell to fill.</param>
         /// <param name="value">The value to place; 0 for clear, or 1-9.</param>
         public void PutCell(Location Where, int value) { data[Where] = value; }
+
+        /// <summary>
+        /// Overrides array indexing (suare brackets []) for accessing locations in the Grid.
+        /// Essentially, it's another way to access GetCell and PutCell.
+        /// 
+        /// You may use
+        ///   <see cref="Location"/> where = new <see cref="Location"/>(x,y);
+        ///   <see cref="int"/> result = myGrid[where];
+        ///   myGrid[where] = result;
+        /// </summary>
+        /// <value>
+        /// The <see cref="int"/> representing the value of the cell (0 for empty, 1-9 for a value).
+        /// </value>
+        /// <param name="where">The <see cref="Location"/> to access.</param>
+        /// <returns></returns>
+        public int this[Location where]
+        {
+            get { return data[where]; }
+            set { data[where] = value; }
+        }
 
         private int[] GetRow(int Row)
         {

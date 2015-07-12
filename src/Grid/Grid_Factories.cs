@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
-    public partial class Puzzle
+    public partial class Grid
     {
         /// <summary>
         /// Creates a random Sudoku board, using the provided Seed for the randomizer.
@@ -14,10 +12,10 @@ namespace SudokuSharp
         /// If a board could not be created, it will return a Null value.
         /// </summary>
         /// <param name="Seed">The seed to use for the random number generator.</param>
-        /// <returns>A <see cref="Puzzle"/> with all cells filled in.</returns>
-        public static async Task<Puzzle> CreateSolutionAsync(int Seed)
+        /// <returns>A <see cref="Grid"/> with all cells filled in.</returns>
+        public static async Task<Grid> CreateSolutionAsync(int Seed)
         {
-            return await Task.Factory.StartNew(() => Puzzle.CreateSolution(Seed));
+            return await Task.Factory.StartNew(() => Grid.CreateSolution(Seed));
         }
 
         /// <summary>
@@ -25,10 +23,10 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
-        /// <returns>A <see cref="Puzzle"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static async Task<Puzzle> CreatePuzzleAsync(Puzzle Solution, int Seed)
+        /// <returns>A <see cref="Grid"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
+        public static async Task<Grid> CreatePuzzleAsync(Grid Solution, int Seed)
         {
-            return await Task.Factory.StartNew(() => Puzzle.CreatePuzzle(Solution, Seed));
+            return await Task.Factory.StartNew(() => Grid.CreatePuzzle(Solution, Seed));
         }
 
         /// <summary>
@@ -37,10 +35,10 @@ namespace SudokuSharp
         /// If a board could not be created, it will return a Null value.
         /// </summary>
         /// <param name="Seed">The seed to use for the random number generator.</param>
-        /// <returns>A <see cref="Puzzle"/> with all cells filled in.</returns>
-        public static Puzzle CreateSolution(int Seed)
+        /// <returns>A <see cref="Grid"/> with all cells filled in.</returns>
+        public static Grid CreateSolution(int Seed)
         {
-            Puzzle work = new Puzzle();
+            Grid work = new Grid();
 
             if (!work.RandomRecursion(new Random(Seed), 0))
                 return null;
@@ -53,13 +51,13 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
-        /// <returns>A <see cref="Puzzle"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static Puzzle CreatePuzzle(Puzzle Solution, int Seed)
+        /// <returns>A <see cref="Grid"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
+        public static Grid CreatePuzzle(Grid Solution, int Seed)
         {
             // Keeping a local array in case we make a mistake has empirically turned out to be faster than manually unrolling the changes
             int[] Restore = new int[81];
             Random Stream = new Random(Seed);
-            Puzzle Work = new Puzzle(Solution);
+            Grid Work = new Grid(Solution);
 
             // I'm sure there's a faster way to do this than with a generic linked list, but why bother? I'll fix it if it's ever a problem.
             List<int> srcOrder = new List<int>();

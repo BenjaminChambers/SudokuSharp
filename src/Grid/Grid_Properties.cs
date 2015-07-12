@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SudokuSharp
 {
-    public partial class Puzzle
+    public partial class Grid
     {
         #region Is Solved
         /// <summary>
@@ -170,7 +166,7 @@ namespace SudokuSharp
                 if (IsSolved) return true;
                 if (!IsValid) return false;
 
-                Puzzle work = new Puzzle(this);
+                Grid work = new Grid(this);
 
                 for (int i = 0; i < 81; i++)
                 {
@@ -184,7 +180,7 @@ namespace SudokuSharp
 
                             foreach (int test in Candidates)
                             {
-                                Puzzle working = new Puzzle(this);
+                                Grid working = new Grid(this);
                                 working.PutCell(i, test);
 
                                 if (working.BruteForceRecursion(0))

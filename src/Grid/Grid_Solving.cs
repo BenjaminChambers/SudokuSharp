@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
-	public partial class Puzzle
+    public partial class Grid
 	{
         /// <summary>
         /// Attempts to fill in all cells in a puzzle using brute force.
         /// The original puzzle remains unchanged.
         /// </summary>
         /// <returns>
-        /// If successful, a new instance of <see cref="Puzzle"/> will be returned with all cells filled in.
+        /// If successful, a new instance of <see cref="Grid"/> will be returned with all cells filled in.
         /// If unsuccesful, a value of null will be returned.
         /// </returns>
-        public Puzzle Solve()
+        public Grid Solve()
         {
             if (DuplicateValuesPresent)
                 return null;
 
-            Puzzle work = new Puzzle(this);
+            Grid work = new Grid(this);
 
             if (work.BruteForceRecursion(0))
                 return work;
