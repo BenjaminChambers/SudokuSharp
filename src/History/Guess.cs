@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SudokuSharp
+namespace SudokuSharp.History
 {
     public class Guess : IHistoryAction
     {
