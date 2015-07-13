@@ -46,6 +46,9 @@
     <Compile Include="src\Grid\Grid_Solving.cs" />
     <Compile Include="src\Grid\Grid.cs" />
     <Compile Include="src\Grid\Grid_Factories.cs" />
+    <Compile Include="src\History\Guess.cs" />
+    <Compile Include="src\History\IHistoryAction.cs" />
+    <Compile Include="src\History\PencilMarks.cs" />
     <Compile Include="src\Location.cs" />
     <Compile Include="src\Grid\Grid_Filling.cs" />
     <Compile Include="src\PencilGrid\PencilGrid.cs" />
@@ -72,6 +75,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

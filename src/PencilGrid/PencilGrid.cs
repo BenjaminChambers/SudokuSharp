@@ -27,12 +27,12 @@ namespace SudokuSharp
         }
         #endregion
 
-        bool GetMark(Location where, int value) { return data[where, value]; }
-        bool PutMark(Location where, int value) { return data[where, value] = true; }
-        bool ClearMark(Location where, int value) { return data[where, value] = false; }
-        bool ToggleMark(Location where, int value) { return (data[where, value] = !data[where, value]); }
+        public bool Get(Location where, int value) { return data[where, value]; }
+        public bool Set(Location where, int value) { return data[where, value] = true; }
+        public bool Clear(Location where, int value) { return data[where, value] = false; }
+        public bool Toggle(Location where, int value) { return (data[where, value] = !data[where, value]); }
 
-        bool[] GetMarks(Location where)
+        public bool[] GetMarks(Location where)
         {
             bool[] result = new bool[10];
             for (int i = 1; i < 10; i++)
