@@ -17,7 +17,7 @@
             do
             {
                 countThisRun = 0;
-                for (Location loc=0; loc<81; loc++)
+                foreach (Location loc in Location.All)
                 {
                     if (GetCell(loc)==0)
                     {

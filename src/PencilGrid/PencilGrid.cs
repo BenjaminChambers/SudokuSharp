@@ -20,7 +20,7 @@ namespace SudokuSharp
         /// <param name="src">The <see cref="Grid"/> to work off of.</param>
         public PencilGrid(Grid src) : base()
         {
-            for (Location where = 0; where < 81; where++)
+            foreach (Location where in Location.All)
             {
                 var candidates = src.GetCandidates(where);
                 foreach (int value in candidates)
