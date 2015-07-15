@@ -71,7 +71,7 @@ namespace SudokuSharp
         /// For example, the first row is numbered 0,1,2... while the second row is numbered 9,10,11...
         /// The lower right-hand corner is numbered 80.
         /// </value>
-        public int Index { get; private set; }
+        public readonly int Index;
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
