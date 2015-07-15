@@ -37,25 +37,35 @@ namespace SudokuSharp
         /// <param name="Row">The row.</param>
         public Location(int Column, int Row)
         {
-            Index = ListOfIndices[Column, Row];
+            Index = _indicesByRowCol[Column, Row];
         }
         #endregion
 
         #region Location Aids
+        /// <summary>
+        /// Gets a collection of all indices, which may be iterated via foreach
+        /// </summary>
+        /// <value>
+        /// The ReadOnlyCollection of all indices.
+        /// </value>
+        public static ReadOnlyCollection<int> All { get { return _allIndices; } }
+
         /// <summary>
         /// Returns the Row of the specified <see cref="Location"/>.
         /// </summary>
         /// <value>
         /// The row of the specified <see cref="Location"/>.
         /// </value>
-        public int Row { get { return ListOfRows[Index]; } }
+        public int Row { get { return _rowByIndex[Index]; } }
+
         /// <summary>
         /// Gets the column of the specified <see cref="Location"/>.
         /// </summary>
         /// <value>
         /// The column of the specified <see cref="Location"/>.
         /// </value>
-        public int Column { get { return ListOfColumns[Index]; } }
+        public int Column { get { return _colByIndex[Index]; } }
+
         /// <summary>
         /// Gets the zone of the specified <see cref="Location"/>.
         /// </summary>
@@ -63,7 +73,8 @@ namespace SudokuSharp
         /// The zone of the specified <see cref="Location"/>.
         /// The Zone is the 3x3 block to which the location belongs; there are nine of them on the Sudoku board and, together with each Row and Column, the Zone when solved will contain a single instance of each digit.
         /// </value>
-        public int Zone { get { return ListOfZones[Index]; } }
+        public int Zone { get { return _zoneByIndex[Index]; } }
+
         /// <summary>
         /// Gets the index.
         /// </summary>
@@ -88,45 +99,6 @@ namespace SudokuSharp
         #endregion
 
         #region Lists of indices
-        public static ReadOnlyCollection<int> All { get { return _all; } }
-
-        // I'm currently marking these as Private, since they aren't ever used.
-        // If I ever find a use for them, then I will mark them public
-
-        // If these ever get utilized more I will consider precalculating them as well; as it is, the only one I actually call is GetConflicting, and it's not the bottleneck, so I'm not worried.
-        private int[] GetRowIndices()
-        {
-            int[] result = new int[9];
-            int start = Index - (Index % 9);
-
-            for (int i = 0; i < 9; i++)
-                result[i] = start + i;
-
-            return result;
-        }
-        private int[] GetColumnIndices()
-        {
-            int[] result = new int[9];
-            int start = Column;
-
-            for (int i = 0; i < 9; i++)
-                result[i] = start + i * 9;
-
-            return result;
-        }
-        private int[] GetZoneIndices()
-        {
-            int[] result = new int[9];
-
-            for (int i = 0; i < 3; i++)
-            {
-                result[i] = ZoneIndices[Zone] + i;
-                result[i + 3] = ZoneIndices[Zone] + 9 + i;
-                result[i + 6] = ZoneIndices[Zone] + 18 + i;
-            }
-
-            return result;
-        }
         /// <summary>
         /// Gets the cells which may cause conflicts with this one.
         /// </summary>
@@ -167,20 +139,7 @@ namespace SudokuSharp
         #endregion
 
         #region Internal predeclarations
-        public static ReadOnlyCollection<int> _all = new ReadOnlyCollection<int>(new int[81]
-        {
-            00, 1, 2, 3, 4, 5, 6, 7, 8,
-            09,10,11,12,13,14,15,16,17,
-            18,19,20,21,22,23,24,25,26,
-            27,28,29,30,31,32,33,34,35,
-            36,37,38,39,40,41,42,43,44,
-            45,46,47,48,49,50,51,52,53,
-            54,55,56,57,58,59,60,61,62,
-            63,64,65,66,67,68,69,70,71,
-            72,73,74,75,76,77,78,79,80
-        });
-
-        private static int[] ListOfRows =
+        private static int[] _rowByIndex =
         {
                 0,0,0,0,0,0,0,0,0,
                 1,1,1,1,1,1,1,1,1,
@@ -192,7 +151,7 @@ namespace SudokuSharp
                 7,7,7,7,7,7,7,7,7,
                 8,8,8,8,8,8,8,8,8
         };
-        private static int[] ListOfColumns =
+        private static int[] _colByIndex =
         {
             0,1,2,3,4,5,6,7,8,
             0,1,2,3,4,5,6,7,8,
@@ -204,7 +163,7 @@ namespace SudokuSharp
             0,1,2,3,4,5,6,7,8,
             0,1,2,3,4,5,6,7,8
         };
-        private static int[] ListOfZones =
+        private static int[] _zoneByIndex =
         {
             0,0,0,1,1,1,2,2,2,
             0,0,0,1,1,1,2,2,2,
@@ -216,7 +175,7 @@ namespace SudokuSharp
             6,6,6,7,7,7,8,8,8,
             6,6,6,7,7,7,8,8,8
         };
-        private static int[,] ListOfIndices =
+        private static int[,] _indicesByRowCol =
         {
             { 0, 1, 2, 3, 4, 5, 6, 7, 8 },
             { 9,10,11,12,13,14,15,16,17 },
@@ -228,7 +187,18 @@ namespace SudokuSharp
             {63,64,65,66,67,68,69,70,71 },
             {72,73,74,75,76,77,78,79,80 }
         };
-        private static int[] ZoneIndices = { 0, 3, 6, 27, 30, 33, 54, 57, 60 };
+        private static ReadOnlyCollection<int> _allIndices = new ReadOnlyCollection<int>(new int[81]
+        {
+            00, 1, 2, 3, 4, 5, 6, 7, 8,
+            09,10,11,12,13,14,15,16,17,
+            18,19,20,21,22,23,24,25,26,
+            27,28,29,30,31,32,33,34,35,
+            36,37,38,39,40,41,42,43,44,
+            45,46,47,48,49,50,51,52,53,
+            54,55,56,57,58,59,60,61,62,
+            63,64,65,66,67,68,69,70,71,
+            72,73,74,75,76,77,78,79,80
+        });
 
         private static int[][] ConflictingIndices = new int[][] {
     new int[] {1,2,3,4,5,6,7,8,9,10,11,18,19,20,27,36,45,54,63,72},
