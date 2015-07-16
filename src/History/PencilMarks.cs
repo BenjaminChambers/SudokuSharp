@@ -1,5 +1,8 @@
-﻿namespace SudokuSharp.History
+﻿using System.Runtime.Serialization;
+
+namespace SudokuSharp.History
 {
+    [DataContract]
     public abstract class PencilActionBase
     {
         public PencilActionBase(PencilGrid Target, Location Where, int Value)
@@ -9,12 +12,17 @@
             _value = Value;
         }
 
+        [DataMember]
         protected PencilGrid _target;
+        [DataMember]
         protected Location _where;
+        [DataMember]
         protected int _value;
+        [DataMember]
         protected bool _prior;
     }
 
+    [DataContract]
     public class PencilToggle : PencilActionBase, IHistoryAction
     {
         public PencilToggle(PencilGrid Target, Location Where, int Value) : base(Target, Where, Value) { }
@@ -22,6 +30,7 @@
         public void Undo() { Apply(); }
     }
 
+    [DataContract]
     public class PencilSet : PencilActionBase, IHistoryAction
     {
         public PencilSet(PencilGrid Target, Location Where, int Value) : base(Target, Where, Value) { }
@@ -36,6 +45,7 @@
         }
     }
 
+    [DataContract]
     public class PencilClear : PencilActionBase, IHistoryAction
     {
         public PencilClear(PencilGrid Target, Location Where, int Value) : base(Target, Where, Value) { }

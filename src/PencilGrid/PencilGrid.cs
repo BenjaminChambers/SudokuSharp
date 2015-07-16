@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace SudokuSharp
 {
+    [DataContract]
     public class PencilGrid
     {
         #region Constructors
@@ -43,6 +45,7 @@ namespace SudokuSharp
         }
 
         #region Internals
+        [DataMember]
         bool[][] data;
         #endregion
     }

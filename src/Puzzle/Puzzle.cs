@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace SudokuSharp
 {
+    [DataContract]
     public class Puzzle
     {
         public Puzzle(Grid Solution)
@@ -56,12 +58,16 @@ namespace SudokuSharp
         }
 
         
-
+        [DataMember]
         private Grid _solution;
+        [DataMember]
         private Grid _work;
+        [DataMember]
         private PencilGrid _scratchPad;
+        [DataMember]
         List<List<History.IHistoryAction>> _history;
 
+        [DataMember]
         public bool AutoPencilMarkClearing { get; set; }
     }
 }
