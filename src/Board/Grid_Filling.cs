@@ -1,6 +1,6 @@
 ﻿namespace SudokuSharp
 {
-    public partial class Grid
+    public partial class Board
     {
         // TODO:
         // Add Hidden Single filling, pairs, triples, quads

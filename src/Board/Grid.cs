@@ -9,18 +9,18 @@ namespace SudokuSharp
     /// It contains a grid of cells with values of 0-9; 0 corresponds to an empty cell, and the other digits the possible values.
     /// </summary>
     [DataContract]
-    public partial class Grid
+    public partial class Board
     {
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Grid"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
+        /// Initializes a new instance of the <see cref="Board"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
         /// </summary>
-        public Grid() { }
+        public Board() { }
         /// <summary>
-        /// Copies an instance of the <see cref="Grid"/> class.
+        /// Copies an instance of the <see cref="Board"/> class.
         /// </summary>
         /// <param name="src">The source.</param>
-        public Grid(Grid src)
+        public Board(Board src)
         {
             Array.Copy(src.data, this.data, 81);
         }

@@ -2,7 +2,7 @@
 
 namespace SudokuSharp
 {
-    public partial class Grid
+    public partial class Board
     {
         #region Is Solved
         /// <summary>
@@ -166,7 +166,7 @@ namespace SudokuSharp
                 if (IsSolved) return true;
                 if (!IsValid) return false;
 
-                Grid work = new Grid(this);
+                Board work = new Board(this);
 
                 for (int i = 0; i < 81; i++)
                 {
@@ -180,7 +180,7 @@ namespace SudokuSharp
 
                             foreach (int test in Candidates)
                             {
-                                Grid working = new Grid(this);
+                                Board working = new Board(this);
                                 working.PutCell(i, test);
 
                                 if (working.BruteForceRecursion(0))

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
-    public partial class Grid
+    public partial class Board
     {
         /// <summary>
         /// Creates a random Sudoku board, using the provided Seed for the randomizer.
@@ -12,10 +12,10 @@ namespace SudokuSharp
         /// If a board could not be created, it will return a Null value.
         /// </summary>
         /// <param name="Seed">The seed to use for the random number generator.</param>
-        /// <returns>A <see cref="Grid"/> with all cells filled in.</returns>
-        public static async Task<Grid> CreateSolutionAsync(int Seed)
+        /// <returns>A <see cref="Board"/> with all cells filled in.</returns>
+        public static async Task<Board> CreateSolutionAsync(int Seed)
         {
-            return await Task.Factory.StartNew(() => Grid.CreateSolution(Seed));
+            return await Task.Factory.StartNew(() => Board.CreateSolution(Seed));
         }
 
         /// <summary>
@@ -23,10 +23,10 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
-        /// <returns>A <see cref="Grid"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static async Task<Grid> CreatePuzzleAsync(Grid Solution, int Seed)
+        /// <returns>A <see cref="Board"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
+        public static async Task<Board> CreatePuzzleAsync(Board Solution, int Seed)
         {
-            return await Task.Factory.StartNew(() => Grid.CreatePuzzle(Solution, Seed));
+            return await Task.Factory.StartNew(() => Board.CreatePuzzle(Solution, Seed));
         }
 
         /// <summary>
@@ -35,10 +35,10 @@ namespace SudokuSharp
         /// If a board could not be created, it will return a Null value.
         /// </summary>
         /// <param name="Seed">The seed to use for the random number generator.</param>
-        /// <returns>A <see cref="Grid"/> with all cells filled in.</returns>
-        public static Grid CreateSolution(int Seed)
+        /// <returns>A <see cref="Board"/> with all cells filled in.</returns>
+        public static Board CreateSolution(int Seed)
         {
-            Grid work = new Grid();
+            Board work = new Board();
 
             if (!work.RandomRecursion(new Random(Seed), 0))
                 return null;
@@ -51,13 +51,13 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
-        /// <returns>A <see cref="Grid"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static Grid CreatePuzzle(Grid Solution, int Seed)
+        /// <returns>A <see cref="Board"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
+        public static Board CreatePuzzle(Board Solution, int Seed)
         {
             // Keeping a local array in case we make a mistake has empirically turned out to be faster than manually unrolling the changes
             int[] Restore = new int[81];
             Random Stream = new Random(Seed);
-            Grid Work = new Grid(Solution);
+            Board Work = new Board(Solution);
 
             // I'm sure there's a faster way to do this than with a generic linked list, but why bother? I'll fix it if it's ever a problem.
             List<int> srcOrder = new List<int>();

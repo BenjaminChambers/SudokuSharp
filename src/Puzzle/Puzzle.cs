@@ -6,10 +6,19 @@ namespace SudokuSharp
     [DataContract]
     public class Puzzle
     {
-        public Puzzle(Grid Solution)
+        public Puzzle(int Seed)
         {
-            _solution = new Grid(Solution);
-            _work = new Grid();
+            _solution = Board.CreateSolution(Seed);
+            _givens = Board.CreatePuzzle(_solution, Seed);
+            _work = new Board();
+            _scratchPad = new PencilGrid();
+            _history = new List<List<History.IHistoryAction>>();
+        }
+        public Puzzle(Board Solution, Board Givens)
+        {
+            _solution = new Board(Solution);
+            _givens = new Board(Givens);
+            _work = new Board();
             _scratchPad = new PencilGrid();
             _history = new List<List<History.IHistoryAction>>();
         }
@@ -59,9 +68,11 @@ namespace SudokuSharp
 
         
         [DataMember]
-        private Grid _solution;
+        private Board _solution;
         [DataMember]
-        private Grid _work;
+        private Board _givens;
+        [DataMember]
+        private Board _work;
         [DataMember]
         private PencilGrid _scratchPad;
         [DataMember]

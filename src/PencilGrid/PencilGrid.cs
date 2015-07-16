@@ -19,8 +19,8 @@ namespace SudokuSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="PencilGrid"/> class, with pencil marks for everywhere a number is a candidate.
         /// </summary>
-        /// <param name="src">The <see cref="Grid"/> to work off of.</param>
-        public PencilGrid(Grid src) : base()
+        /// <param name="src">The <see cref="Board"/> to work off of.</param>
+        public PencilGrid(Board src) : base()
         {
             foreach (Location where in Location.All)
             {

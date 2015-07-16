@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace SudokuSharp
 {
-    public partial class Grid
+    public partial class Board
 	{
         /// <summary>
         /// Attempts to fill in all cells in a puzzle using brute force.
         /// The original puzzle remains unchanged.
         /// </summary>
         /// <returns>
-        /// If successful, a new instance of <see cref="Grid"/> will be returned with all cells filled in.
+        /// If successful, a new instance of <see cref="Board"/> will be returned with all cells filled in.
         /// If unsuccesful, a value of null will be returned.
         /// </returns>
-        public Grid Solve()
+        public Board Solve()
         {
             if (DuplicateValuesPresent)
                 return null;
 
-            Grid work = new Grid(this);
+            Board work = new Board(this);
 
             if (work.BruteForceRecursion(0))
                 return work;

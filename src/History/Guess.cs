@@ -5,7 +5,7 @@ namespace SudokuSharp.History
     [DataContract]
     public class Guess : IHistoryAction
     {
-        public Guess(Grid Target, Location Where, int Value)
+        public Guess(Board Target, Location Where, int Value)
         {
             _target = Target;
             _where = Where;
@@ -23,7 +23,7 @@ namespace SudokuSharp.History
         }
 
         [DataMember]
-        private Grid _target;
+        private Board _target;
         [DataMember]
         private Location _where;
         [DataMember]
