@@ -23,6 +23,9 @@ namespace SudokuSharp
         Guess
     }
 
+    /// <summary>
+    /// The <see cref="Cell"/> is returned by the Puzzle class. It contains useful information about every location in a Sudoku game, including:
+    /// </summary>
     [DataContract]
     public class Cell
     {
