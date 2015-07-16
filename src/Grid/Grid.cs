@@ -99,8 +99,8 @@ namespace SudokuSharp
             if (data[Where] > 0)
                 return result;
 
-            bool[] blocking = new bool[10];
-            int[] blockingIndices = Where.GetConflictingIndices();
+            var blocking = new bool[10];
+            var blockingIndices = Where.GetConflictingIndices();
 
             foreach (int idx in blockingIndices)
             {
