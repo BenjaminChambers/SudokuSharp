@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 
 namespace SudokuSharp
 {
@@ -7,6 +8,7 @@ namespace SudokuSharp
     /// The Location class is a reference to a specific cell on a Sudoku board.
     /// It is internally represented as an integer for performance, but contains many useful methods
     /// </summary>
+    [DataContract]
     public class Location
     {
         #region Constructors
@@ -83,6 +85,7 @@ namespace SudokuSharp
         /// For example, the first row is numbered 0,1,2... while the second row is numbered 9,10,11...
         /// The lower right-hand corner is numbered 80.
         /// </value>
+        [DataMember]
         public readonly int Index;
 
         /// <summary>

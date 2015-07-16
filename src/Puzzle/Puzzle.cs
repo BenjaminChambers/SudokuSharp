@@ -24,7 +24,7 @@ namespace SudokuSharp
             }
             else if (_solution[Where] > 0)
             {
-                type = CellType.Solution;
+                type = CellType.Given;
                 value = _solution[Where];
             }
             else
