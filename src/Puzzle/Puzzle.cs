@@ -6,6 +6,23 @@ namespace SudokuSharp
     [DataContract]
     public class Puzzle
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Puzzle()
+        {
+            _solution = new Board();
+            _givens = new Board();
+            _work = new Board();
+            _scratchPad = new PencilGrid();
+            _history = new List<List<History.IHistoryAction>>();
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Puzzle"/> class.
+        /// 
+        /// The solution and givens are both generated using the same random seed.
+        /// </summary>
+        /// <param name="Seed">The random seed to use.</param>
         public Puzzle(int Seed)
         {
             _solution = Board.CreateSolution(Seed);
