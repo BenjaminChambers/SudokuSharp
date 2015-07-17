@@ -9,7 +9,7 @@
         // Add Swordfish
         // Add Nishio (proof by contradiction)
 
-        public int FillNakedSingles()
+        private int FillNakedSingles()
         {
             int count = 0;
 

@@ -29,6 +29,14 @@ namespace SudokuSharp
     [DataContract]
     public class Cell
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cell"/> class.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/>.</param>
+        /// <param name="Type">The <see cref="CellType"/>.</param>
+        /// <param name="Value">The number that is there.</param>
+        /// <param name="Pencils">A <see cref="bool"/> array of values representing the pencil marks; true for present, false for clear.
+        /// Note that the array contains values for 0-9 even though a pencil mark for 0 (clear) doesn't make sense. This just makes the handling easier.</param>
         public Cell(Location Where, CellType Type, int Value, bool[] Pencils)
         {
             this.Where = Where;
@@ -37,15 +45,31 @@ namespace SudokuSharp
             _pencilMarks = new bool[10];
             Array.Copy(Pencils, _pencilMarks, 10);
         }
+        /// <summary>
+        /// The <see cref="Location"/> of the <see cref="Cell"/>.
+        /// </summary>
         [DataMember]
         public readonly Location Where;
+        /// <summary>
+        /// The number placed in the <see cref="Cell"/>.
+        /// </summary>
         [DataMember]
         public readonly int Value;
+        /// <summary>
+        /// The <see cref="CellType"/> of the cell.
+        /// </summary>
         [DataMember]
         public readonly  CellType Type;
         [DataMember]
         private bool[] _pencilMarks;
 
+        /// <summary>
+        /// Gets a <see cref="bool"/> array of the pencil marks.
+        /// </summary>
+        /// <value>
+        /// An array of 10 <see cref="bool"/> values, for the numbers 0-9. True indicates the presence of a pencil mark, false indicates clear.
+        /// In many Sudoku games, these marks indicate whether a number MAY be placed in the cell.
+        /// </value>
         public ReadOnlyCollection<bool> PencilMarks { get { return new ReadOnlyCollection<bool>(_pencilMarks); }  }
     }
 }
