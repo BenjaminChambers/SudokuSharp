@@ -33,10 +33,10 @@ namespace SudokuSharp
                 type = CellType.Guess;
                 value = _work[Where];
             }
-            else if (_solution[Where] > 0)
+            else if (_givens[Where] > 0)
             {
                 type = CellType.Given;
-                value = _solution[Where];
+                value = _givens[Where];
             }
             else
             {
@@ -64,6 +64,11 @@ namespace SudokuSharp
                 action.Apply();
 
             _history.Add(historyGroup);
+        }
+
+        public bool IsCorrect(Location Where)
+        {
+            return (_work[Where] == _solution[Where]);
         }
 
         
