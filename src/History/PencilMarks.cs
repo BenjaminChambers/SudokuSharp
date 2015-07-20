@@ -2,9 +2,18 @@
 
 namespace SudokuSharp.History
 {
+    /// <summary>
+    /// The base class for PencilMark history items. It contains logic useful for all three.
+    /// </summary>
     [DataContract]
     public abstract class PencilActionBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PencilActionBase"/> class.
+        /// </summary>
+        /// <param name="Target">The <see cref="PencilGrid"/> being marked.</param>
+        /// <param name="Where">The <see cref="Location"/> of the mark.</param>
+        /// <param name="Value">The number being marked.</param>
         public PencilActionBase(PencilGrid Target, Location Where, int Value)
         {
             _target = Target;
@@ -12,12 +21,24 @@ namespace SudokuSharp.History
             _value = Value;
         }
 
+        /// <summary>
+        /// Internal. Do not reference.
+        /// </summary>
         [DataMember]
         protected PencilGrid _target;
+        /// <summary>
+        /// Internal. Do not reference.
+        /// </summary>
         [DataMember]
         protected Location _where;
+        /// <summary>
+        /// Internal. Do not reference.
+        /// </summary>
         [DataMember]
         protected int _value;
+        /// <summary>
+        /// Internal. Do not reference.
+        /// </summary>
         [DataMember]
         protected bool _prior;
     }
