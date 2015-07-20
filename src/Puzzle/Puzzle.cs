@@ -3,6 +3,11 @@ using System.Runtime.Serialization;
 
 namespace SudokuSharp
 {
+    /// <summary>
+    /// The composite <see cref="Puzzle"/> class is an example of a higher-level Sudoku board.
+    /// 
+    /// If you are building a Sudoku application and wish to have as much functionality as possible provided, use this class.
+    /// </summary>
     [DataContract]
     public class Puzzle
     {
@@ -25,12 +30,22 @@ namespace SudokuSharp
             _solution = Board.CreateSolution(Seed);
             _givens = Board.CreatePuzzle(_solution, Seed);
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Puzzle"/> class, using the supplied solution and givens.
+        /// </summary>
+        /// <param name="Solution">A <see cref="Board"/> representing the solved puzzle.</param>
+        /// <param name="Givens">A <see cref="Board"/> representing the initial state of the puzzle.</param>
         public Puzzle(Board Solution, Board Givens)
         {
             _solution = new Board(Solution);
             _givens = new Board(Givens);
         }
 
+        /// <summary>
+        /// Returns a <see cref="CellType"/> with relevant information about that <see cref="Location"/> on the board.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/>.</param>
+        /// <returns></returns>
         public Cell GetCell(Location Where)
         {
             CellType type;
@@ -55,6 +70,14 @@ namespace SudokuSharp
             return new Cell(Where, type, value, _scratchPad.GetMarks(Where));
         }
 
+        /// <summary>
+        /// Fills a cell in.
+        /// It also creates a step in the Undo list.
+        /// If the <see cref="AutoPencilMarkClearing"/> property is <c>true</c>, then the corresponding Pencil Marks are also cleared (and the step in the Undo list
+        /// will contain the necessary information to restore them if necessary).
+        /// </summary>
+        /// <param name="Where">The where.</param>
+        /// <param name="Value">The value.</param>
         public void PutCell(Location Where, int Value)
         {
             List<History.IHistoryAction> historyGroup = new List<History.IHistoryAction>();
@@ -75,11 +98,19 @@ namespace SudokuSharp
             _redoList.Clear();
         }
 
+        /// <summary>
+        /// Determines whether the specified cell matches the solution.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> to check.</param>
+        /// <returns></returns>
         public bool IsCorrect(Location Where)
         {
             return (_work[Where] == _solution[Where]);
         }
 
+        /// <summary>
+        /// Undoes one step of actions, and moves that step to the Redo stack.
+        /// </summary>
         public void Undo()
         {
             List<History.IHistoryAction> step = _undoList.Pop();
@@ -90,6 +121,9 @@ namespace SudokuSharp
             _redoList.Push(step);
         }
 
+        /// <summary>
+        /// Redoes one step of actions, and moves that step back to the Undo stack.
+        /// </summary>
         public void Redo()
         {
             List<History.IHistoryAction> step = _redoList.Pop();
@@ -114,6 +148,12 @@ namespace SudokuSharp
         [DataMember]
         Stack<List<History.IHistoryAction>> _redoList = new Stack<List<History.IHistoryAction>>();
 
+        /// <summary>
+        /// Indicates whether conflicting pencil marks should be automatically cleared when placing values in cells.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [automatic pencil mark clearing]; otherwise, <c>false</c>.
+        /// </value>
         [DataMember]
         public bool AutoPencilMarkClearing { get; set; }
     }
