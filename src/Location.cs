@@ -109,6 +109,11 @@ namespace SudokuSharp
         {
             return new ReadOnlyCollection<int>(ConflictingIndices[Index]);
         }
+        /// <summary>
+        /// Returns a list of of every Index which is either in the same row, column or zone as the selected <see cref="Location"/>.
+        /// </summary>
+        /// <param name="Index">The index.</param>
+        /// <returns></returns>
         public static ReadOnlyCollection<int> GetConflictingIndices(int Index)
         {
             return new ReadOnlyCollection<int>(ConflictingIndices[Index]);
