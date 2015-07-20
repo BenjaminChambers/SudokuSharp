@@ -44,15 +44,15 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Cell.cs" />
-    <Compile Include="src\Board\Grid_Properties.cs" />
-    <Compile Include="src\Board\Grid_Solving.cs" />
-    <Compile Include="src\Board\Grid.cs" />
-    <Compile Include="src\Board\Grid_Factories.cs" />
+    <Compile Include="src\Board\Board_Properties.cs" />
+    <Compile Include="src\Board\Board_Solving.cs" />
+    <Compile Include="src\Board\Board.cs" />
+    <Compile Include="src\Board\Board_Factories.cs" />
     <Compile Include="src\History\Guess.cs" />
     <Compile Include="src\History\IHistoryAction.cs" />
     <Compile Include="src\History\PencilMarks.cs" />
     <Compile Include="src\Location.cs" />
-    <Compile Include="src\Board\Grid_Filling.cs" />
+    <Compile Include="src\Board\Board_Filling.cs" />
     <Compile Include="src\PencilGrid\PencilGrid.cs" />
     <Compile Include="src\Puzzle\Puzzle.cs" />
   </ItemGroup>
