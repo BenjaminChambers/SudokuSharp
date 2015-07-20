@@ -13,9 +13,6 @@ namespace SudokuSharp
         {
             _solution = new Board();
             _givens = new Board();
-            _work = new Board();
-            _scratchPad = new PencilGrid();
-            _history = new List<List<History.IHistoryAction>>();
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Puzzle"/> class.
@@ -27,17 +24,11 @@ namespace SudokuSharp
         {
             _solution = Board.CreateSolution(Seed);
             _givens = Board.CreatePuzzle(_solution, Seed);
-            _work = new Board();
-            _scratchPad = new PencilGrid();
-            _history = new List<List<History.IHistoryAction>>();
         }
         public Puzzle(Board Solution, Board Givens)
         {
             _solution = new Board(Solution);
             _givens = new Board(Givens);
-            _work = new Board();
-            _scratchPad = new PencilGrid();
-            _history = new List<List<History.IHistoryAction>>();
         }
 
         public Cell GetCell(Location Where)
@@ -80,7 +71,8 @@ namespace SudokuSharp
             foreach (History.IHistoryAction action in historyGroup)
                 action.Apply();
 
-            _history.Add(historyGroup);
+            _undoList.Push(historyGroup);
+            _redoList.Clear();
         }
 
         public bool IsCorrect(Location Where)
@@ -88,17 +80,39 @@ namespace SudokuSharp
             return (_work[Where] == _solution[Where]);
         }
 
-        
+        public void Undo()
+        {
+            List<History.IHistoryAction> step = _undoList.Pop();
+
+            foreach (var item in step)
+                item.Undo();
+
+            _redoList.Push(step);
+        }
+
+        public void Redo()
+        {
+            List<History.IHistoryAction> step = _redoList.Pop();
+
+            foreach (var item in step)
+                item.Apply();
+
+            _undoList.Push(step);
+        }
+
+
         [DataMember]
         private Board _solution;
         [DataMember]
         private Board _givens;
         [DataMember]
-        private Board _work;
+        private Board _work = new Board();
         [DataMember]
-        private PencilGrid _scratchPad;
+        private PencilGrid _scratchPad = new PencilGrid();
         [DataMember]
-        List<List<History.IHistoryAction>> _history;
+        Stack<List<History.IHistoryAction>> _undoList = new Stack<List<History.IHistoryAction>>();
+        [DataMember]
+        Stack<List<History.IHistoryAction>> _redoList = new Stack<List<History.IHistoryAction>>();
 
         [DataMember]
         public bool AutoPencilMarkClearing { get; set; }
