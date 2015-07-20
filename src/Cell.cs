@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace SudokuSharp
@@ -43,7 +42,7 @@ namespace SudokuSharp
             this.Value = Value;
             this.Type = Type;
             _pencilMarks = new bool[10];
-            Array.Copy(Pencils, _pencilMarks, 10);
+            Pencils.CopyTo(_pencilMarks,0);
         }
         /// <summary>
         /// The <see cref="Location"/> of the <see cref="Cell"/>.
