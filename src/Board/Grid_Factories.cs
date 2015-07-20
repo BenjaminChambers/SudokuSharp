@@ -1,34 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SudokuSharp
 {
     public partial class Board
     {
-        /// <summary>
-        /// Creates a random Sudoku board, using the provided Seed for the randomizer.
-        /// 
-        /// If a board could not be created, it will return a Null value.
-        /// </summary>
-        /// <param name="Seed">The seed to use for the random number generator.</param>
-        /// <returns>A <see cref="Board"/> with all cells filled in.</returns>
-        public static async Task<Board> CreateSolutionAsync(int Seed)
-        {
-            return await Task.Factory.StartNew(() => Board.CreateSolution(Seed));
-        }
-
-        /// <summary>
-        /// Creates a puzzle with guaranteed to have your provided solution as the unique solution available.
-        /// </summary>
-        /// <param name="Solution">Your provided solution.</param>
-        /// <param name="Seed">The seed for the random generator.</param>
-        /// <returns>A <see cref="Board"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static async Task<Board> CreatePuzzleAsync(Board Solution, int Seed)
-        {
-            return await Task.Factory.StartNew(() => Board.CreatePuzzle(Solution, Seed));
-        }
-
         /// <summary>
         /// Creates a random Sudoku board, using the provided Seed for the randomizer.
         /// 
