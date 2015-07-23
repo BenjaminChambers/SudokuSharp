@@ -27,22 +27,28 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Solution">Your provided solution.</param>
         /// <param name="Seed">The seed for the random generator.</param>
+        /// <param name="BatchSize">The number of locations to examine at a time. After removing this many spaces, the puzzle is checked for validity.
+        /// As this puzzle check is the most intensive part of the creation process, processing batches of spaces together saves a great deal of time.</param>
+        /// <param name="MinimumGivens">The minimum number of clues to include on the board.
+        /// It is mathematically impossible to solve a given Sudoku puzzle with fewer than 17 givens.
+        /// The puzzle creation process will end when the specified number of givens remain on the board.
+        /// If a puzzle cannot be created with that number of givens, then one will be created with more.</param>
         /// <returns>A <see cref="Board"/> with many cells blanked out. It is not guaranteed to have the minimum number of clues (clue removal order could affect this), nor is it guaranteed to be any particular level of difficulty.</returns>
-        public static Board CreatePuzzle(Board Solution, int Seed)
+        public static Board CreatePuzzle(Board Solution, int Seed, int MinimumGivens = 20, int BatchSize = 4)
         {
             // Keeping a local array in case we make a mistake has empirically turned out to be faster than manually unrolling the changes
             int[] Restore = new int[81];
             Random Stream = new Random(Seed);
             Board Work = new Board(Solution);
 
-            // I'm sure there's a faster way to do this than with a generic linked list, but why bother? I'll fix it if it's ever a problem.
-            List<int> srcOrder = new List<int>();
+            // I'm sure there's a faster way to do this than with a generic list, but why bother? I'll fix it if it's ever a problem.
+            var OrderList = new List<int>();
             for (int i = 0; i < 81; i++)
-                srcOrder.Add(i);
+            {
+                OrderList.Insert(Stream.Next(OrderList.Count), i);
+            }
 
-            List<int> Order = new List<int>();
-            foreach (int i in srcOrder)
-                Order.Insert(Stream.Next(Order.Count), i);
+            var OrderQueue = new Queue<int>(OrderList);
 
             #region Cutting quads
             // Removing cells four at a time, mirrored around both axes
@@ -50,9 +56,9 @@ namespace SudokuSharp
             {
                 Array.Copy(Work.data, Restore, 81);
 
-                for (int j=0; j<2; j++)
+                for (int j = 0; j < BatchSize; j++)
                 {
-                    Location loc = Order[i*3+j];
+                    Location loc = OrderQueue.Dequeue();
 
                     int x = loc.Column;
                     int y = loc.Row;
@@ -74,9 +80,9 @@ namespace SudokuSharp
             {
                 Array.Copy(Work.data, Restore, 81);
 
-                for (int j=0; j<2; j++)
+                for (int j = 0; j < 2; j++)
                 {
-                    Location loc = Order[i*3+j];
+                    Location loc = OrderQueue.Dequeue();
 
                     int x = loc.Column;
                     int y = loc.Row;
@@ -99,26 +105,43 @@ namespace SudokuSharp
 
             // If this is too slow I could short circuit it once we get down to only 17 clues, as it's mathematically impossible to solve a sudoku with
             // fewer than that... But I'll wait until I need more speed to get to that level of optimization
-            Order.Clear();
-            for (int i=0; i<81; i++)
+            OrderList.Clear();
+            for (int i = 0; i < 81; i++)
             {
                 if (Work.data[i] != 0)
-                    Order.Insert(Stream.Next(Order.Count), Work.data[i]);
+                    OrderList.Insert(Stream.Next(OrderQueue.Count), Work.data[i]);
             }
-            int backup;
-            int givens = 81 - Order.Count;
-            foreach (int i in Order)
-            {
-                if (givens > 18)
-                {
-                    backup = Work.data[Order[i]];
-                    Work.data[Order[i]] = 0;
+            int givens = 81 - OrderList.Count;
 
-                    if (!Work.ExistsUniqueSolution)
-                        Work.data[Order[i]] = backup;
-                    else
-                        givens--;
+            if (givens < MinimumGivens)
+            {
+                // We've cut too many, and need to give a few back
+
+                for (int i = 0; i < (MinimumGivens - givens); i++)
+                {
+                    int loc;
+                    do
+                    {
+                        loc = Stream.Next(81);
+                    } while (Work[loc] > 0);
+                    Work[loc] = Solution[loc];
                 }
+
+                return Work;
+            }
+
+            foreach (int i in OrderList)
+            {
+                int backup = Work.data[OrderList[i]];
+                Work.data[OrderList[i]] = 0;
+
+                if (!Work.ExistsUniqueSolution)
+                    Work.data[OrderList[i]] = backup;
+                else
+                    givens--;
+
+                if (givens == MinimumGivens)
+                    return Work;
             }
             #endregion
 
