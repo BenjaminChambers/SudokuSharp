@@ -14,3 +14,5 @@ The main classes that you will work with, when using SudokuSharp, are:
 Location</li><li>
 Board</li><li>
 Puzzle</li></ul>&nbsp;
+
+Please see the Wiki for more information about each of these.
