@@ -108,8 +108,9 @@ namespace SudokuSharp
             OrderList.Clear();
             for (int i = 0; i < 81; i++)
             {
-                if (Work.data[i] != 0)
-                    OrderList.Insert(Stream.Next(OrderQueue.Count), Work.data[i]);
+                int num = Work.data[i];
+                if (num != 0)
+                    OrderList.Insert(Stream.Next(OrderList.Count), num);
             }
             int givens = 81 - OrderList.Count;
 
