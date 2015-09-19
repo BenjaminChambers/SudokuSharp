@@ -60,6 +60,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Settings Configurations\Heavy.Randomized.runsettings" />
+    <None Include="Settings Configurations\Medium.Randomized.runsettings" />
     <None Include="Settings Configurations\Quick.runsettings" />
   </ItemGroup>
   <Choose>
