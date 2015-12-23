@@ -99,6 +99,23 @@ namespace SudokuSharp
         }
 
         /// <summary>
+        /// Toggles a pencil mark.
+        /// It also creates an undo step in the history.
+        /// </summary>
+        /// <param name="where">The location to mark</param>
+        /// <param name="value">The number to mark</param>
+        public void TogglePencil(Location where, int value)
+        {
+            _scratchPad.Toggle(where, value);
+
+            List<History.IHistoryAction> historyGroup = new List<History.IHistoryAction>();
+            historyGroup.Add(new History.PencilToggle(_scratchPad, where, value));
+
+            _undoList.Push(historyGroup);
+            _redoList.Clear();
+        }
+
+        /// <summary>
         /// Determines whether the specified cell matches the solution.
         /// </summary>
         /// <param name="Where">The <see cref="Location"/> to check.</param>
