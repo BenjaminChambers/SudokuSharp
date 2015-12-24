@@ -86,8 +86,8 @@ namespace SudokuSharp
             {
                 foreach (Location loc in Where.GetConflictingIndices())
                 {
-                    if (_scratchPad.Get(Where, Value))
-                        historyGroup.Add(new History.PencilClear(_scratchPad, Where, Value));
+                    if (_scratchPad.Get(loc, Value))
+                        historyGroup.Add(new History.PencilClear(_scratchPad, loc, Value));
                 }
             }
 
