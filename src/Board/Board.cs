@@ -92,7 +92,7 @@ namespace SudokuSharp
         /// Gets a list of the values which may go here.
         /// </summary>
         /// <param name="Where">The <see cref="Location"/> of the cell to check.</param>
-        /// <returns>A <see cref="List{T}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
+        /// <returns>A <see cref="List{int}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
         public List<int> GetCandidates(Location Where)
         {
             List<int> result = new List<int>();
@@ -110,6 +110,21 @@ namespace SudokuSharp
             for (int i = 1; i < 10; i++)
                 if (!blocking[i])
                     result.Add(i);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a list of <see cref="Location"/>s which are empty. Useful for solving or grading a board.
+        /// </summary>
+        /// <returns>A <see cref="List{Location}"/></returns>
+        public List<Location> GetEmptyCells()
+        {
+            List<Location> result = new List<Location>();
+
+            foreach (Location loc in Location.All)
+                if (this[loc] == 0)
+                    result.Add(loc);
 
             return result;
         }
