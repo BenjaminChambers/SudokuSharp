@@ -3,13 +3,13 @@
     public partial class Board
     {
         // TODO:
-        // Add Hidden Single filling, pairs, triples, quads
+        // Add pairs, triples, quads
         // Add Locked Candidates
         // Add X-Wing, XY-Wing and XYZ-Wing
         // Add Swordfish
         // Add Nishio (proof by contradiction)
 
-        private int FillNakedSingles()
+        public int FillSingles()
         {
             int count = 0;
 
@@ -33,6 +33,14 @@
             } while (countThisRun > 0);
 
             return count;
+        }
+
+        public int FillDoubles()
+        {
+            // Find any three blocking cells (same row, column, or zone)
+            // If two of them have the same two possibilities, then those two possibilities may be removed from the third
+            // The key here is to focus on those cells with three possibilities, and look for doubles to be removed from them.
+            return 0;
         }
     }
 }
