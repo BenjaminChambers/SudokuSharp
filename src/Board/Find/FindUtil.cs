@@ -22,9 +22,8 @@ namespace SudokuSharp
         /// <returns>A <see cref="Dictionary{Location, List}"/></returns>
         public Dictionary<Location, List<int>> FindCandidatesForAllEmptyCells()
         {
-            return (Dictionary<Location, List<int>>)from loc in Location.All
-            where this[loc] == 0
-            select new KeyValuePair<Location, List<int>>(loc, GetCandidates(loc));
+            return (Dictionary<Location, List<int>>)from loc in FindEmptyCells()
+                select new KeyValuePair<Location, List<int>>(loc, GetCandidates(loc));
         }
     }
 }
