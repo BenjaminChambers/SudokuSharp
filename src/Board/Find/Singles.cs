@@ -88,5 +88,36 @@ namespace SudokuSharp
 
             return results;
         }
+
+        /// <summary>
+        /// For convenience, returns the result a set of all singles, whether naked or hidden.
+        /// </summary>
+        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
+        public Dictionary<Location, int> FindAllSingles()
+        {
+            var naked = FindNakedSingles();
+            var hidden = FindHiddenSingles();
+
+            foreach (var item in hidden)
+                naked[item.Key] = item.Value;
+
+            return naked;
+        }
+
+        /// <summary>
+        /// Static version of <seealso cref="FindAllSingles()"/>, intended to operate on a <see cref="Dictionary{Location, List}"/> returned by <seealso cref="FindCandidatesForAllEmptyCells"/> after it has been modified
+        /// For convenience, returns the result a set of all singles, whether naked or hidden.
+        /// </summary>
+        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
+        public static Dictionary<Location, int> FindAllSingles(Dictionary<Location, List<int>> Candidates)
+        {
+            var naked = FindNakedSingles(Candidates);
+            var hidden = FindHiddenSingles(Candidates);
+
+            foreach (var item in hidden)
+                naked[item.Key] = item.Value;
+
+            return naked;
+        }
     }
 }

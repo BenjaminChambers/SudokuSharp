@@ -58,7 +58,7 @@ namespace SudokuSharp
                 }
             }
 
-//            var results = FindNakedSingles(candidates);
+            return FindAllSingles(candidates);
         }
     }
 }
