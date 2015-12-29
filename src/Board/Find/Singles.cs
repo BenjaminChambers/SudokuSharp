@@ -8,7 +8,7 @@ namespace SudokuSharp
         public Dictionary<Location, int> FindNakedSingles()
         {
             return (Dictionary < Location, int> )
-                from item in FindCandidatesForAllEmptyCell()
+                from item in FindCandidatesForAllEmptyCells()
                 where item.Value.Count == 0
                 select new KeyValuePair<Location, int>(item.Key, item.Value.First());
         }

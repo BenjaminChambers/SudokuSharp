@@ -20,7 +20,7 @@ namespace SudokuSharp
         /// Returns a collection of all empty cells combined with the possible candidates for those cells
         /// </summary>
         /// <returns>A <see cref="Dictionary{Location, List}"/></returns>
-        public Dictionary<Location, List<int>> FindCandidatesForAllEmptyCell()
+        public Dictionary<Location, List<int>> FindCandidatesForAllEmptyCells()
         {
             return (Dictionary<Location, List<int>>)from loc in Location.All
             where this[loc] == 0
