@@ -28,32 +28,34 @@ namespace SudokuSharp
                                                     where loc.Zone == zone
                                                     select loc;
 
-                    int lockedRow = numberLocationsInThisZone.First().Row;
-                    int lockedColumn = numberLocationsInThisZone.First().Column;
+                    if (numberLocationsInThisZone.Count() > 0)
+                    {
+                        int lockedRow = numberLocationsInThisZone.First().Row;
+                        int lockedColumn = numberLocationsInThisZone.First().Column;
 
-                    foreach (var loc in numberLocationsInThisZone)
-                    {
-                        if (loc.Row != lockedRow) lockedRow = -1;
-                        if (loc.Column != lockedColumn) lockedColumn = -1;
-                    }
-
-                    if (lockedRow != -1)
-                    {
-                        foreach (var loc in
-                            (from item in numberLocations
-                             where item.Zone != zone
-                             where item.Row == lockedRow
-                             select item))
-                            candidates[loc].Remove(number);
-                    }
-                    if (lockedColumn != -1)
-                    {
-                        foreach (var loc in
-                            (from item in numberLocations
-                             where item.Zone != zone
-                             where item.Column == lockedColumn
-                             select item))
-                            candidates[loc].Remove(number);
+                        foreach (var loc in numberLocationsInThisZone)
+                        {
+                            if (loc.Row != lockedRow) lockedRow = -1;
+                            if (loc.Column != lockedColumn) lockedColumn = -1;
+                        }
+                        if (lockedRow != -1)
+                        {
+                            foreach (var loc in
+                                (from item in numberLocations
+                                 where item.Zone != zone
+                                 where item.Row == lockedRow
+                                 select item))
+                                candidates[loc].Remove(number);
+                        }
+                        if (lockedColumn != -1)
+                        {
+                            foreach (var loc in
+                                (from item in numberLocations
+                                 where item.Zone != zone
+                                 where item.Column == lockedColumn
+                                 select item))
+                                candidates[loc].Remove(number);
+                        }
                     }
                 }
             }
