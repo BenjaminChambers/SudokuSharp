@@ -114,9 +114,9 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Index">The index.</param>
         /// <returns></returns>
-        public static ReadOnlyCollection<int> GetConflictingIndices(int Index)
+        public static ReadOnlyCollection<Location> GetConflictingIndices(Location Index)
         {
-            return new ReadOnlyCollection<int>(ConflictingIndices[Index]);
+            return new ReadOnlyCollection<Location>(ConflictingIndices[Index]);
         }
         #endregion
 
