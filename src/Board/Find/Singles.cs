@@ -7,16 +7,10 @@ namespace SudokuSharp
     {
         public Dictionary<Location, int> FindNakedSingles()
         {
-            var results = new Dictionary<Location, int>();
-
-            foreach (var loc in Location.All)
-            {
-                var candidates = GetCandidates(loc);
-                if (candidates.Count == 1)
-                    results.Add(loc, candidates[0]);
-            }
-
-            return results;
+            return (Dictionary < Location, int> )
+                from item in FindCandidatesForAllEmptyCell()
+                where item.Value.Count == 0
+                select new KeyValuePair<Location, int>(item.Key, item.Value.First());
         }
 
         public Dictionary<Location, int> FindHiddenSingles()
