@@ -54,7 +54,6 @@
     <Compile Include="src\History\IHistoryAction.cs" />
     <Compile Include="src\History\PencilMarks.cs" />
     <Compile Include="src\Location.cs" />
-    <Compile Include="src\Board\Board_Filling.cs" />
     <Compile Include="src\PencilGrid\PencilGrid.cs" />
     <Compile Include="src\Puzzle\Puzzle.cs" />
   </ItemGroup>

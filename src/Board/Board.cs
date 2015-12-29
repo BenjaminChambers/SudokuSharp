@@ -92,7 +92,7 @@ namespace SudokuSharp
         /// Gets a list of the values which may go here.
         /// </summary>
         /// <param name="Where">The <see cref="Location"/> of the cell to check.</param>
-        /// <returns>A <see cref="List{int}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
+        /// <returns>A <see cref="List{Int}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
         public List<int> GetCandidates(Location Where)
         {
             List<int> result = new List<int>();
