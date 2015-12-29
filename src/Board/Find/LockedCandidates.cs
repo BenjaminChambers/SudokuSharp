@@ -11,10 +11,10 @@ namespace SudokuSharp
         /// For every zone, checks to see if a candidate is confined to only one row or column.
         /// If it is, then it checks for naked or hidden singles after removing that row or column as a possibility from other zones
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
-        public Dictionary<Location, int> FindLockedCandidates()
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
+        public IEnumerable<KeyValuePair<Location, int>> FindLockedCandidates()
         {
-            var candidates = FindCandidatesForAllEmptyCells();
+            var candidates = FindCandidatesForAllEmptyCells().ToDictionary(x=>x.Key, x=>x.Value);
 
             for (int number = 1; number<9; number++)
             {

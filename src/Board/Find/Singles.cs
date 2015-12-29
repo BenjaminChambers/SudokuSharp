@@ -8,11 +8,10 @@ namespace SudokuSharp
         /// <summary>
         /// Checks all empty locations for those with only one possible candidate.
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
-        public Dictionary<Location, int> FindNakedSingles()
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
+        public IEnumerable<KeyValuePair<Location, int>> FindNakedSingles()
         {
-            return (Dictionary < Location, int> )
-                from item in FindCandidatesForAllEmptyCells()
+            return from item in FindCandidatesForAllEmptyCells()
                 where item.Value.Count == 0
                 select new KeyValuePair<Location, int>(item.Key, item.Value.First());
         }
@@ -21,11 +20,10 @@ namespace SudokuSharp
         /// Static version of <seealso cref="FindNakedSingles()"/>, intended to operate on a <see cref="Dictionary{Location, List}"/> returned by <seealso cref="FindCandidatesForAllEmptyCells"/> after it has been modified
         /// Checks all empty locations for those with only one possible candidate.
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
-        public static Dictionary<Location, int> FindNakedSingles(Dictionary<Location, List<int>> Candidates)
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
+        public static IEnumerable<KeyValuePair<Location, int>> FindNakedSingles(Dictionary<Location, List<int>> Candidates)
         {
-            return (Dictionary<Location, int>)
-                from item in Candidates
+            return from item in Candidates
                 where item.Value.Count == 0
                 select new KeyValuePair<Location, int>(item.Key, item.Value.First());
         }
@@ -33,7 +31,7 @@ namespace SudokuSharp
         /// <summary>
         /// For every row, column, and zone, checks to see if there is only one location within that area which may hold each number
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
         public Dictionary<Location, int> FindHiddenSingles()
         {
             Dictionary<Location, int> results = new Dictionary<Location, int>();
@@ -64,7 +62,7 @@ namespace SudokuSharp
         /// Static version of <seealso cref="FindHiddenSingles()"/>, intended to operate on a <see cref="Dictionary{Location, List}"/> returned by <seealso cref="FindCandidatesForAllEmptyCells"/> after it has been modified
         /// For every row, column, and zone, checks to see if there is only one location within that area which may hold each number
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
         public static Dictionary<Location, int> FindHiddenSingles(Dictionary<Location, List<int>> Candidates)
         {
             Dictionary<Location, int> results = new Dictionary<Location, int>();
@@ -92,32 +90,20 @@ namespace SudokuSharp
         /// <summary>
         /// For convenience, returns the result a set of all singles, whether naked or hidden.
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
-        public Dictionary<Location, int> FindAllSingles()
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
+        public IEnumerable<KeyValuePair<Location, int>> FindAllSingles()
         {
-            var naked = FindNakedSingles();
-            var hidden = FindHiddenSingles();
-
-            foreach (var item in hidden)
-                naked[item.Key] = item.Value;
-
-            return naked;
+            return FindNakedSingles().Union(FindHiddenSingles());
         }
 
         /// <summary>
         /// Static version of <seealso cref="FindAllSingles()"/>, intended to operate on a <see cref="Dictionary{Location, List}"/> returned by <seealso cref="FindCandidatesForAllEmptyCells"/> after it has been modified
         /// For convenience, returns the result a set of all singles, whether naked or hidden.
         /// </summary>
-        /// <returns><see cref="Dictionary{Location, Int}"/></returns>
-        public static Dictionary<Location, int> FindAllSingles(Dictionary<Location, List<int>> Candidates)
+        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
+        public static IEnumerable<KeyValuePair<Location, int>> FindAllSingles(Dictionary<Location, List<int>> Candidates)
         {
-            var naked = FindNakedSingles(Candidates);
-            var hidden = FindHiddenSingles(Candidates);
-
-            foreach (var item in hidden)
-                naked[item.Key] = item.Value;
-
-            return naked;
+            return FindNakedSingles(Candidates).Union(FindHiddenSingles(Candidates));
         }
     }
 }
