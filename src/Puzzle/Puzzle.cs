@@ -99,6 +99,19 @@ namespace SudokuSharp
         }
 
         /// <summary>
+        /// Checks if the entire puzzle is solved
+        /// </summary>
+        /// <returns>True or False</returns>
+        public bool IsSolved()
+        {
+            foreach (var loc in Location.All)
+                if (!IsCorrect(loc))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// Toggles a pencil mark.
         /// It also creates an undo step in the history.
         /// </summary>
@@ -122,6 +135,9 @@ namespace SudokuSharp
         /// <returns></returns>
         public bool IsCorrect(Location Where)
         {
+            if (_givens[Where] > 0)
+                return true;
+
             return (_work[Where] == _solution[Where]);
         }
 
