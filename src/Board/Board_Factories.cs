@@ -22,6 +22,47 @@ namespace SudokuSharp
             return work;
         }
 
+        public static Board CutQuads(Board Source, int Seed, int Rounds)
+        {
+            Random stream = new Random(Seed);
+
+            Board result = new Board(Source);
+
+            for (int i=0; i< Rounds; i++)
+            {
+                int x = stream.Next(9);
+                int y = stream.Next(9);
+
+                result[new Location(x, y)] = 0;
+                result[new Location(8 - x, y)] = 0;
+                result[new Location(x, 8 - y)] = 0;
+                result[new Location(8 - x, 8 - y)] = 0;
+            }
+
+            return result;
+        }
+
+        public static Board CutPairs(Board source, int Seed, int Rounds)
+        {
+            Random stream = new Random(Seed);
+
+            Board result = new Board(source);
+
+            for (int i=0; i< Rounds; i++)
+            {
+                int x = stream.Next(9);
+                int y = stream.Next(9);
+
+                result[new Location(x, y)] = 0;
+                if (stream.Next(2) == 1)
+                    result[new Location(8 - x, y)] = 0;
+                else
+                    result[new Location(x, 8 - y)] = 0;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Creates a puzzle with guaranteed to have your provided solution as the unique solution available.
         /// </summary>
@@ -56,7 +97,7 @@ namespace SudokuSharp
             {
                 Array.Copy(Work.data, Restore, 81);
 
-                for (int j = 0; j < BatchSize; j++)
+                for (int j = 0; j < Math.Min(BatchSize, OrderQueue.Count); j++)
                 {
                     Location loc = OrderQueue.Dequeue();
 
