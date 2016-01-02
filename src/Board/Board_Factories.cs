@@ -16,7 +16,26 @@ namespace SudokuSharp
         {
             Board work = new Board();
 
+            Random stream = new Random(Seed);
+            
             if (!work.RandomRecursion(new Random(Seed), 0))
+                return null;
+
+            return work;
+        }
+
+        /// <summary>
+        /// Creates a random Sudoku board, using the provided Seed for the randomizer.
+        /// 
+        /// If a board could not be created, it will return a Null value.
+        /// </summary>
+        /// <param name="Stream">The random number stream to use for filling in the puzzle.</param>
+        /// <returns>A <see cref="Board"/> with all cells filled in.</returns>
+        public static Board CreateSolution(Random Stream)
+        {
+            Board work = new Board();
+
+            if (!work.RandomRecursion(Stream, 0))
                 return null;
 
             return work;
