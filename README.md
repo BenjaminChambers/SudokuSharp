@@ -1,6 +1,6 @@
 # Welcome to the SudokuSharp 2.0
 
-SudokuSharp is a .NET Portable Class Library intended for working with Sudoku puzzles.
+SudokuSharp is a .NET Portable Class Library intended for working with Sudoku puzzles. It is available from the NuGet repository at NuGet.org, or in source form from GitHub.
 
 It contains both low level classes for working with Sudoku boards, and an example higher level class for building a complete Sudoku game.
 
