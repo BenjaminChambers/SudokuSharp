@@ -14,16 +14,14 @@ namespace SudokuSharp
 
         public static Board Solution(Random Stream)
         {
+            Board work = null;
+
             do
             {
-                try
-                {
-                    return new Board().Fill.Randomized(Stream);
-                }
-                catch (Board.CouldNotFillException e)
-                {
-                }
-            } while (true);
+                work = new Board().Fill.Randomized(Stream);
+            } while (work == null);
+
+            return work;
         }
 
         public static Board Puzzle(Board Source, int Seed, int Quads, int Pairs, int Singles)

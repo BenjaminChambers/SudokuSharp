@@ -19,8 +19,6 @@ namespace SudokuSharp
             }
         }
 
-        public class CouldNotFillException : Exception { }
-
         public partial class _FillClass
         {
             Board _parent;

@@ -14,7 +14,7 @@ namespace SudokuSharp
                 if (BruteForceRecursion(result, 0))
                     return result;
 
-                throw new CouldNotFillException();
+                return null;
             }
 
             private static bool BruteForceRecursion(Board work, int Index)
