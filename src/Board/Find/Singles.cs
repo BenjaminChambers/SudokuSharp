@@ -5,7 +5,7 @@ namespace SudokuSharp
 {
     public partial class Board
     {
-        public partial class FindClass
+        public partial class _FindClass
         {
             public IEnumerable<KeyValuePair<Location, int>> NakedSingles()
             {
