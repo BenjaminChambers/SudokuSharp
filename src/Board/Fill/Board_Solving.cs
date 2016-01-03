@@ -35,9 +35,7 @@ namespace SudokuSharp
 				return BruteForceRecursion(Index + 1);
 			else
 			{
-				List<int> Candidates = GetCandidates(Index);
-
-				foreach (int test in Candidates)
+				foreach (int test in Find.Candidates(Index))
 				{
 					data[Index]=test;
 					if (BruteForceRecursion(Index + 1))
@@ -58,13 +56,12 @@ namespace SudokuSharp
 				return BruteForceRecursion(Index + 1);
 			else
 			{
-				List<int> UnsortedCandidates = GetCandidates(Index);
-				List<int> Candidates = new List<int>();
+				var possible = new List<int>();
 
-				foreach (int digit in UnsortedCandidates)
-					Candidates.Insert(stream.Next(Candidates.Count), digit);
+				foreach (int digit in Find.Candidates(Index))
+                    possible.Insert(stream.Next(possible.Count), digit);
 
-				foreach (int test in Candidates)
+				foreach (int test in possible)
 				{
 					data[Index] = test;
 					if (BruteForceRecursion(Index + 1))

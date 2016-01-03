@@ -172,7 +172,7 @@ namespace SudokuSharp
                 {
                     if (GetCell(i) == 0)
                     { // Only test against empty cells
-                        List<int> Candidates = GetCandidates(i);
+                        var Candidates = Find.Candidates(i);
 
                         if (Candidates.Count > 1)
                         { // Only test where there's more than one option
@@ -180,8 +180,8 @@ namespace SudokuSharp
 
                             foreach (int test in Candidates)
                             {
-                                Board working = new Board(this);
-                                working.PutCell(i, test);
+                                var working = new Board(this);
+                                working[i] = test;
 
                                 if (working.BruteForceRecursion(0))
                                 {

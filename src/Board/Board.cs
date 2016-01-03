@@ -16,6 +16,7 @@ namespace SudokuSharp
         /// Initializes a new instance of the <see cref="Board"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
         /// </summary>
         public Board() { }
+
         /// <summary>
         /// Copies an instance of the <see cref="Board"/> class.
         /// </summary>
@@ -84,47 +85,6 @@ namespace SudokuSharp
             Array.Copy(data, ZoneIndices[Zone], result, 0, 3);
             Array.Copy(data, ZoneIndices[Zone] + 9, result, 3, 3);
             Array.Copy(data, ZoneIndices[Zone] + 18, result, 6, 3);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Gets a list of the values which may go here.
-        /// </summary>
-        /// <param name="Where">The <see cref="Location"/> of the cell to check.</param>
-        /// <returns>A <see cref="List{Int}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
-        public List<int> GetCandidates(Location Where)
-        {
-            List<int> result = new List<int>();
-            if (data[Where] > 0)
-                return result;
-
-            var blocking = new bool[10];
-            var blockingIndices = Where.GetConflictingIndices();
-
-            foreach (int idx in blockingIndices)
-            {
-                blocking[data[idx]] = true;
-            }
-
-            for (int i = 1; i < 10; i++)
-                if (!blocking[i])
-                    result.Add(i);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Returns a list of <see cref="Location"/>s which are empty. Useful for solving or grading a board.
-        /// </summary>
-        /// <returns>A <see cref="List{Location}"/></returns>
-        public List<Location> GetEmptyCells()
-        {
-            List<Location> result = new List<Location>();
-
-            foreach (Location loc in Location.All)
-                if (this[loc] == 0)
-                    result.Add(loc);
 
             return result;
         }
