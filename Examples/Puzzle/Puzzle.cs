@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace SudokuSharp
+namespace SudokuSharp.Examples
 {
     /// <summary>
     /// The composite <see cref="Puzzle"/> class is an example of a higher-level Sudoku board.

@@ -43,21 +43,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Board\Board_Cutting.cs" />
-    <Compile Include="src\Board\Find\FindUtil.cs" />
+    <Compile Include="src\Board\Cut\Board_Cutting.cs" />
+    <Compile Include="src\Board\Find\Find.cs" />
     <Compile Include="src\Board\Find\LockedCandidates.cs" />
     <Compile Include="src\Board\Find\Singles.cs" />
-    <Compile Include="src\Cell.cs" />
+    <Compile Include="Examples\Cell.cs" />
     <Compile Include="src\Board\Board_Properties.cs" />
-    <Compile Include="src\Board\Board_Solving.cs" />
+    <Compile Include="src\Board\Fill\Board_Solving.cs" />
     <Compile Include="src\Board\Board.cs" />
     <Compile Include="src\Board\Board_Factories.cs" />
-    <Compile Include="src\History\Guess.cs" />
-    <Compile Include="src\History\IHistoryAction.cs" />
-    <Compile Include="src\History\PencilMarks.cs" />
+    <Compile Include="Examples\History\Guess.cs" />
+    <Compile Include="Examples\History\IHistoryAction.cs" />
+    <Compile Include="Examples\History\PencilMarks.cs" />
     <Compile Include="src\Location.cs" />
-    <Compile Include="src\PencilGrid\PencilGrid.cs" />
-    <Compile Include="src\Puzzle\Puzzle.cs" />
+    <Compile Include="Examples\PencilGrid\PencilGrid.cs" />
+    <Compile Include="Examples\Puzzle\Puzzle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Board\Factory\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

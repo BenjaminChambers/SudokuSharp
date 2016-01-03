@@ -1,4 +1,4 @@
-﻿namespace SudokuSharp.History
+﻿namespace SudokuSharp.Examples.History
 {
     /// <summary>
     /// This interface is used in the Undo / Redo lists of the Puzzle class.
