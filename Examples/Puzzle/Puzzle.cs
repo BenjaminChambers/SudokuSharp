@@ -27,8 +27,8 @@ namespace SudokuSharp.Examples
         /// <param name="Seed">The random seed to use.</param>
         public Puzzle(int Seed)
         {
-            _solution = Board.CreateSolution(Seed);
-            _givens = Board.CreatePuzzle(_solution, Seed);
+            _solution = Factory.Solution(Seed);
+            _givens = Factory.Puzzle(_solution, Seed, 4, 4, 4);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Puzzle"/> class, using the supplied solution and givens.
@@ -84,7 +84,7 @@ namespace SudokuSharp.Examples
             historyGroup.Add(new History.Guess(_work, Where, Value));
             if (AutoPencilMarkClearing)
             {
-                foreach (Location loc in Where.GetConflictingIndices())
+                foreach (Location loc in Where.Blocking())
                 {
                     if (_scratchPad.Get(loc, Value))
                         historyGroup.Add(new History.PencilClear(_scratchPad, loc, Value));
