@@ -56,8 +56,8 @@ namespace SudokuSharp
         /// <returns></returns>
         public int this[Location where]
         {
-            get { return data[Math.Max(Math.Min(where,81),0)]; }
-            set { data[Math.Max(Math.Min(where, 81), 0)] = value; }
+            get { return data[where]; }
+            set { data[where] = value; }
         }
 
         private int[] GetRow(int Row)

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace SudokuSharp
@@ -17,7 +18,7 @@ namespace SudokuSharp
         /// <param name="idx">The cell <see cref="Index"/>.</param>
         public Location(int idx)
         {
-            Index = idx;
+            Index = Math.Max(Math.Min(idx, 80), 0);
         }
         /// <summary>
         /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
