@@ -32,13 +32,13 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Where">The cell to check; may be provided as either an instance of <see cref="Location"/> or the integer index of the cell.</param>
         /// <returns></returns>
-        public int GetCell(Location Where) { return data[Where]; }
+        public int GetCell(Location Where) { return this[Where]; }
         /// <summary>
         /// Fills a cell in.
         /// </summary>
         /// <param name="Where">The <see cref="Location"/> of the cell to fill.</param>
         /// <param name="value">The value to place; 0 for clear, or 1-9.</param>
-        public void PutCell(Location Where, int value) { data[Where] = value; }
+        public void PutCell(Location Where, int value) { this[Where] = value; }
 
         /// <summary>
         /// Overrides array indexing (suare brackets []) for accessing locations in the Grid.
@@ -56,8 +56,8 @@ namespace SudokuSharp
         /// <returns></returns>
         public int this[Location where]
         {
-            get { return data[where]; }
-            set { data[where] = value; }
+            get { return data[Math.Max(Math.Min(where,81),0)]; }
+            set { data[Math.Max(Math.Min(where, 81), 0)] = value; }
         }
 
         private int[] GetRow(int Row)
