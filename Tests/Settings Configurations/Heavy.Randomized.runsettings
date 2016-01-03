@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<RunSettings>
-    <TestRunParameters>
-        <Parameter name="Iterations" value="1000" />
-        <Parameter name="Randomize" value="True" />
-        <Parameter name="Seed" value="0" />
-    </TestRunParameters>
-</RunSettings>

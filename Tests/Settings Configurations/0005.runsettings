@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <RunSettings>
     <TestRunParameters>
-        <Parameter name="Iterations" value="100" />
-        <Parameter name="Randomize" value="True" />
+        <Parameter name="Number Of Puzzles" value="5" />
+        <Parameter name="Batch Size" value="4" />
+        <Parameter Name="Number of Batches" value="20" />
         <Parameter name="Seed" value="0" />
     </TestRunParameters>
 </RunSettings>

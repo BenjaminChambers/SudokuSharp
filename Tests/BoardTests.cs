@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using SudokuSharp;
+using System.Linq;
 
 namespace Tests
 {
@@ -8,95 +10,146 @@ namespace Tests
     public class BoardTests
     {
         static int Iterations = 0;
-        static bool Randomize = false;
+        static int BatchSize = 0;
+        static int NumBatches = 0;
+
         static Random rnd = null;
 
         [ClassInitialize]
         public static void BoardTestsInitialize(TestContext context)
         {
-            Iterations = int.Parse(context.Properties["Iterations"].ToString());
-            Randomize = bool.Parse(context.Properties["Randomize"].ToString());
+            Iterations = int.Parse(context.Properties["Number Of Puzzles"].ToString());
+            BatchSize = int.Parse(context.Properties["Batch Size"].ToString());
+            NumBatches = int.Parse(context.Properties["Number of Batches"].ToString());
 
             int seed = int.Parse(context.Properties["Seed"].ToString());
             rnd = new Random(seed);
         }
 
         [TestMethod]
-        public void CreateSolution()
+        public void CreateSolutions()
         {
-            if (Randomize)
-            {
-                for (int i = 0; i < Iterations; i++)
-                    SudokuSharp.Board.CreateSolution(rnd.Next());
-            }
-            else
-            {
-                for (int i = 0; i < Iterations; i++)
-                    SudokuSharp.Board.CreateSolution(i);
-            }
-        }
-
-        private void RunCreateTest(int Givens, int BatchSize)
-        {
-            if (Randomize)
-            {
-                for (int i = 0; i < Iterations; i++)
-                    SudokuSharp.Board.CreatePuzzle(
-                        SudokuSharp.Board.CreateSolution(rnd.Next()),
-                        rnd.Next(),
-                        Givens, BatchSize);
-            }
-            else
-            {
-                for (int i = 0; i < Iterations; i++)
-                    SudokuSharp.Board.CreatePuzzle(SudokuSharp.Board.CreateSolution(i), i, Givens, BatchSize);
-            }
+            for (int i = 0; i < Iterations; i++)
+                Factory.Solution(rnd);
         }
 
         [TestMethod]
-        public void CreatePuzzleEasyLarge()
+        public void CutQuads()
         {
-            RunCreateTest(60, 8);
+            int[] givens = new int[NumBatches];
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd);
+
+                for (int batch = 0; batch < NumBatches; batch++)
+                {
+                    for (int test = 0; test < BatchSize; test++)
+                        work = work.Cut.Quad(rnd);
+
+                    givens[batch] += work.Find.FilledLocations().Count();
+                }
+            }
+
+            for (int i = 0; i < NumBatches; i++)
+                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
         }
+
         [TestMethod]
-        public void CreatePuzzleEasyMedium()
+        public void CutPairs()
         {
-            RunCreateTest(60, 4);
+            int[] givens = new int[NumBatches];
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd);
+
+                for (int batch = 0; batch < NumBatches; batch++)
+                {
+                    for (int test = 0; test < BatchSize; test++)
+                        work = work.Cut.Pair(rnd);
+
+                    givens[batch] += work.Find.FilledLocations().Count();
+                }
+            }
+
+            for (int i = 0; i < NumBatches; i++)
+                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
         }
+
         [TestMethod]
-        public void CreatePuzzleEasySmall()
+        public void CutSingles()
         {
-            RunCreateTest(60, 2);
+            int[] givens = new int[NumBatches];
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd);
+
+                for (int batch = 0; batch < NumBatches; batch++)
+                {
+                    for (int test = 0; test < BatchSize; test++)
+                        work = work.Cut.Single(rnd);
+
+                    givens[batch] += work.Find.FilledLocations().Count();
+                }
+            }
+
+            for (int i = 0; i < NumBatches; i++)
+                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
         }
+
         [TestMethod]
-        public void CreatePuzzleMediumLarge()
+        public void CutAllSingles()
         {
-            RunCreateTest(45, 8);
+            int givens = 0;
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd).Cut.AllSingles();
+                givens += work.Find.FilledLocations().Count();
+            }
+
+            Console.WriteLine("An average of " + ((double)givens / (double)Iterations) + " givens per board.");
         }
+
         [TestMethod]
-        public void CreatePuzzleMediumMedium()
+        public void CutAllSinglesRandomized()
         {
-            RunCreateTest(45, 8);
+            int givens = 0;
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd).Cut.AllSingles(rnd);
+                givens += work.Find.FilledLocations().Count();
+            }
+
+            Console.WriteLine("An average of " + ((double)givens / (double)Iterations) + " givens per board.");
         }
+
         [TestMethod]
-        public void CreatePuzzleMediumSmall()
+        public void CutComprehensive()
         {
-            RunCreateTest(45, 8);
-        }
-        [TestMethod]
-        public void CreatePuzzleHardLarge()
-        {
-            RunCreateTest(25, 8);
-        }
-        [TestMethod]
-        public void CreatePuzzleHardMedium()
-        {
-            RunCreateTest(25, 4);
-        }
-        [TestMethod]
-        public void CreatePuzzleHardSmall()
-        {
-            RunCreateTest(25, 2);
+            int[] givens = new int[NumBatches];
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = Factory.Solution(rnd);
+
+                for (int i = 0; i < 25; i++)
+                    work = work.Cut.Quad(rnd);
+
+                for (int batch = 0; batch < NumBatches; batch++)
+                {
+                    for (int test = 0; test < BatchSize; test++)
+                        work = work.Cut.Pair(rnd);
+
+                    givens[batch] += work.Find.FilledLocations().Count();
+                }
+            }
+
+            for (int i = 0; i < NumBatches; i++)
+                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
         }
     }
 }

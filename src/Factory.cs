@@ -38,7 +38,7 @@ namespace SudokuSharp
             for (int i = 0; i < Pairs; i++)
                 work = work.Cut.Pair(Stream);
             for (int i = 0; i < Singles; i++)
-                work = work.Cut.Singles(Stream, 1);
+                work = work.Cut.Single(Stream);
 
             return work;
         }

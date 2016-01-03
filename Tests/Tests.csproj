@@ -60,9 +60,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Settings Configurations\Heavy.Randomized.runsettings" />
-    <None Include="Settings Configurations\Medium.Randomized.runsettings" />
-    <None Include="Settings Configurations\Quick.runsettings" />
+    <None Include="Settings Configurations\1000.runsettings" />
+    <None Include="Settings Configurations\0100.runsettings" />
+    <None Include="Settings Configurations\0005.runsettings" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

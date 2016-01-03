@@ -183,7 +183,7 @@ namespace SudokuSharp
                                 var working = new Board(this);
                                 working[i] = test;
 
-                                if (working.BruteForceRecursion(0))
+                                if (work.Fill.Sequential() != null)
                                 {
                                     // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
                                     if (foundSolution)
