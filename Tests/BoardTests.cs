@@ -155,5 +155,37 @@ namespace Tests
 
             WriteStatistics("", givens);
         }
+
+        [TestMethod]
+        public void BuildPuzzleByFilling()
+        {
+            List<int> solutions = new List<int>();
+
+            for (int iter = 0; iter < Iterations; iter++)
+            {
+                var work = new Board();
+
+                var empties = work.Find.EmptyLocations().ToList();
+
+                for (int i = 0; i < 50; i++)
+                {
+                    Location loc = rnd.Next(empties.Count);
+                    var possible = work.Find.Candidates(loc);
+
+                    if (possible.Count > 0)
+                    {
+                        work[loc] = possible[rnd.Next(possible.Count)];
+                        if (work.Fill.Sequential() == null)
+                            work[loc] = 0;
+                        else
+                            empties.Remove(loc);
+                    }
+                }
+
+                solutions.Add(work.CountSolutions());
+            }
+
+            WriteStatistics("With 50 givens, there are these many solutions: ", solutions);
+        }
     }
 }
