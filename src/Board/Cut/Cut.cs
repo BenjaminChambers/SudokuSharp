@@ -39,13 +39,10 @@ namespace SudokuSharp
                 {
                     Location loc = new Location(Filled[Stream.Next(Filled.Count)]);
 
-                    int x = loc.Column;
-                    int y = loc.Row;
-
-                    result[new Location(x, y)] = 0;
-                    result[new Location(8 - x, y)] = 0;
-                    result[new Location(x, 8 - y)] = 0;
-                    result[new Location(8 - x, 8 - y)] = 0;
+                    result[loc] = 0;
+                    result[loc.FlipHorizontal()] = 0;
+                    result[loc.FlipVertical()] = 0;
+                    result[loc.FlipHorizontal().FlipVertical()] = 0;
 
                     if (result.ExistsUniqueSolution)
                         return result;
@@ -63,15 +60,12 @@ namespace SudokuSharp
                 {
                     Location loc = new Location(Filled[Stream.Next(Filled.Count)]);
 
-                    int x = loc.Column;
-                    int y = loc.Row;
-
-                    result[new Location(x, y)] = 0;
+                    result[loc] = 0;
 
                     if (Stream.Next(2) == 1)
-                        result[new Location(8 - x, y)] = 0;
+                        result[loc.FlipHorizontal()] = 0;
                     else
-                        result[new Location(x, 8 - y)] = 0;
+                        result[loc.FlipVertical()] = 0;
 
                     if (result.ExistsUniqueSolution)
                         return result;

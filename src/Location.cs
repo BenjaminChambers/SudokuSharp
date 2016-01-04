@@ -20,17 +20,7 @@ namespace SudokuSharp
         {
             Index = Math.Max(Math.Min(idx, 80), 0);
         }
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
-        /// </summary>
-        /// <param name="index">The cell <see cref="Index"/>.</param>
-        /// <returns>
-        /// A new <see cref="Location"/>.
-        /// </returns>
-        public static implicit operator Location(int index)
-        {
-            return new Location(index);
-        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Location"/> class. Instead of specifying the index of the cell, you may specify the row and column to use.
         /// The parameters are specified in Column, Row order to match the X,Y convention.
@@ -43,15 +33,33 @@ namespace SudokuSharp
         }
         #endregion
 
-        #region Location Aids
+        #region Casts
         /// <summary>
-        /// Gets a collection of all indices, which may be iterated via foreach
+        /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
         /// </summary>
-        /// <value>
-        /// The ReadOnlyCollection of all indices.
-        /// </value>
-        public static ReadOnlyCollection<Location> All { get { return _allIndices; } }
+        /// <param name="index">The cell <see cref="Index"/>.</param>
+        /// <returns>
+        /// A new <see cref="Location"/>.
+        /// </returns>
+        public static implicit operator Location(int index)
+        {
+            return new Location(index);
+        }
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> to be cast.</param>
+        /// <returns>
+        /// The location Index, as an integer
+        /// </returns>
+        public static implicit operator int(Location Where)
+        {
+            return Where.Index;
+        }
+        #endregion
+
+        #region Location Aids
         /// <summary>
         /// Returns the Row of the specified <see cref="Location"/>.
         /// </summary>
@@ -77,6 +85,16 @@ namespace SudokuSharp
         /// </value>
         public int Zone { get { return Row - (Row % 3) + (Column / 3); } }
 
+        public Location FlipHorizontal()
+        {
+            return new Location(8 - Column, Row);
+        }
+
+        public Location FlipVertical()
+        {
+            return new Location(Column, 8 - Row);
+        }
+
         /// <summary>
         /// Gets the index.
         /// </summary>
@@ -87,21 +105,17 @@ namespace SudokuSharp
         /// </value>
         [DataMember]
         public readonly int Index;
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
-        /// </summary>
-        /// <param name="Where">The <see cref="Location"/> to be cast.</param>
-        /// <returns>
-        /// The location Index, as an integer
-        /// </returns>
-        public static implicit operator int (Location Where)
-        {
-            return Where.Index;
-        }
         #endregion
 
         #region Lists of indices
+        /// <summary>
+        /// Gets a collection of all indices, which may be iterated via foreach
+        /// </summary>
+        /// <value>
+        /// The ReadOnlyCollection of all indices.
+        /// </value>
+        public static ReadOnlyCollection<Location> All { get { return _allIndices; } }
+
         /// <summary>
         /// Gets the cells which may cause conflicts with this one.
         /// </summary>
