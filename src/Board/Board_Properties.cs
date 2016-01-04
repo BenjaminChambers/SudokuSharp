@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace SudokuSharp
 {
@@ -198,52 +197,6 @@ namespace SudokuSharp
                 }
                 return true;
             }
-        }
-        #endregion
-
-        #region CountSolutions
-        public int CountSolutions()
-        {
-            int count = 0;
-            Board work = new Board(this);
-
-            // fill everything that has definite answers
-            var mustFill = work.Find.AllSingles().Union(work.Find.LockedCandidates());
-            while (mustFill.Count() > 0)
-            {
-                foreach (var item in mustFill)
-                    work[item.Key] = item.Value;
-
-                mustFill = work.Find.AllSingles().Union(work.Find.LockedCandidates());
-            }
-
-            if (IsSolved)
-                return 1;
-
-            return CountRecursion(work, 0);
-        }
-
-        private static int CountRecursion(Board work, int idx)
-        {
-            if (idx == 81) // using int instead of Location because Location CAN'T have a value of 81
-                return 1;
-
-            if (work[idx] > 0)
-                return CountRecursion(work, idx + 1);
-
-            var possible = work.Find.Candidates(idx);
-            if (possible.Count == 0)
-                return 0;
-
-            int count = 0;
-            foreach (var item in possible)
-            {
-                work[idx] = item;
-                count += CountRecursion(work, idx + 1);
-            }
-            work[idx] = 0;
-
-            return count;
         }
         #endregion
     }
