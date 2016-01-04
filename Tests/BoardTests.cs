@@ -15,6 +15,29 @@ namespace Tests
 
         static Random rnd = null;
 
+        public static void WriteStatistics(string Message, List<int> data)
+        {
+            data.Sort();
+
+            int min = data.Min();
+            int max = data.Max();
+            double mean = (double)(data.Sum()) / (double)data.Count();
+            int qLow = data[data.Count / 4];
+            int qHigh = data[(data.Count * 3) / 4];
+
+            double stDev = 0;
+
+            foreach (var item in data)
+            {
+                double delta = item - mean;
+                stDev += (delta * delta);
+            }
+
+            stDev = Math.Sqrt(stDev / data.Count);
+
+            Console.WriteLine(Message + "\t\tMin: " + min + "\t\t25%: " + qLow + "\t\tMean: " + mean + "\t\t75%: " + qHigh + "\t\tMax: " + max + "\t\tSt Dev: " + stDev);
+        }
+
         [ClassInitialize]
         public static void BoardTestsInitialize(TestContext context)
         {
@@ -36,7 +59,9 @@ namespace Tests
         [TestMethod]
         public void CutQuads()
         {
-            int[] givens = new int[NumBatches];
+            List<int>[] givens = new List<int>[NumBatches];
+            for (int i = 0; i < NumBatches; i++)
+                givens[i] = new List<int>();
 
             for (int iter = 0; iter < Iterations; iter++)
             {
@@ -47,18 +72,20 @@ namespace Tests
                     for (int test = 0; test < BatchSize; test++)
                         work = work.Cut.Quad(rnd);
 
-                    givens[batch] += work.Find.FilledLocations().Count();
+                    givens[batch].Add(work.Find.FilledLocations().Count());
                 }
             }
 
             for (int i = 0; i < NumBatches; i++)
-                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
+                WriteStatistics("After " + (i + 1) * BatchSize + " cuts, ", givens[i]);
         }
 
         [TestMethod]
         public void CutPairs()
         {
-            int[] givens = new int[NumBatches];
+            List<int>[] givens = new List<int>[NumBatches];
+            for (int i = 0; i < NumBatches; i++)
+                givens[i] = new List<int>();
 
             for (int iter = 0; iter < Iterations; iter++)
             {
@@ -69,18 +96,20 @@ namespace Tests
                     for (int test = 0; test < BatchSize; test++)
                         work = work.Cut.Pair(rnd);
 
-                    givens[batch] += work.Find.FilledLocations().Count();
+                    givens[batch].Add(work.Find.FilledLocations().Count());
                 }
             }
 
             for (int i = 0; i < NumBatches; i++)
-                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
+                WriteStatistics("After " + (i + 1) * BatchSize + " cuts, ", givens[i]);
         }
 
         [TestMethod]
         public void CutSingles()
         {
-            int[] givens = new int[NumBatches];
+            List<int>[] givens = new List<int>[NumBatches];
+            for (int i = 0; i < NumBatches; i++)
+                givens[i] = new List<int>();
 
             for (int iter = 0; iter < Iterations; iter++)
             {
@@ -91,65 +120,40 @@ namespace Tests
                     for (int test = 0; test < BatchSize; test++)
                         work = work.Cut.Single(rnd);
 
-                    givens[batch] += work.Find.FilledLocations().Count();
+                    givens[batch].Add(work.Find.FilledLocations().Count());
                 }
             }
 
             for (int i = 0; i < NumBatches; i++)
-                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
+                WriteStatistics("After " + (i + 1) * BatchSize + " cuts, ", givens[i]);
         }
 
         [TestMethod]
         public void CutAllSingles()
         {
-            int givens = 0;
+            List<int> givens = new List<int>();
 
             for (int iter = 0; iter < Iterations; iter++)
             {
                 var work = Factory.Solution(rnd).Cut.AllSingles();
-                givens += work.Find.FilledLocations().Count();
+                givens.Add(work.Find.FilledLocations().Count());
             }
 
-            Console.WriteLine("An average of " + ((double)givens / (double)Iterations) + " givens per board.");
+            WriteStatistics("", givens);
         }
 
         [TestMethod]
         public void CutAllSinglesRandomized()
         {
-            int givens = 0;
+            List<int> givens = new List<int>();
 
             for (int iter = 0; iter < Iterations; iter++)
             {
                 var work = Factory.Solution(rnd).Cut.AllSingles(rnd);
-                givens += work.Find.FilledLocations().Count();
+                givens.Add(work.Find.FilledLocations().Count());
             }
 
-            Console.WriteLine("An average of " + ((double)givens / (double)Iterations) + " givens per board.");
-        }
-
-        [TestMethod]
-        public void CutComprehensive()
-        {
-            int[] givens = new int[NumBatches];
-
-            for (int iter = 0; iter < Iterations; iter++)
-            {
-                var work = Factory.Solution(rnd);
-
-                for (int i = 0; i < 25; i++)
-                    work = work.Cut.Quad(rnd);
-
-                for (int batch = 0; batch < NumBatches; batch++)
-                {
-                    for (int test = 0; test < BatchSize; test++)
-                        work = work.Cut.Pair(rnd);
-
-                    givens[batch] += work.Find.FilledLocations().Count();
-                }
-            }
-
-            for (int i = 0; i < NumBatches; i++)
-                Console.WriteLine("After " + (i + 1) * BatchSize + " cuts, an average of " + ((double)givens[i] / (double)Iterations) + " givens per board.");
+            WriteStatistics("", givens);
         }
     }
 }
