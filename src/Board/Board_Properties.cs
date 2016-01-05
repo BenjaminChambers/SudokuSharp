@@ -167,8 +167,6 @@ namespace SudokuSharp
                 if (IsSolved) return true;
                 if (!IsValid) return false;
 
-                Board work = new Board(this);
-
                 for (int i = 0; i < 81; i++)
                 {
                     if (GetCell(i) == 0)
@@ -178,19 +176,19 @@ namespace SudokuSharp
                         if (Candidates.Count > 1)
                         { // Only test where there's more than one option
                             bool foundSolution = false;
+                            var working = new Board(this);
 
                             foreach (int test in Candidates)
                             {
-                                var working = new Board(this);
                                 working[i] = test;
 
-                                if (work.Fill.Sequential() != null)
+                                if (working.Fill.Sequential() != null)
                                 {
                                     // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
                                     if (foundSolution)
                                         return false;
-                                    else
-                                        foundSolution = true;
+
+                                    foundSolution = true;
                                 }
                             }
                         }
