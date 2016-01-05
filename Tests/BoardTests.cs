@@ -60,8 +60,13 @@ namespace Tests
         public void CutQuads()
         {
             List<int>[] givens = new List<int>[NumBatches];
+            List<int>[] grades = new List<int>[NumBatches];
+
             for (int i = 0; i < NumBatches; i++)
+            {
                 givens[i] = new List<int>();
+                grades[i] = new List<int>();
+            }
 
             for (int iter = 0; iter < Iterations; iter++)
             {
@@ -73,11 +78,14 @@ namespace Tests
                         work = work.Cut.Quad(rnd);
 
                     givens[batch].Add(work.Find.FilledLocations().Count());
+                    grades[batch].Add(work.Solve.Grade());
                 }
             }
 
             for (int i = 0; i < NumBatches; i++)
-                WriteStatistics("After " + (i + 1) * BatchSize + " cuts, ", givens[i]);
+                WriteStatistics("Givens after " + (i + 1) * BatchSize + " cuts: ", givens[i]);
+            for (int i = 0; i < NumBatches; i++)
+                WriteStatistics("Grades after " + (i + 1) * BatchSize + " cuts: ", grades[i]);
         }
 
         [TestMethod]
