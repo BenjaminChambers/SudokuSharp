@@ -22,31 +22,6 @@ namespace Tests
         }
 
         [TestMethod, TestCategory("Creation")]
-        public void BruteForceFill()
-        {
-            for (int i = 0; i < Iterations; i++)
-                new Board().Fill.Sequential();
-
-            Console.WriteLine(new Board().Fill.Sequential());
-        }
-
-        [TestMethod, TestCategory("Creation")]
-        public void BruteForceTracked()
-        {
-            for (int i = 0; i < Iterations; i++)
-                new Board().Fill.SeqTracked();
-
-            var data = new Board().Fill.SeqTracked();
-            for (int y = 0; y < 9; y++)
-            {
-                for (int x = 0; x < 9; x++)
-                    Console.Write(data[new Location(x, y)]);
-                Console.Write("\n");
-            }
-        }
-
-
-        [TestMethod, TestCategory("Creation")]
         public void GradedPuzzle1()
         {
             var Source = Factory.Solution(rnd);
