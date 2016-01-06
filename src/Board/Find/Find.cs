@@ -43,11 +43,15 @@ namespace SudokuSharp
             {
                 if (_parent[Where] > 0)
                     return new List<int>();
-
-                List<int> result = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
+                
+                bool[] present = new bool[10];
                 foreach (var loc in Where.Blocking())
-                    result.Remove(_parent[loc]);
+                    present[_parent[loc]] = true;
+
+                List<int> result = new List<int>();
+                for (int i = 1; i < 10; i++)
+                    if (!present[i])
+                        result.Add(i);
 
                 return result;
             }
