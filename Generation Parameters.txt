@@ -1,0 +1,13 @@
+Top five Easy param sets:
+4 sets of 2 quads.      6 sets of 2 pairs.      5 sets of 2 singles.
+4 sets of 2 quads.      4 sets of 2 pairs.      8 sets of 2 singles.
+4 sets of 2 quads.      6 sets of 2 pairs.      6 sets of 2 singles.
+4 sets of 2 quads.      4 sets of 2 pairs.      11 sets of 2 singles.
+4 sets of 2 quads.      6 sets of 2 pairs.      8 sets of 2 singles.
+Only 0 options found for medium
+Top five Hard param sets:
+5 sets of 2 quads.      5 sets of 2 pairs.      4 sets of 2 singles.
+4 sets of 2 quads.      7 sets of 2 pairs.      4 sets of 2 singles.
+7 sets of 2 quads.      4 sets of 2 pairs.      4 sets of 2 singles.
+5 sets of 2 quads.      6 sets of 2 pairs.      4 sets of 2 singles.
+6 sets of 2 quads.      4 sets of 2 pairs.      5 sets of 2 singles.
