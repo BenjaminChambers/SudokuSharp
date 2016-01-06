@@ -32,6 +32,7 @@ namespace SudokuSharp
                         if (BruteForceRecursion(work, Index + 1))
                             return true;
                     }
+                    work[Index] = 0;
 
                     return false;
                 }
