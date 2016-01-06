@@ -42,5 +42,60 @@ namespace SudokuSharp
 
             return work;
         }
+
+        public static Board GradedPuzzle(Board Source, Random Stream, int Grade)
+        {
+            var work = new Board(Source);
+
+            int minCuts = 8;
+            int maxCuts = 20;
+
+            int g = 0;
+            for (int i = 0; (i < minCuts) || ((i < maxCuts) && (g < Grade - 1)); i++)
+            {
+                var test = work.Cut.Quad(Stream);
+                int g2 = test.Solve.Grade();
+                if (g2 <= Grade)
+                {
+                    work = test;
+                    g = g2;
+                }
+            }
+
+            for (int i = 0; (i < minCuts) || ((i < maxCuts) && (g < Grade)); i++)
+            {
+                var test = work.Cut.Pair(Stream);
+                int g2 = test.Solve.Grade();
+                if (g2 <= Grade)
+                {
+                    work = test;
+                    g = g2;
+                }
+            }
+
+            /*
+            if (g < Grade)
+            {
+                var filled = work.Find.FilledLocations().ToList();
+                var rList = new List<Location>();
+                foreach (var loc in filled)
+                    rList.Insert(Stream.Next(rList.Count), loc);
+                var rQueue = new Queue<Location>();
+                foreach (var loc in rList)
+                    rQueue.Enqueue(loc);
+
+                while ((g < Grade) && (rQueue.Count > 0))
+                {
+                    var loc = rQueue.Dequeue();
+                    work[loc] = 0;
+                    g = work.Solve.Grade();
+                    if (g > Grade)
+                        work[loc] = Source[loc];
+                }
+            }
+            */
+
+            return work;
+        }
     }
 }
