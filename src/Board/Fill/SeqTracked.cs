@@ -43,13 +43,23 @@ namespace SudokuSharp
                     }
                 }
 
-                public IEnumerable<int> Candidates(Location loc)
+                public List<int> Candidates(Location loc)
                 {
+                    /*
                     return from i in new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }
                            where _numInRow[i, loc.Row] == 0
                            where _numInColumn[i, loc.Column] == 0
                            where _numInZone[i, loc.Zone] == 0
                            select i;
+                    */
+
+                    List<int> result = new List<int>();
+
+                    for (int i = 1; i < 10; i++)
+                        if ((_numInRow[i, loc.Row] == 0) && (_numInColumn[i, loc.Column] == 0) && (_numInZone[i, loc.Zone] == 0))
+                            result.Add(i);
+
+                    return result;
                 }
 
                 int[,] _numInRow = new int[10, 9];
