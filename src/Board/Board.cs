@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace SudokuSharp
 {
@@ -87,6 +88,19 @@ namespace SudokuSharp
             Array.Copy(data, ZoneIndices[Zone] + 18, result, 6, 3);
 
             return result;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var loc in Location.All)
+            {
+                sb.Append((this[loc] > 0) ? this[loc].ToString() : "-");
+                if (loc.Column % 3 == 2) sb.Append(" ");
+                if (loc.Column == 8) sb.Append("\n");
+                if (loc.Row % 3 == 2) sb.Append("\n");
+            }
+            return sb.ToString();
         }
 
         [DataMember]
