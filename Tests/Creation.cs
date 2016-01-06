@@ -22,6 +22,37 @@ namespace Tests
         }
 
         [TestMethod, TestCategory("Creation")]
+        public void BruteForceFill()
+        {
+            for (int i = 0; i < Iterations; i++)
+                new Board().Fill.Sequential();
+
+            var data = new Board().Fill.Sequential();
+            for (int y = 0; y < 9; y++)
+            {
+                for (int x = 0; x < 9; x++)
+                    Console.Write(data[new Location(x, y)]);
+                Console.Write("\n");
+            }
+        }
+
+        [TestMethod, TestCategory("Creation")]
+        public void BruteForceTracked()
+        {
+            for (int i = 0; i < Iterations; i++)
+                new Board().Fill.SeqTracked();
+
+            var data = new Board().Fill.SeqTracked();
+            for (int y = 0; y < 9; y++)
+            {
+                for (int x = 0; x < 9; x++)
+                    Console.Write(data[new Location(x, y)]);
+                Console.Write("\n");
+            }
+        }
+
+
+        [TestMethod, TestCategory("Creation")]
         public void GradedPuzzle1()
         {
             var Source = Factory.Solution(rnd);
@@ -75,11 +106,11 @@ namespace Tests
             for (int iter = 0; iter < Iterations; iter++)
             {
                 var Work = Factory.Solution(rnd);
-                for (int i=0; i<3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     var step = new Board(Work);
 
-                    for (int j=0; j<3; j++)
+                    for (int j = 0; j < 3; j++)
                     {
                         Location loc = rnd.Next(81);
                         step[loc] = 0;
