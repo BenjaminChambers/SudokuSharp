@@ -2,8 +2,8 @@
 <RunSettings>
     <TestRunParameters>
         <Parameter name="Number Of Puzzles" value="100" />
-        <Parameter name="Batch Size" value="4" />
-        <Parameter Name="Number of Batches" value="20" />
+        <Parameter name="Batch Size" value="5" />
+        <Parameter Name="Number of Batches" value="5" />
         <Parameter name="Seed" value="0" />
     </TestRunParameters>
 </RunSettings>
