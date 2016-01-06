@@ -27,13 +27,7 @@ namespace Tests
             for (int i = 0; i < Iterations; i++)
                 new Board().Fill.Sequential();
 
-            var data = new Board().Fill.Sequential();
-            for (int y = 0; y < 9; y++)
-            {
-                for (int x = 0; x < 9; x++)
-                    Console.Write(data[new Location(x, y)]);
-                Console.Write("\n");
-            }
+            Console.WriteLine(new Board().Fill.Sequential());
         }
 
         [TestMethod, TestCategory("Creation")]

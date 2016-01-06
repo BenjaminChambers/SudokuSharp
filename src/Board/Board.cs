@@ -98,7 +98,7 @@ namespace SudokuSharp
                 sb.Append((this[loc] > 0) ? this[loc].ToString() : "-");
                 if (loc.Column % 3 == 2) sb.Append(" ");
                 if (loc.Column == 8) sb.Append("\n");
-                if (loc.Row % 3 == 2) sb.Append("\n");
+                if ((loc.Column == 8) && (loc.Row % 3 == 2)) sb.Append("\n");
             }
             return sb.ToString();
         }
