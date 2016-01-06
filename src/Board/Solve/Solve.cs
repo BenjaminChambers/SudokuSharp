@@ -64,11 +64,29 @@ namespace SudokuSharp
 
             public int Grade()
             {
-                var work = Singles();
-                if (work.IsSolved) return 1;
+                var work = new Board(_parent);
 
-                work = work.Solve.LockedCandidates().Solve.Singles();
-                if (work.IsSolved) return 2;
+                var answers = work.Find.AllSingles();
+                while (answers.Count() > 0)
+                {
+                    foreach (var item in answers)
+                        work[item.Key] = item.Value;
+
+                    answers = work.Find.AllSingles();
+                }
+                if (work.IsSolved)
+                    return 1;
+
+                answers = work.Find.LockedCandidates();
+                while (answers.Count() > 0)
+                {
+                    foreach (var item in answers)
+                        work[item.Key] = item.Value;
+
+                    answers = work.Find.LockedCandidates();
+                }
+                if (work.IsSolved)
+                    return 2;
 
                 return 3;
             }
