@@ -48,6 +48,17 @@ ExistsUniqueSolution is straightforward: it attempts to solve the puzzle multipl
 ###Board Helper Classes
 Additionally, there are several member classes which contain helpful functions. These are accessed via members of Board instances, but will usually leave the original Board untouched.
 
+###Board.Fill
+```
+Board Board.Fill.Sequential()
+Board Board.Fill.Randomized()
+```
+Both of these functions return new Board instances. They attempt to fill every empty location in the Board; Sequential tries digits in order, whereas Randomized shuffles the digits before trying them.
+
+If the calling instance cannot be solved successfully (ie there is no combination of digits which will result in a completely filled Board), then null is returned.
+
+Internally, simple constraint tracking is used, so performance is very good. Although I don't implement a heap, my tests show performance on par with, or better than, heap-based constraint solvers for solving any random puzzle via this method.
+
 ###Board.Find
 ```
 Board.Find.EmptyLocations()
@@ -76,8 +87,12 @@ The generic form of the answer is left so as to avoid unnecessary conversions.
 
 
 ###Board.Cut
-###Board.Fill
-###Board.Factory
+```
+Board Board.Cut.Quad(Random Stream)
+Board Board.Cut.Pair(Random Stream)
+Board Board.Cut.Single(Random Stream)
+```
+These functions are intended to aid in puzzle generation. Each one attempts to cut a [number of] single[s] from a board and, if the Board still only has one solution, will return that Board. If the resulting Board has multiple solutions, then the original instance will be returned as a result.
 
 ## Location
 The Location class is a helpful utility for dealing with Boards; most functions require a Location rather than an integer index. However, the class may be freely cast back-and-forth with Int32.
@@ -109,7 +124,8 @@ foreach (var loc in Location.All)
 All is a static member of the Location class, thus called without an instance. Another list exists which requires an instance: Blocking
 
 ```
-foreach (var loc in MyLocation.Blocking())
+Location myLoc = new Location(17);
+foreach (var loc in myLoc.Blocking)
    { }
 ```
 
@@ -120,3 +136,21 @@ MyLocation.IsSameColumn(Location other)
 MyLocation.IsSameZone(Location other)
 MyLocation.IsBlockedBy(Location other)
 ```
+
+## Factory
+
+The Factory class contains static members to generate Board instances.
+```
+Board Factory.Solution(int Seed)
+Board Factory.Solution(Random Stream)
+```
+Both these methods create a new Sudoku Board completely randomized.
+
+```
+Board Factory.Puzzle(int Seed, int QuadsToCut, int PairsToCut, int SinglesToCut)
+Board Factory.Puzzle(Board Source, Random Stream, int QuadsToCut, int PairsToCut, int SinglesToCut)
+```
+Both these methods return a Board instance with several cells removed, such that you may use the result as a game.
+In each case, they make the specific number of calls to Board.Cut.* (Quad, Pair, Single) and return the result.
+
+I'm investigating puzzle generation which would target specific grades of difficulty, but I have not yet implemented anything I like.
