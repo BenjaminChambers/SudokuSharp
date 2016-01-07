@@ -31,8 +31,12 @@ int value = Board[15];
 
 (Usually, instead of referencing cells by their index (as above), you will use an instance of the Location class... see below)
 
-Each Board also provides a number of bool properties to make evaluating them easier: IsSolved, IsValid, and ExistsUniqueSolution.
-
+The Board class contains the following properties:
+```
+IsSolved
+IsValid
+ExistsUniqueSolution
+```
 IsSolved tells you if the puzzle has no empty spaces, no duplicate values, and each value appearing once in every row, column, or 3x3 zone.
 
 IsValid checks whether an incomplete puzzle MAY be solved. Specifically, it checks that:
@@ -43,7 +47,14 @@ IsValid checks whether an incomplete puzzle MAY be solved. Specifically, it chec
 </ul>
 More checks may be added in the future if necessary.
 
+Board also contains the following methods:
+```
+ExistsUniqueSolution
+CountSolutions
+```
 ExistsUniqueSolution is straightforward: it attempts to solve the puzzle multiple times via brute force. As soon as a second solution is found, it quits and returns false. If no solution is found, it returns false. It will only return true if a single correct solution is found.
+
+CountSolutions, by contrast, keeps going and maintains a running count of all solutions found.
 
 ###Board Helper Classes
 Additionally, there are several member classes which contain helpful functions. These are accessed via members of Board instances, but will usually leave the original Board untouched.
