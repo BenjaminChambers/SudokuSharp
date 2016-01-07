@@ -8,6 +8,9 @@ namespace SudokuSharp
     {
         private _FillClass _fillClass;
 
+        /// <summary>
+        /// Hack to allow a namespace inside a class. Allows access to the Fill functions.
+        /// </summary>
         public _FillClass Fill
         {
             get
@@ -19,10 +22,16 @@ namespace SudokuSharp
             }
         }
 
+        /// <summary>
+        /// Hack to allow a namespace inside a class.
+        /// </summary>
         public partial class _FillClass
         {
             Board _parent;
 
+            /// <summary>
+            /// Hack to allow a namespace inside a class.
+            /// </summary>
             public _FillClass(Board Parent)
             {
                 _parent = Parent;

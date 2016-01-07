@@ -7,6 +7,11 @@ namespace SudokuSharp
     {
         public partial class _FillClass
         {
+            /// <summary>
+            /// Attempts to fill the calling <see cref="Board"/> instance with numbers.
+            /// The original instance remains unchanged
+            /// </summary>
+            /// <returns>Either a new instance of <see cref="Board"/> or, if unsuccessful, null</returns>
             public Board Sequential()
             {
                 var work = new Board(_parent);

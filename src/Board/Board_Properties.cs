@@ -203,7 +203,6 @@ namespace SudokuSharp
         /// <returns></returns>
         public int CountSolutions()
         {
-            int count = 0;
             Board work = new Board(this);
 
             // fill everything that has definite answers
