@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Board\Cut\Cut.cs" />
+    <Compile Include="src\Board\Fill\Constraints.cs" />
     <Compile Include="src\Board\Fill\Sequential.cs" />
     <Compile Include="src\Board\Fill\Fill.cs" />
     <Compile Include="src\Board\Find\Find.cs" />
