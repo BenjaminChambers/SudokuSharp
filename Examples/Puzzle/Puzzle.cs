@@ -84,7 +84,7 @@ namespace SudokuSharp.Examples
             historyGroup.Add(new History.Guess(_work, Where, Value));
             if (AutoPencilMarkClearing)
             {
-                foreach (Location loc in Where.Blocking())
+                foreach (Location loc in Where.Blocking)
                 {
                     if (_scratchPad.Get(loc, Value))
                         historyGroup.Add(new History.PencilClear(_scratchPad, loc, Value));

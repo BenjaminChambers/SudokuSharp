@@ -120,18 +120,9 @@ namespace SudokuSharp
         /// Gets the cells which may cause conflicts with this one.
         /// </summary>
         /// <returns>An <see cref="int"/>[] array of all the indices in the current row, column, or zone. These are the only cells which may conflict with this cell.</returns>
-        public ReadOnlyCollection<Location> Blocking()
+        public ReadOnlyCollection<Location> Blocking
         {
-            return new ReadOnlyCollection<Location>(ConflictingIndices[Index]);
-        }
-        /// <summary>
-        /// Returns a list of of every Index which is either in the same row, column or zone as the selected <see cref="Location"/>.
-        /// </summary>
-        /// <param name="Index">The index.</param>
-        /// <returns></returns>
-        public static ReadOnlyCollection<Location> Blocking(Location Index)
-        {
-            return new ReadOnlyCollection<Location>(ConflictingIndices[Index]);
+            get { return new ReadOnlyCollection<Location>(ConflictingIndices[Index]); }
         }
         #endregion
 

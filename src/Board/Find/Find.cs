@@ -45,7 +45,7 @@ namespace SudokuSharp
                     return new List<int>();
                 
                 bool[] present = new bool[10];
-                foreach (var loc in Where.Blocking())
+                foreach (var loc in Where.Blocking)
                     present[_parent[loc]] = true;
 
                 List<int> result = new List<int>();
