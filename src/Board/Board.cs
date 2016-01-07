@@ -90,6 +90,12 @@ namespace SudokuSharp
             return result;
         }
 
+        /// <summary>
+        /// Provides a pretty string representation of the Board instance.
+        /// 3x3 blocks have one empty column and row between them, and empty cells are represented as '-'
+        /// The resulting string is then 11x11 when printed on a terminal
+        /// </summary>
+        /// <returns>A <see cref="string"/> value.</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

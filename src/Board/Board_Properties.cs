@@ -160,46 +160,47 @@ namespace SudokuSharp
         /// <value>
         /// <c>true</c> if [a unique solution exists]; otherwise, <c>false</c>.
         /// </value>
-        public bool ExistsUniqueSolution
+        public bool ExistsUniqueSolution()
         {
-            get
+            if (IsSolved) return true;
+            if (!IsValid) return false;
+
+            for (int i = 0; i < 81; i++)
             {
-                if (IsSolved) return true;
-                if (!IsValid) return false;
+                if (GetCell(i) == 0)
+                { // Only test against empty cells
+                    var Candidates = Find.Candidates(i);
 
-                for (int i = 0; i < 81; i++)
-                {
-                    if (GetCell(i) == 0)
-                    { // Only test against empty cells
-                        var Candidates = Find.Candidates(i);
+                    if (Candidates.Count > 1)
+                    { // Only test where there's more than one option
+                        bool foundSolution = false;
+                        var working = new Board(this);
 
-                        if (Candidates.Count > 1)
-                        { // Only test where there's more than one option
-                            bool foundSolution = false;
-                            var working = new Board(this);
+                        foreach (int test in Candidates)
+                        {
+                            working[i] = test;
 
-                            foreach (int test in Candidates)
+                            if (working.Fill.Sequential() != null)
                             {
-                                working[i] = test;
+                                // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
+                                if (foundSolution)
+                                    return false;
 
-                                if (working.Fill.Sequential() != null)
-                                {
-                                    // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
-                                    if (foundSolution)
-                                        return false;
-
-                                    foundSolution = true;
-                                }
+                                foundSolution = true;
                             }
                         }
                     }
                 }
-                return true;
             }
+            return true;
         }
         #endregion
 
         #region CountSolutions
+        /// <summary>
+        /// Attempts to count all possible solutions
+        /// </summary>
+        /// <returns></returns>
         public int CountSolutions()
         {
             int count = 0;
@@ -212,7 +213,7 @@ namespace SudokuSharp
                 foreach (var item in mustFill)
                     work[item.Key] = item.Value;
 
-                mustFill = work.Find.AllSingles().Union(work.Find.LockedCandidates());
+                mustFill = work.Find.LockedCandidates();
             }
 
             if (IsSolved)

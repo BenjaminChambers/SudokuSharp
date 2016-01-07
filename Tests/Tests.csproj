@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Find.cs" />
     <Compile Include="Cutting.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Creation.cs" />

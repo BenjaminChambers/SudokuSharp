@@ -44,7 +44,7 @@ namespace SudokuSharp
                     result[loc.FlipVertical()] = 0;
                     result[loc.FlipHorizontal().FlipVertical()] = 0;
 
-                    if (result.ExistsUniqueSolution)
+                    if (result.ExistsUniqueSolution())
                         return result;
                 }
                 return _parent;
@@ -67,7 +67,7 @@ namespace SudokuSharp
                     else
                         result[loc.FlipVertical()] = 0;
 
-                    if (result.ExistsUniqueSolution)
+                    if (result.ExistsUniqueSolution())
                         return result;
                 }
                 return _parent;
@@ -83,7 +83,7 @@ namespace SudokuSharp
                 {
                     result[Filled[Stream.Next(Filled.Count)]] = 0;
 
-                    if (result.ExistsUniqueSolution)
+                    if (result.ExistsUniqueSolution())
                         return result;
                 }
                 return _parent;
@@ -99,7 +99,7 @@ namespace SudokuSharp
                 {
                     int test = result[loc];
                     result[loc] = 0;
-                    if (!result.ExistsUniqueSolution)
+                    if (!result.ExistsUniqueSolution())
                         result[loc] = test;
                 }
 
@@ -120,7 +120,7 @@ namespace SudokuSharp
                 {
                     int test = result[loc];
                     result[loc] = 0;
-                    if (!result.ExistsUniqueSolution)
+                    if (!result.ExistsUniqueSolution())
                         result[loc] = test;
                 }
 

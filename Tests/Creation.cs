@@ -36,7 +36,7 @@ namespace Tests
                         step[loc.FlipVertical().FlipHorizontal()] = 0;
                     }
 
-                    if (step.ExistsUniqueSolution)
+                    if (step.ExistsUniqueSolution())
                         Work = step;
                 }
 
