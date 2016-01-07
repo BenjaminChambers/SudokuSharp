@@ -19,7 +19,6 @@ namespace SudokuSharp
                 return null;
             }
 
-
             private static bool BruteForceRecursion(Board work, ConstraintData data, int Index)
             {
                 if (Index == 81)
