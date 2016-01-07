@@ -85,6 +85,7 @@ Board.Find.LockedCandidates()
 Attempts to solve for these patterns, and return IEnumerable<KeyValuePair<Location, int>>.
 The generic form of the answer is left so as to avoid unnecessary conversions.
 
+Note that LockedCandidates first creates an internal representation of a Board, eliminates candidates from certain rows / columns, and then calls an equivalent of AllSingles on the result. So, if you call LockedCandidates, you get AllSingles thrown in for free.
 
 ###Board.Cut
 ```
