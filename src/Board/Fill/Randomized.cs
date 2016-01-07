@@ -8,6 +8,10 @@ namespace SudokuSharp
     {
         public partial class _FillClass
         {
+            public Board Randomized()
+            {
+                return Randomized(new Random());
+            }
             public Board Randomized(int Seed)
             {
                 return Randomized(new Random(Seed));
@@ -16,37 +20,42 @@ namespace SudokuSharp
             public Board Randomized(Random Stream)
             {
                 var result = new Board(_parent);
+                ConstraintData data = new ConstraintData(result);
 
-                if (RandomRecursion(result, Stream, 0))
+                var digits = new List<int>();
+                for (int i = 1; i < 10; i++)
+                    digits.Insert(Stream.Next(digits.Count), i);
+
+                if (RandomRecursion(result, data, digits, 0))
                     return result;
 
                 return null;
             }
 
-            private static bool RandomRecursion(Board work, Random stream, int Index)
+            private static bool RandomRecursion(Board work, ConstraintData data, List<int> Digits, int Index)
             {
                 if (Index == 81)
                     return true;
 
-                if (work[Index] > 0)
-                    return RandomRecursion(work, stream, Index + 1);
-                else
+                var loc = new Location(Index);
+
+                if (work[loc] > 0)
+                    return RandomRecursion(work, data, Digits, Index + 1);
+
+                foreach (int test in Digits)
                 {
-                    var possible = new List<int>();
-
-                    foreach (int digit in work.Find.Candidates(Index))
-                        possible.Insert(stream.Next(possible.Count), digit);
-
-                    foreach (int test in possible)
+                    if (!data.DigitInRow[test, loc.Row] && !data.DigitInColumn[test, loc.Column] && !data.DigitInZone[test, loc.Zone])
                     {
-                        work[Index] = test;
-                        if (RandomRecursion(work, stream, Index + 1))
+                        work[loc] = test;
+                        data.DigitInRow[test, loc.Row] = data.DigitInColumn[test, loc.Column] = data.DigitInZone[test, loc.Zone] = true;
+                        if (RandomRecursion(work, data, Digits, Index + 1))
                             return true;
+                        data.DigitInRow[test, loc.Row] = data.DigitInColumn[test, loc.Column] = data.DigitInZone[test, loc.Zone] = false;
                     }
-                    work[Index] = 0;
-
-                    return false;
                 }
+
+                work[loc] = 0;
+                return false;
             }
         }
     }
