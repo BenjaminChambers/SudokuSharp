@@ -31,7 +31,7 @@ int value = Board[15];
 
 (Usually, instead of referencing cells by their index (as above), you will use an instance of the Location class... see below)
 
-Each Board also provides a number of properties to make evaluating them easier: IsSolved, IsValid, and ExistsUniqueSolution. Each is a bool property.
+Each Board also provides a number of bool properties to make evaluating them easier: IsSolved, IsValid, and ExistsUniqueSolution.
 
 IsSolved tells you if the puzzle has no empty spaces, no duplicate values, and each value appearing once in every row, column, or 3x3 zone.
 
