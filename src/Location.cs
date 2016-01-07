@@ -85,11 +85,19 @@ namespace SudokuSharp
         /// </value>
         public int Zone { get { return Row - (Row % 3) + (Column / 3); } }
 
+        /// <summary>
+        /// Returns the corresponding <see cref="Location"/> flipped horizontally (same Row, different Column)
+        /// </summary>
+        /// <returns></returns>
         public Location FlipHorizontal()
         {
             return new Location(8 - Column, Row);
         }
 
+        /// <summary>
+        /// Returns the corresponding <see cref="Location"/> flipped vertically (same Column, different Row)
+        /// </summary>
+        /// <returns></returns>
         public Location FlipVertical()
         {
             return new Location(Column, 8 - Row);
