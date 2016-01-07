@@ -11,34 +11,52 @@ namespace SudokuSharp
             {
                 var work = new Board(_parent);
 
-                List<int>[] possibilities = new List<int>[81];
-                foreach (var loc in Location.All)
-                    possibilities[loc] = work.Find.Candidates(loc);
+                ConstraintData data = new ConstraintData(work);
 
-                if (ConstraintsRecurse(work, possibilities, 0))
+                if (ConstraintsRecurse(work, data, 0))
                     return work;
 
                 return null;
             }
 
-            private static bool ConstraintsRecurse(Board work, List<int>[] PossibleValues, int Index)
+            class ConstraintData
+            {
+                public ConstraintData(Board Src)
+                {
+                    foreach (var loc in Location.All)
+                    {
+                        DigitInRow[Src[loc], loc.Row] =
+                            DigitInColumn[Src[loc], loc.Column] =
+                            DigitInZone[Src[loc], loc.Zone] = true;
+                    }
+                }
+                public bool[,] DigitInRow = new bool[10, 9];
+                public bool[,] DigitInColumn = new bool[10, 9];
+                public bool[,] DigitInZone = new bool[10, 9];
+            }
+
+            private static bool ConstraintsRecurse(Board work, ConstraintData data, int Index)
             {
                 if (Index == 81)
                     return true;
 
-                if (PossibleValues[Index].Count == 0)
-                    return ConstraintsRecurse(work, PossibleValues, Index + 1);
+                if (work[Index] > 0)
+                    return ConstraintsRecurse(work, data, Index + 1);
 
-                foreach (int test in PossibleValues[Index])
+                var loc = new Location(Index);
+
+                for (int i = 1; i < 10; i++)
                 {
-                    work[Index] = test;
-                    foreach (var blocked in new Location(Index).Blocking)
-                        PossibleValues[blocked].Remove(test);
-                    if (ConstraintsRecurse(work, PossibleValues, Index + 1))
-                        return true;
-                    foreach (var blocked in new Location(Index).Blocking)
-                        PossibleValues[blocked].Add(test);
+                    if (!data.DigitInRow[i, loc.Row] && !data.DigitInColumn[i, loc.Column] && !data.DigitInZone[i, loc.Zone])
+                    {
+                        work[loc] = i;
+                        data.DigitInRow[i, loc.Row] = data.DigitInColumn[i, loc.Column] = data.DigitInZone[i, loc.Zone] = true;
+                        if (ConstraintsRecurse(work, data, Index + 1))
+                            return true;
+                        data.DigitInRow[i, loc.Row] = data.DigitInColumn[i, loc.Column] = data.DigitInZone[i, loc.Zone] = false;
+                    }
                 }
+
                 work[Index] = 0;
                 return false;
             }
