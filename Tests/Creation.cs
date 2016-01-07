@@ -8,65 +8,13 @@ namespace Tests
 {
     public partial class BoardTests
     {
-        private void WriteGradeStats()
-        {
-            for (int i = 1; i <= 5; i++)
-                Console.WriteLine("Grade " + i + ":\t\t" + grades[0].Where(x => x == i).Count());
-        }
-
         [TestMethod, TestCategory("Creation")]
         public void CreateSolutions()
         {
             for (int i = 0; i < Iterations; i++)
-                Factory.Solution(rnd);
-        }
-
-        [TestMethod, TestCategory("Creation")]
-        public void GradedPuzzle1()
-        {
-            var Source = Factory.Solution(rnd);
-
-            for (int iter = 0; iter < Iterations; iter++)
             {
-                var work = Factory.GradedPuzzle(Source, rnd, 1);
-                givens[0].Add(work.Find.FilledLocations().Count());
-                grades[0].Add(work.Solve.Grade());
+                Assert.IsTrue(Factory.Solution(rnd).IsSolved);
             }
-
-            WriteStatistics("Givens in a Grade 1 puzzle: ", givens[0]);
-            WriteGradeStats();
-        }
-
-        [TestMethod, TestCategory("Creation")]
-        public void GradedPuzzle2()
-        {
-            var Source = Factory.Solution(rnd);
-
-            for (int iter = 0; iter < Iterations; iter++)
-            {
-                var work = Factory.GradedPuzzle(Source, rnd, 2);
-                givens[0].Add(work.Find.FilledLocations().Count());
-                grades[0].Add(work.Solve.Grade());
-            }
-
-            WriteStatistics("Givens in a Grade 2 puzzle: ", givens[0]);
-            WriteGradeStats();
-        }
-
-        [TestMethod, TestCategory("Creation")]
-        public void GradedPuzzle3()
-        {
-            var Source = Factory.Solution(rnd);
-
-            for (int iter = 0; iter < Iterations; iter++)
-            {
-                var work = Factory.GradedPuzzle(Source, rnd, 3);
-                givens[0].Add(work.Find.FilledLocations().Count());
-                grades[0].Add(work.Solve.Grade());
-            }
-
-            WriteStatistics("Givens in a Grade 3 puzzle: ", givens[0]);
-            WriteGradeStats();
         }
 
         [TestMethod, TestCategory("Creation")]
@@ -93,11 +41,9 @@ namespace Tests
                 }
 
                 givens[0].Add(Work.Find.FilledLocations().Count());
-                grades[0].Add(Work.Solve.Grade());
             }
 
             WriteStatistics("Givens in generated puzzles: ", givens[0]);
-            WriteGradeStats();
         }
     }
 }

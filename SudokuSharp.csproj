@@ -56,7 +56,6 @@
     <Compile Include="Examples\History\Guess.cs" />
     <Compile Include="Examples\History\IHistoryAction.cs" />
     <Compile Include="Examples\History\PencilMarks.cs" />
-    <Compile Include="src\Board\Solve\Solve.cs" />
     <Compile Include="src\Factory.cs" />
     <Compile Include="src\Location.cs" />
     <Compile Include="Examples\PencilGrid\PencilGrid.cs" />

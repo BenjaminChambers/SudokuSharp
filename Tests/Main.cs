@@ -16,7 +16,6 @@ namespace Tests
         static Random rnd = null;
 
         static List<int>[] givens;
-        static List<int>[] grades;
 
         public static void WriteStatistics(string Message, List<int> data)
         {
@@ -52,7 +51,6 @@ namespace Tests
             rnd = new Random(seed);
 
             givens = new List<int>[NumBatches];
-             grades = new List<int>[NumBatches];
         }
 
         [TestInitialize]
@@ -61,7 +59,6 @@ namespace Tests
             for (int i = 0; i < NumBatches; i++)
             {
                 givens[i] = new List<int>();
-                grades[i] = new List<int>();
             }
         }
     }

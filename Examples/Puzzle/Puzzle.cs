@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace SudokuSharp.Examples
@@ -27,8 +28,10 @@ namespace SudokuSharp.Examples
         /// <param name="Seed">The random seed to use.</param>
         public Puzzle(int Seed)
         {
-            _solution = Factory.Solution(Seed);
-            _givens = Factory.Puzzle(_solution, Seed, 4, 4, 4);
+            Random rnd = new Random(Seed);
+
+            _solution = Factory.Solution(rnd);
+            _givens = Factory.Puzzle(_solution, rnd, 4, 4, 4);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Puzzle"/> class, using the supplied solution and givens.

@@ -24,76 +24,22 @@ namespace SudokuSharp
             return work;
         }
 
-        public static Board Puzzle(Board Source, int Seed, int Quads, int Pairs, int Singles)
+        public static Board Puzzle(int Seed, int QuadsToCut, int PairsToCut, int SinglesToCut)
         {
-            return Puzzle(Source, new Random(Seed), Quads, Pairs, Singles);
+            Random rnd = new Random(Seed);
+            return Puzzle(Solution(rnd), rnd, QuadsToCut, PairsToCut, SinglesToCut);
         }
 
-        public static Board Puzzle(Board Source, Random Stream, int Quads, int Pairs, int Singles)
+        public static Board Puzzle(Board Source, Random Stream, int QuadsToCut, int PairsToCut, int SinglesToCut)
         {
             var work = new Board(Source);
 
-            for (int i = 0; i < Quads; i++)
+            for (int i = 0; i < QuadsToCut; i++)
                 work = work.Cut.Quad(Stream);
-            for (int i = 0; i < Pairs; i++)
+            for (int i = 0; i < PairsToCut; i++)
                 work = work.Cut.Pair(Stream);
-            for (int i = 0; i < Singles; i++)
+            for (int i = 0; i < SinglesToCut; i++)
                 work = work.Cut.Single(Stream);
-
-            return work;
-        }
-
-        public static Board GradedPuzzle(Board Source, Random Stream, int Grade)
-        {
-            var work = new Board(Source);
-
-            int minCuts = 8;
-            int maxCuts = 20;
-
-            int g = 0;
-            for (int i = 0; (i < minCuts) || ((i < maxCuts) && (g < Grade - 1)); i++)
-            {
-                var test = work.Cut.Quad(Stream);
-                int g2 = test.Solve.Grade();
-                if (g2 <= Grade)
-                {
-                    work = test;
-                    g = g2;
-                }
-            }
-
-            for (int i = 0; (i < minCuts) || ((i < maxCuts) && (g < Grade)); i++)
-            {
-                var test = work.Cut.Pair(Stream);
-                int g2 = test.Solve.Grade();
-                if (g2 <= Grade)
-                {
-                    work = test;
-                    g = g2;
-                }
-            }
-
-            /*
-            if (g < Grade)
-            {
-                var filled = work.Find.FilledLocations().ToList();
-                var rList = new List<Location>();
-                foreach (var loc in filled)
-                    rList.Insert(Stream.Next(rList.Count), loc);
-                var rQueue = new Queue<Location>();
-                foreach (var loc in rList)
-                    rQueue.Enqueue(loc);
-
-                while ((g < Grade) && (rQueue.Count > 0))
-                {
-                    var loc = rQueue.Dequeue();
-                    work[loc] = 0;
-                    g = work.Solve.Grade();
-                    if (g > Grade)
-                        work[loc] = Source[loc];
-                }
-            }
-            */
 
             return work;
         }
