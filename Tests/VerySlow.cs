@@ -17,7 +17,7 @@ namespace Tests
                 givens[0].Add(work.Find.FilledLocations().Count());
             }
 
-            WriteStatistics("", givens[0]);
+            WriteStatistics("Givens after cutting all singles: ", givens[0]);
         }
 
         [TestMethod, TestCategory("Very Slow")]
