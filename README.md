@@ -49,6 +49,32 @@ ExistsUniqueSolution is straightforward: it attempts to solve the puzzle multipl
 Additionally, there are several member classes which contain helpful functions. These are accessed via members of Board instances, but will usually leave the original Board untouched.
 
 ###Board.Find
+```
+Board.Find.EmptyLocations()
+Board.Find.FilledLocations()
+```
+These both return lists of Location values.
+
+```
+Board.Find.Candidates(Location Where)
+```
+Returns a list of digits which may be placed here.
+
+```
+Board.Find.AllCandidates()
+```
+Returns a dictionary. The key is an empty Location, the value is a list of digits.
+
+```
+Board.Find.NakedSingles()
+Board.Find.HiddenSingles()
+Board.Find.AllSingles()
+Board.Find.LockedCandidates()
+```
+Attempts to solve for these patterns, and return IEnumerable<KeyValuePair<Location, int>>.
+The generic form of the answer is left so as to avoid unnecessary conversions.
+
+
 ###Board.Cut
 ###Board.Fill
 ###Board.Factory
