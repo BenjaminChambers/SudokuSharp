@@ -10,37 +10,36 @@ namespace SudokuSharp
             public Board Constraints()
             {
                 var work = new Board(_parent);
-                var empties = work.Find.EmptyLocations().ToList();
 
                 List<int>[] possibilities = new List<int>[81];
                 foreach (var loc in Location.All)
                     possibilities[loc] = work.Find.Candidates(loc);
 
-                if (ConstraintsRecurse(work, empties, possibilities, 0))
+                if (ConstraintsRecurse(work, possibilities, 0))
                     return work;
 
                 return null;
             }
 
-            private static bool ConstraintsRecurse(Board work, List<Location> EmptyLocations, List<int>[] PossibleValues, int Index)
+            private static bool ConstraintsRecurse(Board work, List<int>[] PossibleValues, int Index)
             {
-                if (Index == EmptyLocations.Count)
+                if (Index == 81)
                     return true;
 
-                if (PossibleValues[EmptyLocations[Index]].Count == 0)
-                    return ConstraintsRecurse(work, EmptyLocations, PossibleValues, Index + 1);
+                if (PossibleValues[Index].Count == 0)
+                    return ConstraintsRecurse(work, PossibleValues, Index + 1);
 
-                foreach (int test in PossibleValues[EmptyLocations[Index]])
+                foreach (int test in PossibleValues[Index])
                 {
-                    work[EmptyLocations[Index]] = test;
-                    foreach (var blocked in EmptyLocations[Index].Blocking)
+                    work[Index] = test;
+                    foreach (var blocked in new Location(Index).Blocking)
                         PossibleValues[blocked].Remove(test);
-                    if (ConstraintsRecurse(work, EmptyLocations, PossibleValues, Index + 1))
+                    if (ConstraintsRecurse(work, PossibleValues, Index + 1))
                         return true;
-                    foreach (var blocked in EmptyLocations[Index].Blocking)
+                    foreach (var blocked in new Location(Index).Blocking)
                         PossibleValues[blocked].Add(test);
                 }
-                work[EmptyLocations[Index]] = 0;
+                work[Index] = 0;
                 return false;
             }
         }
