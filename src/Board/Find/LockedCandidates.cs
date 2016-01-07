@@ -7,60 +7,63 @@ namespace SudokuSharp
 {
     public partial class Board
     {
-        /// <summary>
-        /// For every zone, checks to see if a candidate is confined to only one row or column.
-        /// If it is, then it checks for naked or hidden singles after removing that row or column as a possibility from other zones
-        /// </summary>
-        /// <returns><see cref="IEnumerable{T}"/>, where T is <see cref="KeyValuePair{Location, Int}"/></returns>
-        public IEnumerable<KeyValuePair<Location, int>> FindLockedCandidates()
+        public partial class _FindClass
         {
-            var candidates = FindCandidatesForAllEmptyCells().ToDictionary(x=>x.Key, x=>x.Value);
-
-            for (int number = 1; number<9; number++)
+            /// <summary>
+            /// Looks for candidates in zones which are restricted to a specific column or row.
+            /// Removes those candidates from that column or row in other zones, and checks for cells which may be solved
+            /// </summary>
+            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            public IEnumerable<KeyValuePair<Location, int>> LockedCandidates()
             {
-                var numberLocations = from item in candidates
-                                      where item.Value.Contains(number)
-                                      select item.Key;
+                var possible = AllCandidates();
 
-                for (int zone=0; zone<9; zone++)
+                for (int number = 1; number < 9; number++)
                 {
-                    var numberLocationsInThisZone = from loc in numberLocations
-                                                    where loc.Zone == zone
-                                                    select loc;
+                    var numberLocations = from item in possible
+                                          where item.Value.Contains(number)
+                                          select item.Key;
 
-                    if (numberLocationsInThisZone.Count() > 0)
+                    for (int zone = 0; zone < 9; zone++)
                     {
-                        int lockedRow = numberLocationsInThisZone.First().Row;
-                        int lockedColumn = numberLocationsInThisZone.First().Column;
+                        var numberLocationsInThisZone = from loc in numberLocations
+                                                        where loc.Zone == zone
+                                                        select loc;
 
-                        foreach (var loc in numberLocationsInThisZone)
+                        if (numberLocationsInThisZone.Count() > 0)
                         {
-                            if (loc.Row != lockedRow) lockedRow = -1;
-                            if (loc.Column != lockedColumn) lockedColumn = -1;
-                        }
-                        if (lockedRow != -1)
-                        {
-                            foreach (var loc in
-                                (from item in numberLocations
-                                 where item.Zone != zone
-                                 where item.Row == lockedRow
-                                 select item))
-                                candidates[loc].Remove(number);
-                        }
-                        if (lockedColumn != -1)
-                        {
-                            foreach (var loc in
-                                (from item in numberLocations
-                                 where item.Zone != zone
-                                 where item.Column == lockedColumn
-                                 select item))
-                                candidates[loc].Remove(number);
+                            int lockedRow = numberLocationsInThisZone.First().Row;
+                            int lockedColumn = numberLocationsInThisZone.First().Column;
+
+                            foreach (var loc in numberLocationsInThisZone)
+                            {
+                                if (loc.Row != lockedRow) lockedRow = -1;
+                                if (loc.Column != lockedColumn) lockedColumn = -1;
+                            }
+                            if (lockedRow != -1)
+                            {
+                                foreach (var loc in
+                                    (from item in numberLocations
+                                     where item.Zone != zone
+                                     where item.Row == lockedRow
+                                     select item))
+                                    possible[loc].Remove(number);
+                            }
+                            if (lockedColumn != -1)
+                            {
+                                foreach (var loc in
+                                    (from item in numberLocations
+                                     where item.Zone != zone
+                                     where item.Column == lockedColumn
+                                     select item))
+                                    possible[loc].Remove(number);
+                            }
                         }
                     }
                 }
-            }
 
-            return FindAllSingles(candidates);
+                return AllSingles(possible);
+            }
         }
     }
 }

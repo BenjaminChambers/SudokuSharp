@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace SudokuSharp
+namespace SudokuSharp.Examples
 {
     /// <summary>
     /// The composite <see cref="Puzzle"/> class is an example of a higher-level Sudoku board.
@@ -27,8 +28,10 @@ namespace SudokuSharp
         /// <param name="Seed">The random seed to use.</param>
         public Puzzle(int Seed)
         {
-            _solution = Board.CreateSolution(Seed);
-            _givens = Board.CreatePuzzle(_solution, Seed);
+            Random rnd = new Random(Seed);
+
+            _solution = Factory.Solution(rnd);
+            _givens = Factory.Puzzle(_solution, rnd, 4, 4, 4);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Puzzle"/> class, using the supplied solution and givens.
@@ -84,7 +87,7 @@ namespace SudokuSharp
             historyGroup.Add(new History.Guess(_work, Where, Value));
             if (AutoPencilMarkClearing)
             {
-                foreach (Location loc in Where.GetConflictingIndices())
+                foreach (Location loc in Where.Blocking)
                 {
                     if (_scratchPad.Get(loc, Value))
                         historyGroup.Add(new History.PencilClear(_scratchPad, loc, Value));

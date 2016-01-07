@@ -50,8 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BoardTests.cs" />
+    <Compile Include="Find.cs" />
+    <Compile Include="Cutting.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Creation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VerySlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SudokuSharp.csproj">
@@ -60,9 +64,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Settings Configurations\Heavy.Randomized.runsettings" />
-    <None Include="Settings Configurations\Medium.Randomized.runsettings" />
-    <None Include="Settings Configurations\Quick.runsettings" />
+    <None Include="Settings Configurations\1000.runsettings" />
+    <None Include="Settings Configurations\0100.runsettings" />
+    <None Include="Settings Configurations\0005.runsettings" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

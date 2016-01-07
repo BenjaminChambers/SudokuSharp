@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SudokuSharp.History
+namespace SudokuSharp.Examples.History
 {
     /// <summary>
     /// A <see cref="Guess"/> is a number placed on the board by the user. It may or may not be correct.

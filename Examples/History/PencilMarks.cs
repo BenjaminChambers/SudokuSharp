@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SudokuSharp.History
+namespace SudokuSharp.Examples.History
 {
     [DataContract]
     internal abstract class PencilActionBase

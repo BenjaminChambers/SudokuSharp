@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SudokuSharp
+namespace SudokuSharp.Examples
 {
     /// <summary>
     /// A grid for keeping track of all the pencil marks.
@@ -26,12 +26,9 @@ namespace SudokuSharp
         /// <param name="src">The <see cref="Board"/> to work off of.</param>
         public PencilGrid(Board src) : base()
         {
-            foreach (Location where in Location.All)
-            {
-                var candidates = src.GetCandidates(where);
-                foreach (int value in candidates)
-                    data[where][value] = true;
-            }
+            foreach (var item in src.Find.AllCandidates())
+                foreach (var number in item.Value)
+                    data[item.Key][number] = true;
         }
         #endregion
 

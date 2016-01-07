@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace SudokuSharp
@@ -17,19 +18,9 @@ namespace SudokuSharp
         /// <param name="idx">The cell <see cref="Index"/>.</param>
         public Location(int idx)
         {
-            Index = idx;
+            Index = Math.Max(Math.Min(idx, 80), 0);
         }
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
-        /// </summary>
-        /// <param name="index">The cell <see cref="Index"/>.</param>
-        /// <returns>
-        /// A new <see cref="Location"/>.
-        /// </returns>
-        public static implicit operator Location(int index)
-        {
-            return new Location(index);
-        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Location"/> class. Instead of specifying the index of the cell, you may specify the row and column to use.
         /// The parameters are specified in Column, Row order to match the X,Y convention.
@@ -42,15 +33,33 @@ namespace SudokuSharp
         }
         #endregion
 
-        #region Location Aids
+        #region Casts
         /// <summary>
-        /// Gets a collection of all indices, which may be iterated via foreach
+        /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="Location"/>.
         /// </summary>
-        /// <value>
-        /// The ReadOnlyCollection of all indices.
-        /// </value>
-        public static ReadOnlyCollection<Location> All { get { return _allIndices; } }
+        /// <param name="index">The cell <see cref="Index"/>.</param>
+        /// <returns>
+        /// A new <see cref="Location"/>.
+        /// </returns>
+        public static implicit operator Location(int index)
+        {
+            return new Location(index);
+        }
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="Where">The <see cref="Location"/> to be cast.</param>
+        /// <returns>
+        /// The location Index, as an integer
+        /// </returns>
+        public static implicit operator int(Location Where)
+        {
+            return Where.Index;
+        }
+        #endregion
+
+        #region Location Aids
         /// <summary>
         /// Returns the Row of the specified <see cref="Location"/>.
         /// </summary>
@@ -77,6 +86,24 @@ namespace SudokuSharp
         public int Zone { get { return Row - (Row % 3) + (Column / 3); } }
 
         /// <summary>
+        /// Returns the corresponding <see cref="Location"/> flipped horizontally (same Row, different Column)
+        /// </summary>
+        /// <returns></returns>
+        public Location FlipHorizontal()
+        {
+            return new Location(8 - Column, Row);
+        }
+
+        /// <summary>
+        /// Returns the corresponding <see cref="Location"/> flipped vertically (same Column, different Row)
+        /// </summary>
+        /// <returns></returns>
+        public Location FlipVertical()
+        {
+            return new Location(Column, 8 - Row);
+        }
+
+        /// <summary>
         /// Gets the index.
         /// </summary>
         /// <value>
@@ -86,37 +113,24 @@ namespace SudokuSharp
         /// </value>
         [DataMember]
         public readonly int Index;
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Location"/> to <see cref="System.Int32"/>.
-        /// </summary>
-        /// <param name="Where">The <see cref="Location"/> to be cast.</param>
-        /// <returns>
-        /// The location Index, as an integer
-        /// </returns>
-        public static implicit operator int (Location Where)
-        {
-            return Where.Index;
-        }
         #endregion
 
         #region Lists of indices
         /// <summary>
+        /// Gets a collection of all indices, which may be iterated via foreach
+        /// </summary>
+        /// <value>
+        /// The ReadOnlyCollection of all indices.
+        /// </value>
+        public static ReadOnlyCollection<Location> All { get { return _allIndices; } }
+
+        /// <summary>
         /// Gets the cells which may cause conflicts with this one.
         /// </summary>
         /// <returns>An <see cref="int"/>[] array of all the indices in the current row, column, or zone. These are the only cells which may conflict with this cell.</returns>
-        public ReadOnlyCollection<Location> GetConflictingIndices()
+        public ReadOnlyCollection<Location> Blocking
         {
-            return new ReadOnlyCollection<Location>(ConflictingIndices[Index]);
-        }
-        /// <summary>
-        /// Returns a list of of every Index which is either in the same row, column or zone as the selected <see cref="Location"/>.
-        /// </summary>
-        /// <param name="Index">The index.</param>
-        /// <returns></returns>
-        public static ReadOnlyCollection<Location> GetConflictingIndices(Location Index)
-        {
-            return new ReadOnlyCollection<Location>(ConflictingIndices[Index]);
+            get { return new ReadOnlyCollection<Location>(ConflictingIndices[Index]); }
         }
         #endregion
 

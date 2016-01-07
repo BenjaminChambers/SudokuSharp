@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
-namespace SudokuSharp
+namespace SudokuSharp.Examples
 {
     /// <summary>
     /// <see cref="CellType"/>s are used to define how a cell on a Sudoku board was filled in.

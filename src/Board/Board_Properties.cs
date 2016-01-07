@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SudokuSharp
 {
@@ -159,44 +160,88 @@ namespace SudokuSharp
         /// <value>
         /// <c>true</c> if [a unique solution exists]; otherwise, <c>false</c>.
         /// </value>
-        public bool ExistsUniqueSolution
+        public bool ExistsUniqueSolution()
         {
-            get
+            if (IsSolved) return true;
+            if (!IsValid) return false;
+
+            for (int i = 0; i < 81; i++)
             {
-                if (IsSolved) return true;
-                if (!IsValid) return false;
+                if (GetCell(i) == 0)
+                { // Only test against empty cells
+                    var Candidates = Find.Candidates(i);
 
-                Board work = new Board(this);
+                    if (Candidates.Count > 1)
+                    { // Only test where there's more than one option
+                        bool foundSolution = false;
+                        var working = new Board(this);
 
-                for (int i = 0; i < 81; i++)
-                {
-                    if (GetCell(i) == 0)
-                    { // Only test against empty cells
-                        List<int> Candidates = GetCandidates(i);
+                        foreach (int test in Candidates)
+                        {
+                            working[i] = test;
 
-                        if (Candidates.Count > 1)
-                        { // Only test where there's more than one option
-                            bool foundSolution = false;
-
-                            foreach (int test in Candidates)
+                            if (working.Fill.Sequential() != null)
                             {
-                                Board working = new Board(this);
-                                working.PutCell(i, test);
+                                // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
+                                if (foundSolution)
+                                    return false;
 
-                                if (working.BruteForceRecursion(0))
-                                {
-                                    // We just found a solution. If we have already found a solution, then multiple exist and we may quit.
-                                    if (foundSolution)
-                                        return false;
-                                    else
-                                        foundSolution = true;
-                                }
+                                foundSolution = true;
                             }
                         }
                     }
                 }
-                return true;
             }
+            return true;
+        }
+        #endregion
+
+        #region CountSolutions
+        /// <summary>
+        /// Attempts to count all possible solutions
+        /// </summary>
+        /// <returns></returns>
+        public int CountSolutions()
+        {
+            Board work = new Board(this);
+
+            // fill everything that has definite answers
+            var mustFill = work.Find.AllSingles().Union(work.Find.LockedCandidates());
+            while (mustFill.Count() > 0)
+            {
+                foreach (var item in mustFill)
+                    work[item.Key] = item.Value;
+
+                mustFill = work.Find.LockedCandidates();
+            }
+
+            if (IsSolved)
+                return 1;
+
+            return CountRecursion(work, 0);
+        }
+
+        private static int CountRecursion(Board work, int idx)
+        {
+            if (idx == 81) // using int instead of Location because Location CAN'T have a value of 81
+                return 1;
+
+            if (work[idx] > 0)
+                return CountRecursion(work, idx + 1);
+
+            var possible = work.Find.Candidates(idx);
+            if (possible.Count == 0)
+                return 0;
+
+            int count = 0;
+            foreach (var item in possible)
+            {
+                work[idx] = item;
+                count += CountRecursion(work, idx + 1);
+            }
+            work[idx] = 0;
+
+            return count;
         }
         #endregion
     }

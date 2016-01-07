@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace SudokuSharp
 {
@@ -16,6 +17,7 @@ namespace SudokuSharp
         /// Initializes a new instance of the <see cref="Board"/> class, completely blank (ie every cell <see cref="Location"/> is empty).
         /// </summary>
         public Board() { }
+
         /// <summary>
         /// Copies an instance of the <see cref="Board"/> class.
         /// </summary>
@@ -31,13 +33,13 @@ namespace SudokuSharp
         /// </summary>
         /// <param name="Where">The cell to check; may be provided as either an instance of <see cref="Location"/> or the integer index of the cell.</param>
         /// <returns></returns>
-        public int GetCell(Location Where) { return data[Where]; }
+        public int GetCell(Location Where) { return this[Where]; }
         /// <summary>
         /// Fills a cell in.
         /// </summary>
         /// <param name="Where">The <see cref="Location"/> of the cell to fill.</param>
         /// <param name="value">The value to place; 0 for clear, or 1-9.</param>
-        public void PutCell(Location Where, int value) { data[Where] = value; }
+        public void PutCell(Location Where, int value) { this[Where] = value; }
 
         /// <summary>
         /// Overrides array indexing (suare brackets []) for accessing locations in the Grid.
@@ -89,44 +91,22 @@ namespace SudokuSharp
         }
 
         /// <summary>
-        /// Gets a list of the values which may go here.
+        /// Provides a pretty string representation of the Board instance.
+        /// 3x3 blocks have one empty column and row between them, and empty cells are represented as '-'
+        /// The resulting string is then 11x11 when printed on a terminal
         /// </summary>
-        /// <param name="Where">The <see cref="Location"/> of the cell to check.</param>
-        /// <returns>A <see cref="List{Int}"/> of possible values. We start with a list of digits 1-9, and remove any which are found in the same row, column, or zone.</returns>
-        public List<int> GetCandidates(Location Where)
+        /// <returns>A <see cref="string"/> value.</returns>
+        public override string ToString()
         {
-            List<int> result = new List<int>();
-            if (data[Where] > 0)
-                return result;
-
-            var blocking = new bool[10];
-            var blockingIndices = Where.GetConflictingIndices();
-
-            foreach (int idx in blockingIndices)
+            StringBuilder sb = new StringBuilder();
+            foreach (var loc in Location.All)
             {
-                blocking[data[idx]] = true;
+                sb.Append((this[loc] > 0) ? this[loc].ToString() : "-");
+                if (loc.Column % 3 == 2) sb.Append(" ");
+                if (loc.Column == 8) sb.Append("\n");
+                if ((loc.Column == 8) && (loc.Row % 3 == 2)) sb.Append("\n");
             }
-
-            for (int i = 1; i < 10; i++)
-                if (!blocking[i])
-                    result.Add(i);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Returns a list of <see cref="Location"/>s which are empty. Useful for solving or grading a board.
-        /// </summary>
-        /// <returns>A <see cref="List{Location}"/></returns>
-        public List<Location> GetEmptyCells()
-        {
-            List<Location> result = new List<Location>();
-
-            foreach (Location loc in Location.All)
-                if (this[loc] == 0)
-                    result.Add(loc);
-
-            return result;
+            return sb.ToString();
         }
 
         [DataMember]
