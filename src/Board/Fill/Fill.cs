@@ -27,6 +27,24 @@ namespace SudokuSharp
             {
                 _parent = Parent;
             }
+
+            // This class is not made public because it only checks for the presence of a digit in a row or column.
+            // It does nothing to guard against duplicates, so is useless for the general board class.
+            class ConstraintData
+            {
+                public ConstraintData(Board Src)
+                {
+                    foreach (var loc in Location.All)
+                    {
+                        DigitInRow[Src[loc], loc.Row] =
+                            DigitInColumn[Src[loc], loc.Column] =
+                            DigitInZone[Src[loc], loc.Zone] = true;
+                    }
+                }
+                public bool[,] DigitInRow = new bool[10, 9];
+                public bool[,] DigitInColumn = new bool[10, 9];
+                public bool[,] DigitInZone = new bool[10, 9];
+            }
         }
     }
 }

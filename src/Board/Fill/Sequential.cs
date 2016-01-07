@@ -9,33 +9,41 @@ namespace SudokuSharp
         {
             public Board Sequential()
             {
-                var result = new Board(_parent);
+                var work = new Board(_parent);
 
-                if (BruteForceRecursion(result, 0))
-                    return result;
+                ConstraintData data = new ConstraintData(work);
+
+                if (BruteForceRecursion(work, data, 0))
+                    return work;
 
                 return null;
             }
 
-            private static bool BruteForceRecursion(Board work, int Index)
+
+            private static bool BruteForceRecursion(Board work, ConstraintData data, int Index)
             {
                 if (Index == 81)
                     return true;
 
                 if (work[Index] > 0)
-                    return BruteForceRecursion(work, Index + 1);
-                else
-                {
-                    foreach (int test in work.Find.Candidates(Index))
-                    {
-                        work[Index] = test;
-                        if (BruteForceRecursion(work, Index + 1))
-                            return true;
-                    }
-                    work[Index] = 0;
+                    return BruteForceRecursion(work, data, Index + 1);
 
-                    return false;
+                var loc = new Location(Index);
+
+                for (int i = 1; i < 10; i++)
+                {
+                    if (!data.DigitInRow[i, loc.Row] && !data.DigitInColumn[i, loc.Column] && !data.DigitInZone[i, loc.Zone])
+                    {
+                        work[loc] = i;
+                        data.DigitInRow[i, loc.Row] = data.DigitInColumn[i, loc.Column] = data.DigitInZone[i, loc.Zone] = true;
+                        if (BruteForceRecursion(work, data, Index + 1))
+                            return true;
+                        data.DigitInRow[i, loc.Row] = data.DigitInColumn[i, loc.Column] = data.DigitInZone[i, loc.Zone] = false;
+                    }
                 }
+
+                work[Index] = 0;
+                return false;
             }
         }
     }
