@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuSharp", "D:\Source\Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCreation", "Tests\SolutionCreation\SolutionCreation.csproj", "{981F9BA7-55AC-47C3-9426-8ACB32C8E86A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleGeneration", "Tests\PuzzleGeneration\PuzzleGeneration.csproj", "{9F8FB1DE-C0F5-49F3-829C-9F7EA0EAF1FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{981F9BA7-55AC-47C3-9426-8ACB32C8E86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{981F9BA7-55AC-47C3-9426-8ACB32C8E86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{981F9BA7-55AC-47C3-9426-8ACB32C8E86A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8FB1DE-C0F5-49F3-829C-9F7EA0EAF1FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8FB1DE-C0F5-49F3-829C-9F7EA0EAF1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8FB1DE-C0F5-49F3-829C-9F7EA0EAF1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8FB1DE-C0F5-49F3-829C-9F7EA0EAF1FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
