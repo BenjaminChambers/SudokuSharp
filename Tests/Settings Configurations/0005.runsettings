@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<RunSettings>
-    <TestRunParameters>
-        <Parameter name="Number Of Puzzles" value="5" />
-        <Parameter name="Batch Size" value="5" />
-        <Parameter Name="Number of Batches" value="5" />
-        <Parameter name="Seed" value="0" />
-    </TestRunParameters>
-</RunSettings>
