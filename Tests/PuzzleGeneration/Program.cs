@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
- * On my laptop:
+ * On my laptop running 10x50:
 Timing the creation of 500 puzzles.
 50 puzzles created in 3.03 seconds for 17 puzzles per second.
 50 puzzles created in 3.03 seconds for 16 puzzles per second.
@@ -27,10 +27,10 @@ namespace PuzzleGeneration
     {
         static void Main(string[] args)
         {
-            int BatchSize = 50;
             int Batches = 10;
+            int BatchSize = 50;
 
-            Console.WriteLine("Timing the creation of {0} puzzles.", Batches*BatchSize);
+            Console.WriteLine("Timing the creation of {0:N0} puzzles.", Batches*BatchSize);
             var rnd = new Random(0);
             var brd = SudokuSharp.Factory.Solution(rnd);
 
@@ -44,10 +44,10 @@ namespace PuzzleGeneration
                     SudokuSharp.Factory.Puzzle(brd, rnd, 10, 10, 10);
                 }
                 elapsed = DateTime.Now - bStart;
-                Console.WriteLine("{0} puzzles created in {1:0.00} seconds for {2:0} puzzles per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
+                Console.WriteLine("{0:N0} puzzles created in {1:0.00} seconds for {2:N0} puzzles per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
             }
             elapsed = DateTime.Now - start;
-            Console.WriteLine("{0} puzzles created in {1:0.00} seconds for {2:0} puzzles per second.", BatchSize * Batches, elapsed.TotalSeconds, (BatchSize*Batches) / elapsed.TotalSeconds);
+            Console.WriteLine("{0:N0} puzzles created in {1:0.00} seconds for {2:N0} puzzles per second.", BatchSize * Batches, elapsed.TotalSeconds, (BatchSize*Batches) / elapsed.TotalSeconds);
         }
     }
 }

@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
- * 100K boards
- * Output on my laptop:
+ * Output on my laptop running 10x10_000:
 Timing the creation of 100,000 boards.
 10,000 boards created in 0.73 seconds for 13707 boards per second.
 10,000 boards created in 0.72 seconds for 13832 boards per second.
@@ -31,7 +30,7 @@ namespace SolutionCreation
             int Batches = 10;
             int BatchSize = 10000;
 
-            Console.WriteLine("Timing the creation of {0} boards.", Batches*BatchSize);
+            Console.WriteLine("Timing the creation of {0:N0} boards.", Batches*BatchSize);
             var rnd = new Random(0);
 
             TimeSpan elapsed;
@@ -44,10 +43,10 @@ namespace SolutionCreation
                     SudokuSharp.Factory.Solution(rnd);
                 }
                 elapsed = DateTime.Now - bStart;
-                Console.WriteLine("{0} boards created in {1:0.00} seconds for {2:0} boards per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
+                Console.WriteLine("{0:N0} boards created in {1:0.00} seconds for {2:N0} boards per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
             }
             elapsed = DateTime.Now - start;
-            Console.WriteLine("{0} boards created in {1:0.00} seconds for {2:0} boards per second.", Batches*BatchSize, elapsed.TotalSeconds, (Batches*BatchSize) / elapsed.TotalSeconds);
+            Console.WriteLine("{0:N0} boards created in {1:0.00} seconds for {2:N0} boards per second.", Batches*BatchSize, elapsed.TotalSeconds, (Batches*BatchSize) / elapsed.TotalSeconds);
         }
     }
 }
