@@ -28,23 +28,26 @@ namespace SolutionCreation
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Timing the creation of 100,000 boards.");
+            int Batches = 10;
+            int BatchSize = 10000;
+
+            Console.WriteLine("Timing the creation of {0} boards.", Batches*BatchSize);
             var rnd = new Random(0);
 
             TimeSpan elapsed;
             var start = DateTime.Now;
-            for (int i=0; i<10; i++)
+            for (int i=0; i< Batches; i++)
             {
                 var bStart = DateTime.Now;
-                for (int j=0; j<10_000; j++)
+                for (int j=0; j< BatchSize; j++)
                 {
                     SudokuSharp.Factory.Solution(rnd);
                 }
                 elapsed = DateTime.Now - bStart;
-                Console.WriteLine("10,000 boards created in {0:0.00} seconds for {1:0} boards per second.", elapsed.TotalSeconds, 10_000 / elapsed.TotalSeconds);
+                Console.WriteLine("{0} boards created in {1:0.00} seconds for {2:0} boards per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
             }
             elapsed = DateTime.Now - start;
-            Console.WriteLine("100,000 boards created in {0:0.00} seconds for {1:0} boards per second.", elapsed.TotalSeconds, 100_000 / elapsed.TotalSeconds);
+            Console.WriteLine("{0} boards created in {1:0.00} seconds for {2:0} boards per second.", Batches*BatchSize, elapsed.TotalSeconds, (Batches*BatchSize) / elapsed.TotalSeconds);
         }
     }
 }
