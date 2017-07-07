@@ -44,10 +44,10 @@ namespace PuzzleGeneration
                     SudokuSharp.Factory.Puzzle(brd, rnd, 10, 10, 10);
                 }
                 elapsed = DateTime.Now - bStart;
-                Console.WriteLine("{2} puzzles created in {0:0.00} seconds for {1:0} puzzles per second.", elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds, BatchSize);
+                Console.WriteLine("{0} puzzles created in {1:0.00} seconds for {2:0} puzzles per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
             }
             elapsed = DateTime.Now - start;
-            Console.WriteLine("{2} puzzles created in {0:0.00} seconds for {1:0} puzzles per second.", elapsed.TotalSeconds, (BatchSize*Batches) / elapsed.TotalSeconds, BatchSize*Batches);
+            Console.WriteLine("{0} puzzles created in {1:0.00} seconds for {2:0} puzzles per second.", BatchSize * Batches, elapsed.TotalSeconds, (BatchSize*Batches) / elapsed.TotalSeconds);
         }
     }
 }
