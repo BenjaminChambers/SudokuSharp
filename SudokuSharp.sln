@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuSharp", "D:\Source\Repos\SudokuSharp\SudokuSharp.csproj", "{82B46D96-454C-4801-A097-08DFF29AA7D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuSharp", "SudokuSharp.csproj", "{82B46D96-454C-4801-A097-08DFF29AA7D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionCreation", "Tests\SolutionCreation\SolutionCreation.csproj", "{981F9BA7-55AC-47C3-9426-8ACB32C8E86A}"
 EndProject
