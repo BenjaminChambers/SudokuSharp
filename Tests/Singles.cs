@@ -3,11 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class Singles
     {
-        static SudokuSharp.Board t1 = new SudokuSharp.Board();
-
-
         [TestMethod]
         public void TestMethod1()
         {
