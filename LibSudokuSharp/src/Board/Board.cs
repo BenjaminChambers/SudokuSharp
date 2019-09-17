@@ -26,6 +26,17 @@ namespace SudokuSharp
         {
             Array.Copy(src.data, this.data, 81);
         }
+
+        public Board(IEnumerable<int> src)
+        {
+            int i = 0;
+            foreach (var c in src)
+            {
+                data[i++] = c;
+                if (i > 80)
+                    break;
+            }
+        }
         #endregion
 
         /// <summary>
