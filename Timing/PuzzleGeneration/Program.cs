@@ -5,21 +5,43 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
- * On my laptop running 10x50:
-Timing the creation of 500 puzzles.
-50 puzzles created in 3.03 seconds for 17 puzzles per second.
-50 puzzles created in 3.03 seconds for 16 puzzles per second.
-50 puzzles created in 4.31 seconds for 12 puzzles per second.
-50 puzzles created in 5.49 seconds for 9 puzzles per second.
-50 puzzles created in 5.10 seconds for 10 puzzles per second.
-50 puzzles created in 5.56 seconds for 9 puzzles per second.
-50 puzzles created in 7.40 seconds for 7 puzzles per second.
-50 puzzles created in 4.92 seconds for 10 puzzles per second.
-50 puzzles created in 7.64 seconds for 7 puzzles per second.
-50 puzzles created in 4.78 seconds for 10 puzzles per second.
-500 puzzles created in 51.26 seconds for 10 puzzles per second.
+ * Output on my laptop configured for Any CPU:
+15 Puzzles created in 0.5496921 seconds.
+22 Puzzles created in 1.0943824 seconds.
+33 Puzzles created in 1.2442839 seconds.
+49 Puzzles created in 2.3656245 seconds.
+73 Puzzles created in 5.4038927 seconds.
+
+Puzzles per second: 18.0148471614737
 Press any key to continue . . .
-*/
+
+
+ * Output on my laptop configured for x64:
+15 Puzzles created in 0.3168167 seconds.
+22 Puzzles created in 0.6826054 seconds.
+33 Puzzles created in 0.7215857 seconds.
+49 Puzzles created in 1.3152413 seconds.
+73 Puzzles created in 2.9723058 seconds.
+109 Puzzles created in 4.0476545 seconds.
+
+Puzzles per second: 29.9317553988086
+Press any key to continue . . .
+
+
+ * Output on my laptop configured for x86:
+15 Puzzles created in 0.5546807 seconds.
+22 Puzzles created in 1.1423399 seconds.
+33 Puzzles created in 1.4761508 seconds.
+49 Puzzles created in 2.8223899 seconds.
+73 Puzzles created in 5.4428703 seconds.
+
+Puzzles per second: 16.785518042526
+Press any key to continue . . .
+
+ */
+
+
+
 
 namespace PuzzleGeneration
 {
@@ -27,27 +49,27 @@ namespace PuzzleGeneration
     {
         static void Main(string[] args)
         {
-            int Batches = 10;
-            int BatchSize = 50;
-
-            Console.WriteLine("Timing the creation of {0:N0} puzzles.", Batches*BatchSize);
             var rnd = new Random(0);
             var brd = SudokuSharp.Factory.Solution(rnd);
 
-            TimeSpan elapsed;
-            var start = DateTime.Now;
-            for (int i = 0; i < Batches; i++)
+            int BatchSize = 10;
+
+            var results = new List<(int Batch, double Seconds)>();
+
+            TimeSpan Elapsed;
+            do
             {
-                var bStart = DateTime.Now;
-                for (int j = 0; j < BatchSize; j++)
-                {
+                BatchSize = (3 * BatchSize) / 2;
+                var start = DateTime.Now;
+                for (int i = 0; i < BatchSize; i++)
                     SudokuSharp.Factory.Puzzle(brd, rnd, 10, 10, 10);
-                }
-                elapsed = DateTime.Now - bStart;
-                Console.WriteLine("{0:N0} puzzles created in {1:0.00} seconds for {2:N0} puzzles per second.", BatchSize, elapsed.TotalSeconds, BatchSize / elapsed.TotalSeconds);
-            }
-            elapsed = DateTime.Now - start;
-            Console.WriteLine("{0:N0} puzzles created in {1:0.00} seconds for {2:N0} puzzles per second.", BatchSize * Batches, elapsed.TotalSeconds, (BatchSize*Batches) / elapsed.TotalSeconds);
+                Elapsed = DateTime.Now - start;
+                Console.WriteLine($"{BatchSize} Puzzles created in {Elapsed.TotalSeconds} seconds.");
+                results.Add((BatchSize, Elapsed.TotalSeconds));
+            } while (Elapsed.TotalSeconds < 3.0f);
+
+            Console.WriteLine();
+            Console.WriteLine($"Puzzles per second: {results.Sum(x => x.Batch) / results.Sum(x => x.Seconds)}");
         }
     }
 }
