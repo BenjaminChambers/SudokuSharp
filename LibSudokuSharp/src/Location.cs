@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 
 namespace SudokuSharp
@@ -9,7 +10,7 @@ namespace SudokuSharp
     /// It is internally represented as an integer for performance, but contains many useful methods
     /// </summary>
     [DataContract]
-    public class Location
+    public struct Location
     {
         #region Constructors
         /// <summary>
@@ -18,7 +19,8 @@ namespace SudokuSharp
         /// <param name="idx">The cell <see cref="Index"/>.</param>
         public Location(int idx)
         {
-            Index = Math.Max(Math.Min(idx, 80), 0);
+            Debug.Assert(idx < 81);
+            Index = idx;
         }
 
         /// <summary>
@@ -29,7 +31,9 @@ namespace SudokuSharp
         /// <param name="Row">The row.</param>
         public Location(int Column, int Row)
         {
-            Index = Row * 9 + Column;
+            Debug.Assert(Column < 9);
+            Debug.Assert(Row < 9);
+            Index = (int)(Row * 9 + Column);
         }
         #endregion
 
@@ -43,6 +47,7 @@ namespace SudokuSharp
         /// </returns>
         public static implicit operator Location(int index)
         {
+            Debug.Assert(index < 81);
             return new Location(index);
         }
 
@@ -122,16 +127,15 @@ namespace SudokuSharp
         /// <value>
         /// The ReadOnlyCollection of all indices.
         /// </value>
-        public static ReadOnlyCollection<Location> All { get { return _allIndices; } }
+        public static IReadOnlyList<Location> All
+            => _allIndices;
 
         /// <summary>
         /// Gets the cells which may cause conflicts with this one.
         /// </summary>
         /// <returns>An <see cref="int"/>[] array of all the indices in the current row, column, or zone. These are the only cells which may conflict with this cell.</returns>
-        public ReadOnlyCollection<Location> Blocking
-        {
-            get { return new ReadOnlyCollection<Location>(ConflictingIndices[Index]); }
-        }
+        public IReadOnlyList<Location> Blocking
+            => ConflictingIndices[Index];
         #endregion
 
         #region Conflict verification
@@ -162,7 +166,7 @@ namespace SudokuSharp
         #endregion
 
         #region Internal predeclarations
-        private static ReadOnlyCollection<Location> _allIndices = new ReadOnlyCollection<Location>(new Location[81]
+        private static Location[] _allIndices = new Location[]
         {
             00, 1, 2, 3, 4, 5, 6, 7, 8,
             09,10,11,12,13,14,15,16,17,
@@ -173,7 +177,7 @@ namespace SudokuSharp
             54,55,56,57,58,59,60,61,62,
             63,64,65,66,67,68,69,70,71,
             72,73,74,75,76,77,78,79,80
-        });
+        };
 
         private static Location[][] ConflictingIndices = new Location[][] {
     new Location[] {1,2,3,4,5,6,7,8,9,10,11,18,19,20,27,36,45,54,63,72},
