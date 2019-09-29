@@ -77,9 +77,10 @@ namespace SudokuSharp
             /// Returns a the results of both Naked Singles and Hidden Singles
             /// </summary>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location,int>> AllSingles()
+            public IEnumerable<(Location Cell, int Value)> AllSingles()
             {
-                return HiddenSingles().Union(NakedSingles());
+                foreach (var result in AllSingles(AllCandidates()))
+                    yield return result;
             }
 
             /// <summary>
@@ -88,9 +89,13 @@ namespace SudokuSharp
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> AllSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
+            public IEnumerable<(Location Cell, int Value)> AllSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
-                return HiddenSingles(Possibilities).Union(NakedSingles(Possibilities));
+                foreach (var result in NakedSingles(Possibilities))
+                    yield return result;
+
+                foreach (var result in HiddenSingles(Possibilities))
+                    yield return result;
             }
         }
     }
