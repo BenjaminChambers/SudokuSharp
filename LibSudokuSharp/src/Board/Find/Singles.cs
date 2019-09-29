@@ -35,7 +35,7 @@ namespace SudokuSharp
             /// Looks for Hidden Singles. These are digits which may only be placed in one cell within a row, column, or zone
             /// </summary>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> HiddenSingles()
+            public IEnumerable<(Location Cell, int Value)> HiddenSingles()
             {
                 return HiddenSingles(AllCandidates());
             }
@@ -46,7 +46,7 @@ namespace SudokuSharp
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> HiddenSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
+            public IEnumerable<(Location Cell, int Value)> HiddenSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
                 Dictionary<Location, int> results = new Dictionary<Location, int>();
 
@@ -64,10 +64,13 @@ namespace SudokuSharp
                         if (possible.Count() == 1) results[possible.First()] = number;
                         possible = from item in locationsForThisNumber where item.Column == test select item;
                         if (possible.Count() == 1) results[possible.First()] = number;
+
+                        if (((from item in locationsForThisNumber where item.Zone == test select item).Count() == 1)
+                            || ((from item in locationsForThisNumber where item.Row == test select item).Count() == 1)
+                            || ((from item in locationsForThisNumber where item.Column == test select item).Count() == 1))
+                            yield return (possible.First(), number);
                     }
                 }
-
-                return results;
             }
 
             /// <summary>
