@@ -13,8 +13,8 @@ namespace SudokuSharp
             /// Looks for candidates in zones which are restricted to a specific column or row.
             /// Removes those candidates from that column or row in other zones, and checks for cells which may be solved
             /// </summary>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> LockedCandidates()
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
+            public IEnumerable<(Location Cell, int Value)> LockedCandidates()
             {
                 var possible = AllCandidates();
 
@@ -62,7 +62,8 @@ namespace SudokuSharp
                     }
                 }
 
-                return AllSingles(possible);
+                foreach (var result in AllSingles(possible))
+                    yield return result;
             }
         }
     }
