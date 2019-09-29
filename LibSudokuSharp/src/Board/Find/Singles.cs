@@ -11,7 +11,7 @@ namespace SudokuSharp
             /// Looks for Naked Singles. These are cells with only a single candidate
             /// </summary>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> NakedSingles()
+            public IEnumerable<(Location Cell, int Value)> NakedSingles()
             {
                 return NakedSingles(AllCandidates());
             }
@@ -22,11 +22,13 @@ namespace SudokuSharp
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> NakedSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
+            public IEnumerable<(Location Cell, int Value)> NakedSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
-                return from item in Possibilities
-                       where item.Value.Count == 1
-                       select new KeyValuePair<Location, int>(item.Key, item.Value.First());
+                foreach (var test in Possibilities)
+                {
+                    if (test.Value.Count == 1)
+                        yield return (test.Key, test.Value.First());
+                }
             }
 
             /// <summary>
