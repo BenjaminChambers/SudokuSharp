@@ -14,7 +14,7 @@ namespace SudokuSharp
             /// Removes those candidates from that column or row in other zones, and checks for cells which may be solved
             /// </summary>
             /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
-            public IEnumerable<KeyValuePair<Location, int>> LockedCandidates()
+            public IEnumerable<(Location Cell, int Value)> LockedCandidates()
             {
                 var possible = AllCandidates();
 
