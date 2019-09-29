@@ -10,7 +10,7 @@ namespace SudokuSharp
             /// <summary>
             /// Looks for Naked Singles. These are cells with only a single candidate
             /// </summary>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> NakedSingles()
             {
                 return NakedSingles(AllCandidates());
@@ -21,7 +21,7 @@ namespace SudokuSharp
             /// This version is intended to be called by other reducing functions (such as LockedCandidates)
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> NakedSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
                 foreach (var test in Possibilities)
@@ -34,7 +34,7 @@ namespace SudokuSharp
             /// <summary>
             /// Looks for Hidden Singles. These are digits which may only be placed in one cell within a row, column, or zone
             /// </summary>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> HiddenSingles()
             {
                 return HiddenSingles(AllCandidates());
@@ -45,7 +45,7 @@ namespace SudokuSharp
             /// This version is intended to be called by other reducing functions (such as LockedCandidates)
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> HiddenSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
                 Dictionary<Location, int> results = new Dictionary<Location, int>();
@@ -76,7 +76,7 @@ namespace SudokuSharp
             /// <summary>
             /// Returns a the results of both Naked Singles and Hidden Singles
             /// </summary>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> AllSingles()
             {
                 foreach (var result in AllSingles(AllCandidates()))
@@ -88,7 +88,7 @@ namespace SudokuSharp
             /// This version is intended to be called by other reducing functions (such as LockedCandidates)
             /// </summary>
             /// <param name="Possibilities">A set of candidates</param>
-            /// <returns>A set of <see cref="KeyValuePair{Location, Int32}"/> items</returns>
+            /// <returns>An enumeration of tuples containing a <see cref="Location"/> and <see cref="int"/></returns>
             public IEnumerable<(Location Cell, int Value)> AllSingles(IEnumerable<KeyValuePair<Location, List<int>>> Possibilities)
             {
                 foreach (var result in NakedSingles(Possibilities))
