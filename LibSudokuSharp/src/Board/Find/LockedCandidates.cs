@@ -62,7 +62,8 @@ namespace SudokuSharp
                     }
                 }
 
-                return AllSingles(possible);
+                foreach (var result in AllSingles(possible))
+                    yield return result;
             }
         }
     }
