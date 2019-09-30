@@ -37,6 +37,19 @@ namespace SudokuSharp
                     break;
             }
         }
+
+        /// <summary>
+        /// Create a board from a string description
+        /// </summary>
+        /// <param name="src">A string of at least 81 characters. Shorter strings will throw an exception, as will non-numeric numbers. Longer strings will have the excess ignored.</param>
+        public Board(string src)
+        {
+            if (src.Length < 81)
+                throw new ArgumentException("Parameter src not long enough to describe complete board.");
+
+            foreach (var loc in Location.All)
+                PutCell(loc, int.Parse(src[loc.Index].ToString()));
+        }
         #endregion
 
         /// <summary>
