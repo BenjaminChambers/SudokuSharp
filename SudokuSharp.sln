@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timing", "Timing", "{80EBD418-A58B-4186-905E-BB42C358A7EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimePuzzleGeneration", "TimePuzzleGeneration\TimePuzzleGeneration.csproj", "{B99F138B-CA18-4511-9531-E49EB70703E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimePuzzleGeneration", "TimePuzzleGeneration\TimePuzzleGeneration.csproj", "{B99F138B-CA18-4511-9531-E49EB70703E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSolutionGeneration", "TimeSolutionGeneration\TimeSolutionGeneration.csproj", "{E2477F11-289C-4B0E-830F-7FE7FDB14B93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSolutionGeneration", "TimeSolutionGeneration\TimeSolutionGeneration.csproj", "{E2477F11-289C-4B0E-830F-7FE7FDB14B93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuSharp", "SudokuSharp\SudokuSharp.csproj", "{38A33D32-9431-4861-8B2F-03834BF697C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,18 @@ Global
 		{E2477F11-289C-4B0E-830F-7FE7FDB14B93}.Release|x64.Build.0 = Release|Any CPU
 		{E2477F11-289C-4B0E-830F-7FE7FDB14B93}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2477F11-289C-4B0E-830F-7FE7FDB14B93}.Release|x86.Build.0 = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|x64.Build.0 = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Debug|x86.Build.0 = Debug|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|x64.ActiveCfg = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|x64.Build.0 = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|x86.ActiveCfg = Release|Any CPU
+		{38A33D32-9431-4861-8B2F-03834BF697C0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
