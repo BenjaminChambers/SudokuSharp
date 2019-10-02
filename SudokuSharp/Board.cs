@@ -6,11 +6,32 @@ namespace SudokuSharp
     public class Board
     {
         #region Constructors
-        // Order: 2 = 4x4, 3=9x9, 4=16x16...
-        public Board(int Order = 3) => throw new NotImplementedException();
-        public Board(Board Source) => throw new NotImplementedException();
-        public Board(IEnumerable<int> Source) => throw new NotImplementedException();
-        public Board(string Source) => throw new NotImplementedException();
+        // Order: 2 = 4x4, 3=9x9, 4=16x16, 5=25x25
+        public Board(int Order = 3)
+        {
+            if (Order < 2 || Order > 5)
+                throw new ArgumentOutOfRangeException("Order must be between 2 and 5 (inclusive)");
+
+            createBoard(Order);
+        }
+
+        public Board(Board Source)
+            : this(Source.Order)
+        {
+            Array.Copy(Source._data, 0, _data, 0, Size * Size);
+        }
+
+        public Board(int Order, IEnumerable<int> Source)
+            : this(Order)
+        {
+            var idx = 0;
+            foreach (var x in Source)
+            {
+                if (x < 0 || x > Size)
+                    throw new ArgumentOutOfRangeException($"Encountered value {x} which is outside the range of 1-{Size}");
+                _data[idx++] = x;
+            }
+        }
         #endregion
 
 
@@ -57,6 +78,12 @@ namespace SudokuSharp
 
         public IEnumerable<Board> Solve() => throw new NotImplementedException();
 
+
+        private void createBoard(int Order)
+        {
+            _order = Order;
+            _data = new int[Size * Size];
+        }
         private int[] _data;
         int _order;
     }
