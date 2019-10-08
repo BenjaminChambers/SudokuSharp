@@ -47,6 +47,7 @@ namespace SudokuSharp
         #region Transform
         public Board SwapColumns(int First, int Second) => throw new NotImplementedException();
         public Board SwapRows(int First, int Second) => throw new NotImplementedException();
+        public Board SwapDigits(int First, int Second) => throw new NotImplementedException();
         public Board Rotate(int NumberOfTimesClockwise) => throw new NotImplementedException();
         public Board Flip(bool Vertical, bool Horizontal) => throw new NotImplementedException();
         #endregion
@@ -63,6 +64,7 @@ namespace SudokuSharp
         public IEnumerable<PossibilitySet> FindXWing(Scratchpad Work) => throw new NotImplementedException();
         public IEnumerable<PossibilitySet> FindXYWing(Scratchpad Work) => throw new NotImplementedException();
         public IEnumerable<PossibilitySet> FindSwordfish(Scratchpad Work) => throw new NotImplementedException();
+        public IEnumerable<PossibilitySet> FindColorChain(int MaxSteps) => throw new NotImplementedException();
         #endregion
 
 
