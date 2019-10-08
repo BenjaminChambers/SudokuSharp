@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SudokuSharp
 {
@@ -38,7 +39,10 @@ namespace SudokuSharp
 
         #region Accessors
         public int this[int Location]
-            => GetCell(Location);
+        {
+            get => GetCell(Location);
+            set => PutCell(Location, value);
+        }
         public int GetCell(int Location)
             => _data[Location];
         public void PutCell(int Location, int Value)
@@ -92,6 +96,15 @@ namespace SudokuSharp
 
             return result;
         }
+
+        public (int Row, int Column, int Zone) GetCoordinates(int Index)
+        {
+            var r = Index / Size;
+            var c = Index % Size;
+            var z = r - (r % Order) + (c / Order);
+
+            return (r, c, z);
+        }
         #endregion
 
 
@@ -108,6 +121,20 @@ namespace SudokuSharp
 
         #region Find
         // These functions work on the board itself
+        public HashSet<int> FindCandidates(int Location)
+        {
+            var Result = new HashSet<int>(Enumerable.Range(1,Size));
+            var coord = GetCoordinates(Location);
+
+            foreach (var test in GetRow(coord.Row).Concat(GetColumn(coord.Column)).Concat(GetZone(coord.Zone)))
+            {
+                if (Result.Contains(test))
+                    Result.Remove(test);
+            }
+
+            return Result;
+        }
+
         public IEnumerable<PossibilitySet> FindNakedSets(int SetSize) => throw new NotImplementedException();
         public IEnumerable<PossibilitySet> FindHiddenSets(int SetSize) => throw new NotImplementedException();
 
@@ -164,7 +191,29 @@ namespace SudokuSharp
 
 
 
-        public IEnumerable<Board> Fill() => throw new NotImplementedException();
+        public IEnumerable<Board> Fill()
+        {
+            foreach (var result in Fill(new Board(this), 0))
+                yield return result;
+        }
+        private static IEnumerable<Board> Fill(Board work, int Index)
+        {
+            if (Index == work.Size*work.Size)
+            {
+                if (work.Solved)
+                    yield return work;
+            }
+            else
+            {
+                foreach (var attempt in work.FindCandidates(Index))
+                {
+                    work[Index] = attempt;
+                    foreach (var next in Fill(work, Index + 1))
+                        yield return work;
+                }
+            }
+        }
+
         public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
 
 
