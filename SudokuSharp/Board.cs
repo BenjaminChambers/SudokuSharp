@@ -122,8 +122,42 @@ namespace SudokuSharp
 
 
         #region Meta info about the board
-        public bool Solved { get => throw new NotImplementedException(); }
+        public bool Solved
+        {
+            get
+            {
+                Func<IEnumerable<int>, bool> testFail = (IEnumerable<int> src) =>
+                {
+                    var present = new HashSet<int>();
+                    foreach (var x in src)
+                    {
+                        if (x < 1 || x >= Size)
+                            return true;
+
+                        if (present.Contains(x))
+                            return true;
+
+                        present.Add(x);
+                    }
+                    return false;
+                };
+
+                for (int i = 0; i < Size; i++)
+                {
+                    if (testFail(GetRow(i)))
+                        return false;
+                    if (testFail(GetColumn(i)))
+                        return false;
+                    if (testFail(GetZone(i)))
+                        return false;
+                }
+
+                return true;
+            }
+        }
+
         public bool Valid { get => throw new NotImplementedException(); }
+
         public int Order => _order;
         public int Size => _order * _order;
         #endregion
