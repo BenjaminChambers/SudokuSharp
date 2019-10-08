@@ -164,8 +164,8 @@ namespace SudokuSharp
 
 
 
-        public IEnumerable<Board> Solve() => throw new NotImplementedException();
-        public IEnumerable<Board> Solve(Random Rnd) => throw new NotImplementedException();
+        public IEnumerable<Board> Fill() => throw new NotImplementedException();
+        public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
 
 
         private void createBoard(int Order)
