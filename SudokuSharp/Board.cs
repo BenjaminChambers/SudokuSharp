@@ -40,6 +40,10 @@ namespace SudokuSharp
         public int this[int Location] => throw new NotImplementedException();
         public int GetCell(int Location) => throw new NotImplementedException();
         public void PutCell(int Location, int Value) => throw new NotImplementedException();
+
+        public int[] GetRow(int Row) => throw new NotImplementedException();
+        public int[] GetColumn(int Column) => throw new NotImplementedException();
+        public int[] GetZone(int Zone) => throw new NotImplementedException();
         #endregion
 
 
@@ -79,6 +83,7 @@ namespace SudokuSharp
 
 
         public IEnumerable<Board> Solve() => throw new NotImplementedException();
+        public IEnumerable<Board> Solve(Random Rnd) => throw new NotImplementedException();
 
 
         private void createBoard(int Order)
