@@ -41,9 +41,49 @@ namespace SudokuSharp
         public int GetCell(int Location) => throw new NotImplementedException();
         public void PutCell(int Location, int Value) => throw new NotImplementedException();
 
-        public int[] GetRow(int Row) => throw new NotImplementedException();
-        public int[] GetColumn(int Column) => throw new NotImplementedException();
-        public int[] GetZone(int Zone) => throw new NotImplementedException();
+        public int[] GetRow(int Row)
+        {
+            if (Row < 0 || Row >= Size)
+                throw new ArgumentOutOfRangeException($"Row {Row} is out of range of [0..{Size - 1}]");
+
+            var result = new int[Size];
+            for (int i = 0; i < Size; i++)
+                result[i] = _data[Row * Size + i];
+            return result;
+        }
+
+        public int[] GetColumn(int Column)
+        {
+            if (Column < 0 || Column >= Size)
+                throw new ArgumentOutOfRangeException($"Column {Column} is out of range of [0..{Size - 1}]");
+
+            var result = new int[Size];
+            for (int i = 0; i < Size; i++)
+                result[i] = _data[Column + i * Size];
+
+            return result;
+        }
+
+        public int[] GetZone(int Zone)
+        {
+            if (Zone < 0 || Zone >= Size)
+                throw new ArgumentOutOfRangeException($"Zone {Zone} is out of range of [0..{Size - 1}]");
+
+            var zRow = Zone - (Zone % Order);
+            var zCol = (Zone % Order) * Order;
+            var zIndex = zRow * Order + zCol;
+
+            var result = new int[Size];
+            for (int iR=0; iR<Order; iR++)
+            {
+                for (int iC=0; iC<Order; iC++)
+                {
+                    result[iR * Order + iC] = _data[zIndex + iR * Size + iC];
+                }
+            }
+
+            return result;
+        }
         #endregion
 
 
