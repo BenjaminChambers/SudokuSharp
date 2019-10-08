@@ -47,7 +47,7 @@ namespace SudokuSharp
             => _data[Location];
         public void PutCell(int Location, int Value)
         {
-            if (Value < 0 || Value >= Size)
+            if (Value < 0 || Value > Size)
                 throw new ArgumentOutOfRangeException($"Value {Value} is out of range of [0..{Size - 1}]");
 
             _data[Location] = Value;
