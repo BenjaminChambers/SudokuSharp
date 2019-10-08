@@ -124,9 +124,9 @@ namespace SudokuSharp
         public HashSet<int> FindCandidates(int Location)
         {
             var Result = new HashSet<int>(Enumerable.Range(1,Size));
-            var coord = GetCoordinates(Location);
+            var (r, c, z) = GetCoordinates(Location);
 
-            foreach (var test in GetRow(coord.Row).Concat(GetColumn(coord.Column)).Concat(GetZone(coord.Zone)))
+            foreach (var test in GetRow(r).Concat(GetColumn(c)).Concat(GetZone(z)))
             {
                 if (Result.Contains(test))
                     Result.Remove(test);
@@ -153,7 +153,7 @@ namespace SudokuSharp
         {
             get
             {
-                Func<IEnumerable<int>, bool> testFail = (IEnumerable<int> src) =>
+                bool testFail(IEnumerable<int> src)
                 {
                     var present = new HashSet<int>();
                     foreach (var x in src)
@@ -167,7 +167,7 @@ namespace SudokuSharp
                         present.Add(x);
                     }
                     return false;
-                };
+                }
 
                 for (int i = 0; i < Size; i++)
                 {
@@ -193,25 +193,10 @@ namespace SudokuSharp
 
         public IEnumerable<Board> Fill()
         {
+
+
             foreach (var result in Fill(new Board(this), 0))
                 yield return result;
-        }
-        private static IEnumerable<Board> Fill(Board work, int Index)
-        {
-            if (Index == work.Size*work.Size)
-            {
-                if (work.Solved)
-                    yield return work;
-            }
-            else
-            {
-                foreach (var attempt in work.FindCandidates(Index))
-                {
-                    work[Index] = attempt;
-                    foreach (var next in Fill(work, Index + 1))
-                        yield return work;
-                }
-            }
         }
 
         public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
