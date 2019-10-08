@@ -193,10 +193,33 @@ namespace SudokuSharp
 
         public IEnumerable<Board> Fill()
         {
+            foreach (var attempt in Fill(0))
+                yield return attempt;
+        }
 
+        private IEnumerable<Board> Fill(int Index)
+        {
+            if (Index < Size * Size)
+            {
+                while (this[Index] > 0)
+                    Index++;
+            }
 
-            foreach (var result in Fill(new Board(this), 0))
-                yield return result;
+            if (Index == Size*Size)
+            {
+                if (Solved)
+                    yield return this;
+            } else
+            {
+                var work = new Board(this);
+                var possible = FindCandidates(Index);
+                foreach (var test in possible)
+                {
+                    work[Index] = test;
+                    foreach (var attempt in work.Fill(Index + 1))
+                        yield return attempt;
+                }
+            }
         }
 
         public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
