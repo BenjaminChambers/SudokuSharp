@@ -37,9 +37,17 @@ namespace SudokuSharp
 
 
         #region Accessors
-        public int this[int Location] => throw new NotImplementedException();
-        public int GetCell(int Location) => throw new NotImplementedException();
-        public void PutCell(int Location, int Value) => throw new NotImplementedException();
+        public int this[int Location]
+            => GetCell(Location);
+        public int GetCell(int Location)
+            => _data[Location];
+        public void PutCell(int Location, int Value)
+        {
+            if (Value < 0 || Value >= Size)
+                throw new ArgumentOutOfRangeException($"Value {Value} is out of range of [0..{Size - 1}]");
+
+            _data[Location] = Value;
+        }
 
         public int[] GetRow(int Row)
         {
