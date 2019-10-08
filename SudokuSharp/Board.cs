@@ -82,9 +82,9 @@ namespace SudokuSharp
             var zIndex = zRow * Order + zCol;
 
             var result = new int[Size];
-            for (int iR=0; iR<Order; iR++)
+            for (int iR = 0; iR < Order; iR++)
             {
-                for (int iC=0; iC<Order; iC++)
+                for (int iC = 0; iC < Order; iC++)
                 {
                     result[iR * Order + iC] = _data[zIndex + iR * Size + iC];
                 }
