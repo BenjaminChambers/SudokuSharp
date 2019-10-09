@@ -7,11 +7,11 @@ namespace EnumerateBoards
     {
         static void WriteBoard(Board b)
         {
-            for (int r = 0; r < 9; r++)
+            for (int r = 0; r < 4; r++)
             {
-                for (int c = 0; c < 9; c++)
+                for (int c = 0; c < 4; c++)
                 {
-                    Console.Write(b[r * 9 + c].ToString());
+                    Console.Write(b[r * 4 + c].ToString());
                 }
                 Console.WriteLine();
             }
