@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SudokuSharp
@@ -8,30 +9,33 @@ namespace SudokuSharp
     {
         #region Constructors
         // Order: 2 = 4x4, 3=9x9, 4=16x16, 5=25x25
-        public Board(int Order = 3)
+        public Board(int Order, IList<int> SourceData)
         {
+            // TODO: possibly increase the limit on Order later, but for now I just want to get things working
             if (Order < 2 || Order > 5)
                 throw new ArgumentOutOfRangeException("Order must be between 2 and 5 (inclusive)");
 
-            createBoard(Order);
+            this.Order = Order;
+            Size = Order * Order;
+            Cells = new ReadOnlyCollection<int>(SourceData.Take(Size * Size).ToList());
         }
+
+        public Board(int Order = 3)
+            : this(Order, new int[Order * Order * Order * Order]) { }
 
         public Board(Board Source)
-            : this(Source.Order)
-        {
-            Array.Copy(Source._data, 0, _data, 0, Size * Size);
-        }
+            : this(Source.Order, Source.Cells) { }
 
-        public Board(int Order, IEnumerable<int> Source)
-            : this(Order)
+        public Board(Board Source, IEnumerable<(int Location, int Value)> Changes)
         {
-            var idx = 0;
-            foreach (var x in Source)
-            {
-                if (x < 0 || x > Size)
-                    throw new ArgumentOutOfRangeException($"Encountered value {x} which is outside the range of 1-{Size}");
-                _data[idx++] = x;
-            }
+            this.Order = Source.Order;
+            Size = Order * Order;
+
+            var work = Source.Cells.ToArray();
+            foreach (var change in Changes)
+                work[change.Location] = change.Value;
+
+            Cells = new ReadOnlyCollection<int>(work);
         }
         #endregion
 
@@ -39,19 +43,7 @@ namespace SudokuSharp
 
         #region Accessors
         public int this[int Location]
-        {
-            get => GetCell(Location);
-            set => PutCell(Location, value);
-        }
-        public int GetCell(int Location)
-            => _data[Location];
-        public void PutCell(int Location, int Value)
-        {
-            if (Value < 0 || Value > Size)
-                throw new ArgumentOutOfRangeException($"Value {Value} is out of range of [0..{Size - 1}]");
-
-            _data[Location] = Value;
-        }
+            => Cells[Location];
 
         public int[] GetRow(int Row)
         {
@@ -60,7 +52,7 @@ namespace SudokuSharp
 
             var result = new int[Size];
             for (int i = 0; i < Size; i++)
-                result[i] = _data[Row * Size + i];
+                result[i] = Cells[Row * Size + i];
             return result;
         }
 
@@ -71,7 +63,7 @@ namespace SudokuSharp
 
             var result = new int[Size];
             for (int i = 0; i < Size; i++)
-                result[i] = _data[Column + i * Size];
+                result[i] = Cells[Column + i * Size];
 
             return result;
         }
@@ -89,7 +81,7 @@ namespace SudokuSharp
             {
                 for (int iC = 0; iC < Order; iC++)
                 {
-                    result[iR * Order + iC] = _data[(zRow + iR) * Size + zCol + iC];
+                    result[iR * Order + iC] = Cells[(zRow + iR) * Size + zCol + iC];
                 }
             }
 
@@ -109,6 +101,10 @@ namespace SudokuSharp
 
 
         #region Transform
+        public Board PutCell(int Location, int Value)
+            => new Board(this, new[] { (Location, Value) });
+        public Board PutCells(IEnumerable<(int Location, int Value)> Changes)
+            => new Board(this, Changes);
         public Board SwapColumns(int First, int Second) => throw new NotImplementedException();
         public Board SwapRows(int First, int Second) => throw new NotImplementedException();
         public Board SwapDigits(int First, int Second) => throw new NotImplementedException();
@@ -184,52 +180,14 @@ namespace SudokuSharp
 
         public bool Valid { get => throw new NotImplementedException(); }
 
-        public int Order => _order;
-        public int Size => _order * _order;
+        public readonly int Order;
+        public readonly int Size;
+        public ReadOnlyCollection<int> Cells;
         #endregion
 
 
 
-        public IEnumerable<Board> Fill()
-        {
-            foreach (var attempt in Fill(0))
-                yield return attempt;
-        }
-
-        private IEnumerable<Board> Fill(int Index)
-        {
-            if (Index < Size * Size)
-            {
-                while (this[Index] > 0)
-                    Index++;
-            }
-
-            if (Index == Size*Size)
-            {
-                if (Solved)
-                    yield return this;
-            } else
-            {
-                var work = new Board(this);
-                var possible = FindCandidates(Index);
-                foreach (var test in possible)
-                {
-                    work[Index] = test;
-                    foreach (var attempt in work.Fill(Index + 1))
-                        yield return attempt;
-                }
-            }
-        }
-
+        public IEnumerable<Board> Fill() => throw new NotImplementedException();
         public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
-
-
-        private void createBoard(int Order)
-        {
-            _order = Order;
-            _data = new int[Size * Size];
-        }
-        private int[] _data;
-        int _order;
     }
 }
