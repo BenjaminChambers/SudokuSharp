@@ -25,6 +25,8 @@ namespace EnumerateBoards
             foreach (var b in blank.Fill())
             {
                 WriteBoard(b);
+                Console.WriteLine("Press any key to search for the next board...");
+                Console.ReadKey();
             }
         }
     }
