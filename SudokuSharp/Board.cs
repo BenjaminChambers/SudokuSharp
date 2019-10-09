@@ -32,8 +32,8 @@ namespace SudokuSharp
             Size = Order * Order;
 
             var work = Source.Cells.ToArray();
-            foreach (var change in Changes)
-                work[change.Location] = change.Value;
+            foreach (var (Location, Value) in Changes)
+                work[Location] = Value;
 
             Cells = new ReadOnlyCollection<int>(work);
         }
@@ -144,6 +144,8 @@ namespace SudokuSharp
 
 
         #region Meta info about the board
+        public bool Full
+            => !(from c in Cells where c == 0 select c).Any();
         public bool Solved
         {
             get
@@ -187,7 +189,24 @@ namespace SudokuSharp
 
 
 
-        public IEnumerable<Board> Fill() => throw new NotImplementedException();
+        public IEnumerable<Board> Fill()
+        {
+            if (Full)
+            {
+                if (Solved)
+                    yield return this;
+            } else
+            {
+                var loc = Enumerable.Range(0, Cells.Count).Where(x => Cells[x] == 0).First();
+                var candidates = FindCandidates(loc);
+                foreach (var attempt in candidates)
+                {
+                    foreach (var result in PutCell(loc, attempt).Fill())
+                        yield return result;
+                }
+            }
+        }
+
         public IEnumerable<Board> Fill(Random Rnd) => throw new NotImplementedException();
     }
 }
