@@ -150,29 +150,18 @@ namespace SudokuSharp
         {
             get
             {
-                bool testFail(IEnumerable<int> src)
+                int sum = (from i in Enumerable.Range(1, Size) select i * i).Sum();
+
+                for (int i=0; i<Size; i++)
                 {
-                    var present = new HashSet<int>();
-                    foreach (var x in src)
-                    {
-                        if (x < 1 || x >= Size)
-                            return true;
+                    var test = GetRow(i);
+                    int r = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
+                    test = GetColumn(i);
+                    int c = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
+                    test = GetZone(i);
+                    int z = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
 
-                        if (present.Contains(x))
-                            return true;
-
-                        present.Add(x);
-                    }
-                    return false;
-                }
-
-                for (int i = 0; i < Size; i++)
-                {
-                    if (testFail(GetRow(i)))
-                        return false;
-                    if (testFail(GetColumn(i)))
-                        return false;
-                    if (testFail(GetZone(i)))
+                    if (!(r == sum && c == sum && z == sum))
                         return false;
                 }
 
