@@ -1,11 +1,13 @@
-﻿using SudokuSharp;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SudokuSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace UnitTests
 {
-    public class Common
+    static public class Common
     {
         static public int[] Raw2 = new int[] {
                 1,2, 3,4,
@@ -34,16 +36,20 @@ namespace UnitTests
         static public Board Constructed3 = new Board(3, Raw3);
         static public Board Copied3 = new Board(Constructed3);
 
-        static public bool CompareArrays(int[] First, int[] Second)
+        static public void CompareArrays(int[] First, int[] Second)
         {
-            if (First.Length != Second.Length)
-                return false;
+            Assert.AreEqual(First.Length, Second.Length);
 
             for (int i = 0; i < First.Length; i++)
-                if (First[i] != Second[i])
-                    return false;
+                Assert.AreEqual(First[i], Second[i]);
+        }
 
-            return true;
+        static public void CompareIEnum(IEnumerable<int> First, IEnumerable<int> Second)
+        {
+            var zipped = First.Zip(Second, (f, s) => f == s);
+
+            foreach (var test in zipped)
+                Assert.IsTrue(test);
         }
     }
 }

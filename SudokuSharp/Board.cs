@@ -26,14 +26,14 @@ namespace SudokuSharp
         public Board(Board Source)
             : this(Source.Order, Source.Cells) { }
 
-        public Board(Board Source, IEnumerable<(int Location, int Value)> Changes)
+        public Board(Board Source, IEnumerable<(int Index, int Value)> Changes)
         {
             this.Order = Source.Order;
             Size = Order * Order;
 
             var work = Source.Cells.ToArray();
-            foreach (var (Location, Value) in Changes)
-                work[Location] = Value;
+            foreach (var (Index, Value) in Changes)
+                work[Index] = Value;
 
             Cells = new ReadOnlyCollection<int>(work);
         }
@@ -42,68 +42,16 @@ namespace SudokuSharp
 
 
         #region Accessors
-        public int this[int Location]
-            => Cells[Location];
-
-        public int[] GetRow(int Row)
-        {
-            if (Row < 0 || Row >= Size)
-                throw new ArgumentOutOfRangeException($"Row {Row} is out of range of [0..{Size - 1}]");
-
-            var result = new int[Size];
-            for (int i = 0; i < Size; i++)
-                result[i] = Cells[Row * Size + i];
-            return result;
-        }
-
-        public int[] GetColumn(int Column)
-        {
-            if (Column < 0 || Column >= Size)
-                throw new ArgumentOutOfRangeException($"Column {Column} is out of range of [0..{Size - 1}]");
-
-            var result = new int[Size];
-            for (int i = 0; i < Size; i++)
-                result[i] = Cells[Column + i * Size];
-
-            return result;
-        }
-
-        public int[] GetZone(int Zone)
-        {
-            if (Zone < 0 || Zone >= Size)
-                throw new ArgumentOutOfRangeException($"Zone {Zone} is out of range of [0..{Size - 1}]");
-
-            var zRow = Zone - (Zone % Order);
-            var zCol = (Zone % Order) * Order;
-
-            var result = new int[Size];
-            for (int iR = 0; iR < Order; iR++)
-            {
-                for (int iC = 0; iC < Order; iC++)
-                {
-                    result[iR * Order + iC] = Cells[(zRow + iR) * Size + zCol + iC];
-                }
-            }
-
-            return result;
-        }
-
-        public (int Row, int Column, int Zone) GetCoordinates(int Index)
-        {
-            var r = Index / Size;
-            var c = Index % Size;
-            var z = r - (r % Order) + (c / Order);
-
-            return (r, c, z);
-        }
+        public int this[int Index]
+            => Cells[Index];
         #endregion
 
 
 
         #region Transform
-        public Board PutCell(int Location, int Value)
-            => new Board(this, new[] { (Location, Value) });
-        public Board PutCells(IEnumerable<(int Location, int Value)> Changes)
+        public Board PutCell(int Index, int Value)
+            => new Board(this, new[] { (Index, Value) });
+        public Board PutCells(IEnumerable<(int Index, int Value)> Changes)
             => new Board(this, Changes);
         public Board SwapColumns(int First, int Second) => throw new NotImplementedException();
         public Board SwapRows(int First, int Second) => throw new NotImplementedException();
@@ -116,29 +64,28 @@ namespace SudokuSharp
 
         #region Find
         // These functions work on the board itself
-        public HashSet<int> FindCandidates(int Location)
+        public HashSet<int> FindCandidates(int Index)
         {
-            var Result = new HashSet<int>(Enumerable.Range(1,Size));
-            var (r, c, z) = GetCoordinates(Location);
+            var Result = new HashSet<int>(Enumerable.Range(1, Size));
 
-            foreach (var test in GetRow(r).Concat(GetColumn(c)).Concat(GetZone(z)))
+            foreach (var test in Location.BlockingIndices(Order, Index))
             {
-                if (Result.Contains(test))
+                if (Result.Contains(Cells[test]))
                     Result.Remove(test);
             }
 
             return Result;
         }
 
-        public IEnumerable<PossibilitySet> FindNakedSets(int SetSize) => throw new NotImplementedException();
-        public IEnumerable<PossibilitySet> FindHiddenSets(int SetSize) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindNakedSets(int SetSize) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindHiddenSets(int SetSize) => throw new NotImplementedException();
 
         // These functions require a Scratchpad and will alert you to values which may be eliminated from it
-        public IEnumerable<PossibilitySet> FindLockedCandidates(Scratchpad Work) => throw new NotImplementedException();
-        public IEnumerable<PossibilitySet> FindXWing(Scratchpad Work) => throw new NotImplementedException();
-        public IEnumerable<PossibilitySet> FindXYWing(Scratchpad Work) => throw new NotImplementedException();
-        public IEnumerable<PossibilitySet> FindSwordfish(Scratchpad Work) => throw new NotImplementedException();
-        public IEnumerable<PossibilitySet> FindColorChain(int MaxSteps) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindLockedCandidates(Scratchpad Work) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindXWing(Scratchpad Work) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindXYWing(Scratchpad Work) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindSwordfish(Scratchpad Work) => throw new NotImplementedException();
+        public IEnumerable<Util.PossibilitySet> FindColorChain(int MaxSteps) => throw new NotImplementedException();
         #endregion
 
 
@@ -152,17 +99,11 @@ namespace SudokuSharp
             {
                 int sum = (from i in Enumerable.Range(1, Size) select i * i).Sum();
 
-                for (int i=0; i<Size; i++)
+                for (int i = 0; i < Size; i++)
                 {
-                    var test = GetRow(i);
-                    int r = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
-                    test = GetColumn(i);
-                    int c = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
-                    test = GetZone(i);
-                    int z = (from j in Enumerable.Range(0, Size) select test[j] * test[j]).Sum();
-
-                    if (!(r == sum && c == sum && z == sum))
-                        return false;
+                    if ((from x in Location.RowIndices(Order, i) select Cells[x] * Cells[x]).Sum() != sum) return false;
+                    if ((from x in Location.ColumnIndices(Order, i) select Cells[x] * Cells[x]).Sum() != sum) return false;
+                    if ((from x in Location.ZoneIndices(Order, i) select Cells[x] * Cells[x]).Sum() != sum) return false;
                 }
 
                 return true;
@@ -184,7 +125,8 @@ namespace SudokuSharp
             {
                 if (Solved)
                     yield return this;
-            } else
+            }
+            else
             {
                 var loc = Enumerable.Range(0, Cells.Count).Where(x => Cells[x] == 0).First();
                 var candidates = FindCandidates(loc);
