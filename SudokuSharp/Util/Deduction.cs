@@ -4,9 +4,10 @@ using System.Text;
 
 namespace SudokuSharp.Util
 {
-    public class PossibilitySet
+    public struct Deduction
     {
-        HashSet<int> Locations;
-        HashSet<int> Possibilities;
+        Conclusion Conclusion;
+        int Location;
+        int Value;
     }
 }

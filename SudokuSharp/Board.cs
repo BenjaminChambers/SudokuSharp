@@ -53,11 +53,87 @@ namespace SudokuSharp
             => new Board(this, new[] { (Index, Value) });
         public Board PutCells(IEnumerable<(int Index, int Value)> Changes)
             => new Board(this, Changes);
-        public Board SwapColumns(int First, int Second) => throw new NotImplementedException();
-        public Board SwapRows(int First, int Second) => throw new NotImplementedException();
-        public Board SwapDigits(int First, int Second) => throw new NotImplementedException();
-        public Board Rotate(int NumberOfTimesClockwise) => throw new NotImplementedException();
-        public Board Flip(bool Vertical, bool Horizontal) => throw new NotImplementedException();
+        public Board SwapColumns(int First, int Second)
+        {
+            if (First % Order != Second % Order)
+                throw new ArgumentException($"Columns {First} and {Second} are not in the same block.");
+
+            var changes = new List<(int Index, int Value)>();
+
+            for (int i = 0; i < Size; i++)
+            {
+                var a = Location.Index(Order, i, First);
+                var b = Location.Index(Order, i, Second);
+                changes.Add((a, Cells[b]));
+                changes.Add((b, Cells[a]));
+            }
+
+            return new Board(this, changes);
+        }
+        public Board SwapRows(int First, int Second)
+        {
+            if (First % Order != Second % Order)
+                throw new ArgumentException($"Rows {First} and {Second} are not in the same block.");
+
+            var changes = new List<(int Index, int Value)>();
+
+            for (int i = 0; i < Size; i++)
+            {
+                var a = Location.Index(Order, First, i);
+                var b = Location.Index(Order, Second, i);
+                changes.Add((a, Cells[b]));
+                changes.Add((b, Cells[a]));
+            }
+
+            return new Board(this, changes);
+        }
+        public Board SwapDigits(int First, int Second)
+        {
+            if (First == Second)
+                throw new ArgumentException($"{First} and {Second} are not separate digits");
+
+            return new Board(this, from i in Enumerable.Range(0, Size * Size)
+                                   where Cells[i] == First || Cells[i] == Second
+                                   select (i, Cells[i] == First ? Second : First));
+        }
+        public Board Rotate(int NumberOfTimesClockwise)
+        {
+            var result = new List<int>();
+
+            for (int r = 0; r < Size; r++)
+            {
+                for (int c = 0; c < Size; c++)
+                {
+                    (int Row, int Col) = (NumberOfTimesClockwise % 4) switch
+                    {
+                        0 => (r, c),
+                        1 => (Size - c - 1, r),
+                        2 => (Size - r - 1, Size - c - r),
+                        3 => (c, Size - r - 1)
+                    };
+
+                    result.Add(Cells[Location.Index(Order, Row, Column)]);
+                }
+            }
+
+            return new Board(Order, result);
+        }
+        public Board Flip(bool Vertical, bool Horizontal)
+        {
+            var result = new List<int>();
+
+            for (int r = 0; r < Size; r++)
+            {
+                for (int c = 0; c < Size; c++)
+                {
+                    var nc = Horizontal ? Size - c - 1 : c;
+                    var nr = Vertical ? Size - r - 1 : r;
+                    result.Add(Cells[Location.Index(Order, nr, nc)]);
+                }
+            }
+
+            return new Board(Order, result);
+        }
         #endregion
 
 
