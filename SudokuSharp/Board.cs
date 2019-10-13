@@ -112,7 +112,7 @@ namespace SudokuSharp
                         3 => (c, Size - r - 1)
                     };
 
-                    result.Add(Cells[Location.Index(Order, Row, Column)]);
+                    result.Add(Cells[Location.Index(Order, Row, Col)]);
                 }
             }
 
